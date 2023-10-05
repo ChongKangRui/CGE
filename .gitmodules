@@ -1,0 +1,6 @@
+[submodule "spdlog"]
+	path = spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "CKR Engine/Vendor/spdlog"]
+	path = CKR Engine/Vendor/spdlog
+	url = https://github.com/gabime/spdlog

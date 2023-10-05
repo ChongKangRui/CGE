@@ -1,7 +1,7 @@
 -Entry point(a main function to start everything)
 -Application window(a window allow user to edit anything)
 -Renderer(shader, rendering everything), opengl API, multiple api
--Debugging support(memory tracking)
+-Debugging support(memory tracking, normal logging system)
 -Script language c++
 -event system
 

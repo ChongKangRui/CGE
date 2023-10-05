@@ -2,6 +2,7 @@
 //
 #include <Engine.h>
 
+
 class GameApplication : public GEngine::Application {
 public:
 	GameApplication() {
