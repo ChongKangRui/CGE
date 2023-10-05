@@ -1,0 +1,12 @@
+-Entry point(a main function to start everything)
+-Application window(a window allow user to edit anything)
+-Renderer(shader, rendering everything), opengl API, multiple api
+-Debugging support(memory tracking)
+-Script language c++
+-event system
+
+Game Object Creation
+-Level
+-Game Instance(Component that construct the actor)
+-Physic solution
+-custom asset(custom format for texture and model)
