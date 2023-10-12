@@ -4,6 +4,7 @@
 //Include for Game File
 
 #include "Core/EngineApplication.h"
+#include "Core/Layer.h"
 #include "Core/Log.h"
 
 // -------EntryPoint---------------

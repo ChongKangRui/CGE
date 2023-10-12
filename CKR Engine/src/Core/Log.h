@@ -1,8 +1,10 @@
 #pragma once
 #include "Core.h"
 #include "spdlog/spdlog.h"
+#include "spdlog/fmt/ostr.h"
 
-namespace GEngine {
+
+namespace GE {
 	class GE_API Log
 	{
 	public:
@@ -27,16 +29,16 @@ namespace GEngine {
 }
 
 //Engine log macros
-#define GELog_Error(...) ::GEngine::Log::GetEngineLogger()->error(__VA_ARGS__)
-#define GELog_Warn(...) ::GEngine::Log::GetEngineLogger()->warn(__VA_ARGS__)
-#define GELog_Trace(...) ::GEngine::Log::GetEngineLogger()->trace(__VA_ARGS__)
-#define GELog_Fatal(...) ::GEngine::Log::GetEngineLogger()->critical(__VA_ARGS__)
-#define GELog_Info(...) ::GEngine::Log::GetEngineLogger()->info(__VA_ARGS__)
+#define GELog_Error(...) ::GE::Log::GetEngineLogger()->error(__VA_ARGS__)
+#define GELog_Warn(...) ::GE::Log::GetEngineLogger()->warn(__VA_ARGS__)
+#define GELog_Trace(...) ::GE::Log::GetEngineLogger()->trace(__VA_ARGS__)
+#define GELog_Fatal(...) ::GE::Log::GetEngineLogger()->critical(__VA_ARGS__)
+#define GELog_Info(...) ::GE::Log::GetEngineLogger()->info(__VA_ARGS__)
 
 
 //Client log macros
-#define Log_Error(...) ::GEngine::Log::GetClientLogger()->error(__VA_ARGS__)
-#define Log_Warm(...) ::GEngine::Log::GetClientLogger()->warm(__VA_ARGS__)
-#define Log_Trace(...) ::GEngine::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define Log_Fatal(...) ::GEngine::Log::GetClientLogger()->fatal(__VA_ARGS__)
-#define Log_Info(...) ::GEngine::Log::GetCClientogger()->info(__VA_ARGS__)
+#define Log_Error(...) ::GE::Log::GetClientLogger()->error(__VA_ARGS__)
+#define Log_Warm(...) ::GE::Log::GetClientLogger()->warm(__VA_ARGS__)
+#define Log_Trace(...) ::GE::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define Log_Fatal(...) ::GE::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define Log_Info(...) ::GE::Log::GetClientLogger()->info(__VA_ARGS__)
