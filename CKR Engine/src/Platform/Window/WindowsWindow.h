@@ -1,8 +1,11 @@
 #pragma once
 
 #include "Core/Window.h"
-#include <GLFW/glfw3.h>
+
 #include "Core/Log.h"
+
+#include <glfw/glfw3.h>
+
 namespace GE {
 	
 	class WindowsWindow : public Window

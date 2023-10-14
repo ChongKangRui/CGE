@@ -13,9 +13,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "CKR Engine/Vendor/GLFW/include"
+IncludeDir["Glad"]	= "CKR Engine/Vendor/Glad/include"
 
 include "CKR Engine/Vendor/GLFW"
-
+include "CKR Engine/Vendor/Glad"
 
 project "CKR Engine"
 	location "CKR Engine"
@@ -36,13 +37,17 @@ project "CKR Engine"
 	includedirs{
 		"%{prj.name}/src",
 		"%{prj.name}/Vendor/spdlog/include",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.Glad}"
+
 	}
 
 	links{
 		"GLFW",
+		"Glad",
 		"opengl32.lib",
 		"dwmapi.lib"
+		
 	}
 
 	filter "system:windows"
@@ -52,7 +57,8 @@ project "CKR Engine"
 
 	defines{
 		"GE_BUILD_DLL",
-		"GE_PLATFORM_WINDOW"
+		"GE_PLATFORM_WINDOW",
+		"GLFW_INCLUDE_NONE"
 	}
 	
 	postbuildcommands{
@@ -61,7 +67,7 @@ project "CKR Engine"
 
 	filter "configurations:Debug"
 	defines "GA_DEBUG"
-	buildoptions "/MD"
+	buildoptions "/MDd"
 	symbols "On"
 
 	filter "configurations:Release"
@@ -109,7 +115,7 @@ project "Game"
 
 	filter "configurations:Debug"
 	defines "GA_DEBUG"
-	buildoptions "/MD"
+	buildoptions "/MDd"
 	symbols "On"
 
 	filter "configurations:Release"
