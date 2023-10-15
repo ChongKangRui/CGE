@@ -1,0 +1,11 @@
+Window.h
+base class of window, can be seem as an interface 
+
+WindowsWindow.h
+window class that inherited the functions from window.h, will be used to initialize a new window in EngineApplication.h
+
+EngineApplication.h
+A class that use to run inside the Entry point. The core of the whole application.
+
+
+

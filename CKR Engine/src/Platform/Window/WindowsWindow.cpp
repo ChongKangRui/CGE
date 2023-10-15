@@ -131,6 +131,14 @@ namespace GE {
 			});
 		glfwSetKeyCallback(m_Window, Keylambda);
 
+		auto KeyCharLambda = ([](GLFWwindow* window, unsigned int keycode) {
+			
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			KeyTypeEvent event(keycode);
+			data.EventCallback(event);
+			});
+		glfwSetCharCallback(m_Window, KeyCharLambda);
+
 		//MouseButton
 		auto MouseButtonlambda = ([](GLFWwindow* window, int button, int action, int mods) {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);

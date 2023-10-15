@@ -1,6 +1,7 @@
 #pragma once
 
 
+//! This is an entry point which will be used to serve as program entry point
 #ifdef GE_PLATFORM_WINDOW
 
 extern GE::Application* GE::CreateApplication();

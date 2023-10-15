@@ -19,6 +19,7 @@ namespace GE {
 	void LayerStack::PushOverlay(Layer* overlay)
 	{
 		m_Layers.emplace_back(overlay);
+		
 
 	}
 	void LayerStack::PopLayer(Layer* layer)

@@ -9,7 +9,8 @@
 
 namespace GE {
 
-
+	//! This will be the base application class to setup layer, create window etc.
+	//! This is a singleton class which will only have one application throughout the whole program
 	class GE_API Application
 	{
 	public:
@@ -24,6 +25,9 @@ namespace GE {
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+
+		inline static Application& Get() { return *s_Instance; }
+		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnButtonPressed(MouseButtonEvent& e);
@@ -32,6 +36,9 @@ namespace GE {
 		bool m_Running = true;
 
 		LayerStack m_LayerStack;
+
+	private:
+		static Application* s_Instance;
 	};
 	// To be define in the client
 	Application* CreateApplication();

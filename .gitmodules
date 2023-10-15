@@ -7,3 +7,6 @@
 [submodule "CKR Engine/Vendor/glfw"]
 	path = CKR Engine/Vendor/glfw
 	url = https://github.com/TheCherno/GLFW
+[submodule "CKR Engine/Vendor/imgui"]
+	path = CKR Engine/Vendor/imgui
+	url = https://github.com/ocornut/imgui

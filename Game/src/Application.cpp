@@ -7,12 +7,12 @@ class ExampleLayer : public GE::Layer {
 public:
 	ExampleLayer() : Layer("Testing") {};
 	void OnUpdate() override {
-		Log_Info("Testing layer here");
+		//Log_Info("Testing layer here");
 	}
 
 	void OnEvent(GE::Event& event) override {
 
-		Log_Info("EEEEEE {0}", event);
+		Log_Info("{0}", event);
 	}
 };
 
@@ -21,6 +21,7 @@ class GameApplication : public GE::Application {
 public:
 	GameApplication() {
 		PushLayer(new ExampleLayer());
+		PushOverlay(new GE::ImGuiLayer());
 	}
 	~GameApplication(){
 

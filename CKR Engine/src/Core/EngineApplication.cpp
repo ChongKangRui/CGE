@@ -11,8 +11,13 @@ namespace GE {
 
 #define Bind_Event_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
+	 Application* Application::s_Instance = nullptr;
+
 	GE::Application::Application()
 	{
+		GE_CORE_ASSERT(s_Instance, "Application already exists!");
+		s_Instance = this;
+
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(Bind_Event_FN(OnEvent));
 		
@@ -66,11 +71,13 @@ namespace GE {
 	void Application::PushLayer(Layer* layer)
 	{
 		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* layer)
 	{
 		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 

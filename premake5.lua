@@ -14,9 +14,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"] = "CKR Engine/Vendor/GLFW/include"
 IncludeDir["Glad"]	= "CKR Engine/Vendor/Glad/include"
+IncludeDir["imgui"]	= "CKR Engine/Vendor/imgui"
 
 include "CKR Engine/Vendor/GLFW"
 include "CKR Engine/Vendor/Glad"
+include "CKR Engine/Vendor/imgui"
 
 project "CKR Engine"
 	location "CKR Engine"
@@ -38,13 +40,15 @@ project "CKR Engine"
 		"%{prj.name}/src",
 		"%{prj.name}/Vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.Glad}"
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.imgui}"
 
 	}
 
 	links{
 		"GLFW",
 		"Glad",
+		"imgui",
 		"opengl32.lib",
 		"dwmapi.lib"
 		

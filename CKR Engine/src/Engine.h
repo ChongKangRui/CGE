@@ -6,6 +6,7 @@
 #include "Core/EngineApplication.h"
 #include "Core/Layer.h"
 #include "Core/Log.h"
+#include "Core/Imgui/ImGuiLayer.h"
 
 // -------EntryPoint---------------
 #include "Core/EntryPoint.h"
