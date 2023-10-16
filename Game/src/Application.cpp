@@ -13,6 +13,7 @@ public:
 	void OnEvent(GE::Event& event) override {
 
 		Log_Info("{0}", event);
+		
 	}
 };
 

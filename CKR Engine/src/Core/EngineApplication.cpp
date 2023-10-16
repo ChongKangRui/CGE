@@ -11,8 +11,9 @@ namespace GE {
 
 #define Bind_Event_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
-	 Application* Application::s_Instance = nullptr;
+	Application* Application::s_Instance = nullptr;
 
+	//Create window, set window event callback, everytime input trigger, callbackevent will trigger
 	GE::Application::Application()
 	{
 		GE_CORE_ASSERT(s_Instance, "Application already exists!");
@@ -27,6 +28,7 @@ namespace GE {
 	{
 	}
 
+	//While loop for window, constantly update layer
 	void Application::Run()
 	{
 		if (!m_Window) {
@@ -36,13 +38,12 @@ namespace GE {
 			glClearColor(1, 0.5, 0.5, 1.0);
 			glClear(GL_COLOR_BUFFER_BIT);
 
+			//Layer Update in layerstack
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
 			}
 
-
-
-
+			//Window Update
 			m_Window->OnUpdate();
 
 
@@ -51,11 +52,11 @@ namespace GE {
 		
 	}
 
+	//Event callback that bind to oneventcallback
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e); 
 	
-
 		dispatcher.Dispatch<MouseButtonPressedEvent>(Bind_Event_FN(OnButtonPressed));
 		dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_FN(OnWindowClosed));
 		
