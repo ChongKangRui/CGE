@@ -16,7 +16,7 @@ namespace GE {
 	//Create window, set window event callback, everytime input trigger, callbackevent will trigger
 	GE::Application::Application()
 	{
-		GE_CORE_ASSERT(s_Instance, "Application already exists!");
+		//GE_CORE_ASSERT(s_Instance, "Application already exists!");
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
@@ -57,8 +57,8 @@ namespace GE {
 	{
 		EventDispatcher dispatcher(e); 
 	
-		dispatcher.Dispatch<MouseButtonPressedEvent>(Bind_Event_FN(OnButtonPressed));
-		dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_FN(OnWindowClosed));
+		//dispatcher.Dispatch<MouseButtonPressedEvent>(Bind_Event_FN(OnButtonPressed));
+		//dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_FN(OnWindowClosed));
 		
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{

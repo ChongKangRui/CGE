@@ -1,11 +1,56 @@
+Engine Project
+
 Window.h
-base class of window, can be seem as an interface 
+//base class of window, can be seem as an interface 
 
 WindowsWindow.h
-window class that inherited the functions from window.h, will be used to initialize a new window in EngineApplication.h
+//window class that inherited the functions from window.h, will be used to initialize a new window in 
+//EngineApplication.h
+// All the lambda retrieve the data from the pointer that set at glfwSetWindowUserPointer
+// everytime glfw detect the input that it set below, 
+// it will call the binded function(which is onevent in engine application) data.EventCallback(event); 
+// and once onevent being call, all the layer in layer stack 
+// onevent will be called as well which is where we bind the event into the dispatcher
+
+EntryPoint.h
+//Create application and run it. The application define at the Game Application class, so it will create //the game application instead of engine application.
 
 EngineApplication.h
-A class that use to run inside the Entry point. The core of the whole application.
+//A class that use to run inside the Entry point. The core of the whole application.
 
+Log.h
+//have the define function to print log and connected to spdlog
 
+Event.h(mouseevent, keyevent, windowevent)
+//contain all the information for event like eventtype, name, categoryflag etc
+
+EventDispatcher class inside event
+//use to bind the function based on event and call it when it received input
+//return bool and input an event into it
+//using EventFn = std::function<bool(T&)>;
+//if (m_Event.GetEventType() == T::GetStaticType()) {
+//	m_Event.m_Handled = func(*(T*)&m_Event);
+//	return true;
+//}
+
+GUIRenderer.h && imgui_impl_opengl3_loader.h
+//thirdparty header file from imgui, use to link the input event in the imguilayer.h
+
+Layer
+//use to manage rendering order, Hierarchy, collision, ui layer etc
+
+imguilayer.h
+//a layer which setup all the input binding dispatcher inorder to use the imgui framework
+
+Layerstack
+//use to manage the layer, push pull drop the layer
+//note that layer store inside a vector, and the it will calling layer on event reversed from list
+
+gepch.h
+//A precompiled file which contain all the common necessary library. Will be force to include in all the //cpp file.
+
+Game Project
+Application.cpp
+//Have a class of gameapplication inherit from engineapplication
+//Have an example layer which jsut used to push layer
 

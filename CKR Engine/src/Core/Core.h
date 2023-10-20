@@ -14,9 +14,16 @@
 
 #define BIT(x) (1 << x)
 
+
+
+#ifdef GE_DEBUG
+	#define GE_ENABLE_ASSERTS
+#endif 
+
+
 #ifdef GE_ENABLE_ASSERTS
-#define GE_ASSERT(x,...){if(!(x)) {Log_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();)}}
-#define GE_CORE_ASSERT(...){if(!(x)) {GELog_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();)}}
+#define GE_ASSERT(x, ...){if(!(x)) {Log_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();)}}
+#define GE_CORE_ASSERT(x, ...){if(!(x)) {GELog_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();)}}
 #else
 #define GE_ASSERT(x,...)
 #define GE_CORE_ASSERT(x,...)

@@ -1,10 +1,12 @@
 #include "gepch.h"
 #include "LayerStack.h"
+#include "Log.h"
 
 namespace GE {
 	LayerStack::LayerStack()
 	{
 		m_LayerInsert = m_Layers.begin();
+		GELog_Info("Initialize layer stack");
 	}
 	LayerStack::~LayerStack()
 	{

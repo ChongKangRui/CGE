@@ -28,11 +28,7 @@ namespace GE {
 		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
-		
-
-		
-
-
+	
 		ImGui_ImplOpenGL3_Init("#version 440");
 	}
 	void ImGuiLayer::OnDetach()
@@ -46,6 +42,7 @@ namespace GE {
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
 
+		//delta time 60 frame
 		float time = (float)glfwGetTime();
 		io.DeltaTime = m_Time > 0.0? (time - m_Time) : (1.0f / 60.0f);
 		m_Time = time;
@@ -53,9 +50,11 @@ namespace GE {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
 
+		//show a demo video
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);
 
+		//Renderer
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
@@ -63,6 +62,8 @@ namespace GE {
 	{
 		EventDispatcher dispatcher(event);
 
+		//All the event that bind into dispatcher in order to trigger specific event for imgui
+		//More binding explanation can look at EngineApplication.h which involve bind to glfw input setup
 		dispatcher.Dispatch<MouseButtonPressedEvent>(GE_BEVENT_FN(ImGuiLayer::OnMouseButtonPressedEvent));
 		dispatcher.Dispatch<MouseButtonReleasedEvent>(GE_BEVENT_FN(ImGuiLayer::OnMouseButtonReleasedEvent));
 		dispatcher.Dispatch<MouseMovedEvent>(GE_BEVENT_FN(ImGuiLayer::OnMouseMovedEvent));

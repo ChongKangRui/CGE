@@ -24,6 +24,7 @@ project "CKR Engine"
 	location "CKR Engine"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -56,13 +57,12 @@ project "CKR Engine"
 
 	filter "system:windows"
 	cppdialect "C++20"
-	staticruntime "On"
 	systemversion "latest"
 
 	defines{
 		"GE_BUILD_DLL",
 		"GE_PLATFORM_WINDOW",
-		"GLFW_INCLUDE_NONE"
+		"GLFW_INCLUDE_NONE",
 	}
 	
 	postbuildcommands{
@@ -70,18 +70,18 @@ project "CKR Engine"
 	}
 
 	filter "configurations:Debug"
-	defines "GA_DEBUG"
-	buildoptions "/MDd"
+	defines "GE_DEBUG"
+	runtime "Debug"
 	symbols "On"
 
 	filter "configurations:Release"
-	defines "GA_RELEASE"
-	buildoptions "/MD"
+	defines "GE_RELEASE"
+	runtime "Release"
 	optimize "On"
 
 	filter "configurations:Dist"
-	defines "GA_DIST"
-	buildoptions "/MD"
+	defines "GE_DIST"
+	runtime "Release"
 	optimize "On"
 
 		
@@ -89,6 +89,7 @@ project "Game"
 	location "Game"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -110,7 +111,6 @@ project "Game"
 
 	filter "system:windows"
 	cppdialect "C++20"
-	staticruntime "On"
 	systemversion "latest"
 
 	defines{
@@ -118,16 +118,16 @@ project "Game"
 	}
 
 	filter "configurations:Debug"
-	defines "GA_DEBUG"
-	buildoptions "/MDd"
+	defines "GE_DEBUG"
+	runtime "Debug"
 	symbols "On"
 
 	filter "configurations:Release"
-	defines "GA_RELEASE"
-	buildoptions "/MD"
+	defines "GE_RELEASE"
+	runtime "Release"
 	optimize "On"
 
 	filter "configurations:Dist"
-	defines "GA_DIST"
-	buildoptions "/MD"
+	defines "GE_DIST"
+	runtime "Release"
 	optimize "On"

@@ -74,12 +74,19 @@ namespace GE {
 			m_Data.Title.c_str(), nullptr, nullptr);
 
 		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);;
+		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
-		GE_CORE_ASSERT(status, "Failed To Initialize Glad");
+		//GE_CORE_ASSERT(status, "Failed To Initialize Glad");
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
+		
+
+		//All the lambda retrieve the data from the pointer that set at glfwSetWindowUserPointer
+		//everytime glfw detect the input that it set below, 
+		// it will call the binded function(which is onevent in engine application) data.EventCallback(event); 
+		// and once onevent being call, all the layer in layer stack 
+		// onevent will be called as well which is where we bind the event into the dispatcher
 
 		//Set GLFW callbacks
 		auto Resizelambda = ([](GLFWwindow* window, int Width, int Height) {
