@@ -5,6 +5,7 @@
 #include "Event/Event.h"
 #include "Log.h"
 #include <glad/glad.h>
+#include "Input.h"
 
 namespace GE {
 
@@ -21,6 +22,7 @@ namespace GE {
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(Bind_Event_FN(OnEvent));
+		
 		
 	}
 
@@ -45,8 +47,7 @@ namespace GE {
 
 			//Window Update
 			m_Window->OnUpdate();
-
-
+			
 
 		}
 		
@@ -57,15 +58,14 @@ namespace GE {
 	{
 		EventDispatcher dispatcher(e); 
 	
-		//dispatcher.Dispatch<MouseButtonPressedEvent>(Bind_Event_FN(OnButtonPressed));
-		//dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_FN(OnWindowClosed));
-		
+		dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_FN(OnWindowClosed));
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
 			(*--it)->OnEvent(e);
 			if (e.m_Handled)
 				break;
 		}
+
 		
 	}
 

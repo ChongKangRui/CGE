@@ -1,0 +1,14 @@
+Layer.h
+//use to do rendering order, Hierarchy, collision, ui layer etc
+
+imguilayer.h
+//a layer which setup all the input binding dispatcher inorder to use the imgui framework
+
+Layerstack
+//use to manage the layer, push pull drop the layer
+//note that layer store inside a vector, and the it will calling layer on event reversed from list
+
+--------LogicExplanation
+-Layer will be push at the Game Application
+-Layer->onupdate() will be called at the engineapplication->run() which is the while loop
+-Layer->onevent() will be triggered as well at the engineapplication->OnEvent()     <-which bind when the application initialized 

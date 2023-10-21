@@ -108,8 +108,6 @@ namespace GE {
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			WindowCloseEvent event;
 			data.EventCallback(event);
-
-
 			});
 		glfwSetWindowCloseCallback(m_Window, Closelambda);
 

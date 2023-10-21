@@ -1,0 +1,13 @@
+KeyCode.h
+MouseCode.h
+//Copy the glfw.h mouse and key code and convert it into our own version of input keycode
+
+Input.h
+//Handle all of the input. like an interface which contain all of the necessary function. Singleton pattern. 
+//the s_Instance will be assign in the WindowsInput. 
+//Implementation will be 
+//implemented in windowinput.h as well
+
+WindosInput.h
+//Contain all of the input implementation. child of the input or technically implemented the input interface
+//singleton s_Instance will be assign to the windowsinput instance.

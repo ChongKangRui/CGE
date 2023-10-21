@@ -38,6 +38,9 @@ namespace GE {
 			virtual void SetVSync(bool enabled) = 0;
 			virtual bool IsVSync() const = 0;
 
+			//Just to return glfw window or even other type of window
+			virtual void* GetNativeWindow() const = 0;
+
 			static Window* Create(const WindowProps& props = WindowProps());
 		};
 }

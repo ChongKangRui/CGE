@@ -1,7 +1,7 @@
 #pragma once
 #include "gepch.h"
-#include "../Log.h"
-#include "../Core.h"
+#include "Core/Log.h"
+#include "Core/Core.h"
 
 
 namespace GE {

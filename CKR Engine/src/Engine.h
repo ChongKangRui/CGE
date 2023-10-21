@@ -8,6 +8,11 @@
 #include "Core/Log.h"
 #include "Core/Imgui/ImGuiLayer.h"
 
+#include "Core/Input.h"
+#include "Core/KeyCode.h"
+#include "Core/MouseCode.h"
+
+
 // -------EntryPoint---------------
 #include "Core/EntryPoint.h"
 //----------------------------------

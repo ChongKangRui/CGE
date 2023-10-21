@@ -14,7 +14,7 @@ namespace GE {
 		s_EngineLogger = spdlog::stdout_color_mt("CKR Engine");
 		s_EngineLogger->set_level(spdlog::level::trace);
 
-		s_ClientLogger = spdlog::stdout_color_mt("App");
+		s_ClientLogger = spdlog::stdout_color_mt("Application");
 		s_ClientLogger->set_level(spdlog::level::trace);
 
 	}

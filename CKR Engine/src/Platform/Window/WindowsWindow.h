@@ -26,6 +26,7 @@ namespace GE {
 			m_Data.EventCallback = callback;
 		}
 
+		inline virtual void* GetNativeWindow() const {return m_Window;}
 
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;

@@ -1,0 +1,19 @@
+Event.h(mouseevent.h, keyevent.h, windowevent.h)
+//contain all the information for event like eventtype, name, categoryflag etc
+
+EventDispatcher class inside event
+//use to bind the function based on event and call it when it received input
+//return bool and input an event into it
+//using EventFn = std::function<bool(T&)>;
+//if (m_Event.GetEventType() == T::GetStaticType()) {
+//	m_Event.m_Handled = func(*(T*)&m_Event);
+//	return true;
+//}
+
+-------------LogicExplaination
+-Event will be trigger everytime the input trigger which bind to glfw input.
+-Input binding was binded inside the WindowsWindow.cpp during the initialization
+-The EventDispatcher binding will be set either in EngineApplication.h(close/shutdown window) or ImGuiLayer.h(to bind and use all of the imgui functionality)
+
+
+
