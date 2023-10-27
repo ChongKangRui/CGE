@@ -1,0 +1,7 @@
+if application wan to use the third party library that using from engine, the third party library will need to export themself as  a dll file so application can use it.
+
+Example:
+Application want to use ImGui but it only link staticly with the Engine itself
+
+solution: export imgui as dll to engine dll-> export engine dll to the application
+this allow us to solve the linking problem and use the functionality from the application

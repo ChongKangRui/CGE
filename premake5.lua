@@ -15,6 +15,7 @@ IncludeDir = {}
 IncludeDir["GLFW"] = "CKR Engine/Vendor/GLFW/include"
 IncludeDir["Glad"]	= "CKR Engine/Vendor/Glad/include"
 IncludeDir["imgui"]	= "CKR Engine/Vendor/imgui"
+IncludeDir["Glm"]	= "CKR Engine/Vendor/Glm"
 
 include "CKR Engine/Vendor/GLFW"
 include "CKR Engine/Vendor/Glad"
@@ -22,9 +23,10 @@ include "CKR Engine/Vendor/imgui"
 
 project "CKR Engine"
 	location "CKR Engine"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -32,18 +34,27 @@ project "CKR Engine"
 	pchheader "gepch.h"
 	pchsource "CKR Engine/src/gepch.cpp"
 
+	-- used to include the file into project
 	files{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/Vendor/Glm/glm/**.hpp",
+		"%{prj.name}/Vendor/Glm/glm/**.inl"
 	}
 
+
+	defines{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
+
+	--use to include the directory into the project
 	includedirs{
 		"%{prj.name}/src",
 		"%{prj.name}/Vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
-		"%{IncludeDir.imgui}"
-
+		"%{IncludeDir.imgui}",
+		"%{IncludeDir.Glm}"
 	}
 
 	links{
@@ -56,40 +67,42 @@ project "CKR Engine"
 	}
 
 	filter "system:windows"
-	cppdialect "C++20"
 	systemversion "latest"
-
+	-- define the preprocessor
 	defines{
 		"GE_BUILD_DLL",
 		"GE_PLATFORM_WINDOW",
 		"GLFW_INCLUDE_NONE",
 	}
 	
-	postbuildcommands{
-		'{COPY} "%{cfg.targetdir}\\%{prj.name}.dll" "..\\bin\\Debug-windows-x86_64Game\\"'
-	}
+	--dont need for static library
+	-- build dll
+--	postbuildcommands{
+	--	'{COPY} "%{cfg.targetdir}\\%{prj.name}.dll" "..\\bin\\Debug-windows-x86_64Game\\"'
+--	}
 
 	filter "configurations:Debug"
 	defines "GE_DEBUG"
 	runtime "Debug"
-	symbols "On"
+	symbols "on"
 
 	filter "configurations:Release"
 	defines "GE_RELEASE"
 	runtime "Release"
-	optimize "On"
+	optimize "on"
 
 	filter "configurations:Dist"
 	defines "GE_DIST"
 	runtime "Release"
-	optimize "On"
+	optimize "on"
 
 		
 project "Game"
 	location "Game"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++20"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -102,7 +115,10 @@ project "Game"
 
 	includedirs{
 		"CKR Engine/Vendor/spdlog/include",
-		"CKR Engine/src"
+		"CKR Engine/src",
+		"CKR Engine/Vendor",
+		"%{IncludeDir.Glm}"
+		
 	}
 
 	links{
@@ -110,7 +126,6 @@ project "Game"
 	}
 
 	filter "system:windows"
-	cppdialect "C++20"
 	systemversion "latest"
 
 	defines{
@@ -120,14 +135,14 @@ project "Game"
 	filter "configurations:Debug"
 	defines "GE_DEBUG"
 	runtime "Debug"
-	symbols "On"
+	symbols "on"
 
 	filter "configurations:Release"
 	defines "GE_RELEASE"
 	runtime "Release"
-	optimize "On"
+	optimize "on"
 
 	filter "configurations:Dist"
 	defines "GE_DIST"
 	runtime "Release"
-	optimize "On"
+	optimize "on"

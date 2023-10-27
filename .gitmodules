@@ -10,3 +10,6 @@
 [submodule "CKR Engine/Vendor/imgui"]
 	path = CKR Engine/Vendor/imgui
 	url = https://github.com/ocornut/imgui
+[submodule "CKR Engine/Vendor/Glm"]
+	path = CKR Engine/Vendor/Glm
+	url = https://github.com/g-truc/glm

@@ -5,6 +5,7 @@
 #include "Event/ApplicationEvent.h"
 //#include "Platform/Window/WindowsWindow.h"
 #include "Core/Event/MouseEvent.h"
+#include "Core/Imgui/ImGuiLayer.h"
 #include "LayerStack.h"
 
 namespace GE {
@@ -33,6 +34,8 @@ namespace GE {
 		bool OnButtonPressed(MouseButtonEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
+
 		bool m_Running = true;
 
 		LayerStack m_LayerStack;

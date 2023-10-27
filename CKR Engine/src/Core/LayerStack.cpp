@@ -5,7 +5,7 @@
 namespace GE {
 	LayerStack::LayerStack()
 	{
-		m_LayerInsert = m_Layers.begin();
+		//m_LayerInsert = m_Layers.begin();
 		GELog_Info("Initialize layer stack");
 	}
 	LayerStack::~LayerStack()
@@ -15,8 +15,9 @@ namespace GE {
 	}
 	void LayerStack::PushLayer(Layer* layer)
 	{
-		m_LayerInsert = m_Layers.emplace(m_LayerInsert, layer);
-		m_LayerInsert++;
+		m_Layers.emplace(m_Layers.begin() + layerIndex, layer);
+		//m_LayerInsert++;
+		layerIndex++;
 	}
 	void LayerStack::PushOverlay(Layer* overlay)
 	{
@@ -30,7 +31,7 @@ namespace GE {
 
 		if (it != m_Layers.end()) {
 			m_Layers.erase(it);
-			m_LayerInsert--;
+			layerIndex--;
 		}
 	}
 	void LayerStack::PopOverlay(Layer* overlay)

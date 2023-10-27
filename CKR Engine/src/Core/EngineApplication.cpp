@@ -7,6 +7,7 @@
 #include <glad/glad.h>
 #include "Input.h"
 
+
 namespace GE {
 
 
@@ -23,7 +24,8 @@ namespace GE {
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(Bind_Event_FN(OnEvent));
 		
-		
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlay(m_ImGuiLayer);
 	}
 
 	GE::Application::~Application()
@@ -44,6 +46,14 @@ namespace GE {
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
 			}
+
+			//to render every layer
+			m_ImGuiLayer->Begin();
+			for (Layer* layer : m_LayerStack) {
+				layer->OnRender();
+			}
+			m_ImGuiLayer->End();
+
 
 			//Window Update
 			m_Window->OnUpdate();
