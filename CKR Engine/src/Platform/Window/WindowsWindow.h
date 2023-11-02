@@ -5,6 +5,7 @@
 #include "Core/Log.h"
 
 #include <glfw/glfw3.h>
+#include "Core/Renderer/GraphicContext.h"
 
 namespace GE {
 	
@@ -35,6 +36,7 @@ namespace GE {
 		virtual void Shutdown();
 	private:
 		GLFWwindow* m_Window;
+		GraphicContext* m_Context;
 
 		struct WindowData
 		{

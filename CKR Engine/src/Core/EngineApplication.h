@@ -8,6 +8,9 @@
 #include "Core/Imgui/ImGuiLayer.h"
 #include "LayerStack.h"
 
+
+#include "Renderer/Buffer.h"
+#include "Renderer/Shader.h"
 namespace GE {
 
 	//! This will be the base application class to setup layer, create window etc.
@@ -40,6 +43,10 @@ namespace GE {
 
 		LayerStack m_LayerStack;
 
+		unsigned int m_VertexArray;
+		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 	private:
 		static Application* s_Instance;
 	};

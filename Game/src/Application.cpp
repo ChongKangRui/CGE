@@ -25,15 +25,15 @@ public:
 
 	void OnEvent(GE::Event& event) override {
 
-		Log_Info("{0}", event);
+		//Log_Info("{0}", event);
+		//Example
 		if (event.GetEventType() == EventType::KeyPressed) {
 			
 			KeyPressedEvent& e = (KeyPressedEvent&)event;
-			Log_Trace("{0}", (char)e.GetKeyCode());
-
-			if (e.GetKeyCode() == KEY_TAB)
+		
+			/*if (e.GetKeyCode() == KEY_TAB)
 				Log_Trace("Tab Pressed");
-				
+				*/
 		}
 		
 	}

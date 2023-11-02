@@ -1,4 +1,6 @@
 #pragma once
+//#include "Log.h"
+//#include <Memory>
 
 #ifdef GE_PLATFORM_WINDOW
 #if  GE_DYNAMIC_LINK
@@ -24,10 +26,10 @@
 	#define GE_ENABLE_ASSERTS
 #endif 
 
-
+#include "Log.h"
 #ifdef GE_ENABLE_ASSERTS
-#define GE_ASSERT(x, ...){if(!(x)) {Log_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();)}}
-#define GE_CORE_ASSERT(x, ...){if(!(x)) {GELog_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();)}}
+ #define GE_ASSERT(x, ...) { if(!(x)) { Log_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+#define GE_CORE_ASSERT(x, ...){if(!(x)) {GELog_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
 #define GE_ASSERT(x,...)
 #define GE_CORE_ASSERT(x,...)
