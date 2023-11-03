@@ -46,6 +46,10 @@ namespace GE {
 	{
 		glDeleteBuffers(1, &m_RendererID);
 	}
+	uint32_t OpenGLIndexBuffer::GetCount() const
+	{
+		return m_Count;
+	}
 	void OpenGLIndexBuffer::Bind() const
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
