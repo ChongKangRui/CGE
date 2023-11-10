@@ -77,7 +77,7 @@ namespace GE {
 		}
 
 		inline const uint32_t& GetStrides() const {
-			Log_Trace("{0}", m_Stride);
+			//Log_Trace("{0}", m_Stride);
 			return m_Stride;
 		}
 
@@ -92,7 +92,7 @@ namespace GE {
 			
 			for (auto& element : m_Elements) {
 
-				Log_Trace("{0}", element.Size);
+				//Log_Trace("{0}", element.Size);
 
 				element.Offset = offset;
 				offset += element.Size;

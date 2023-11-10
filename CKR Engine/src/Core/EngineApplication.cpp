@@ -4,8 +4,9 @@
 
 #include "Event/Event.h"
 #include "Log.h"
-#include <glad/glad.h>
 #include "Input.h"
+
+#include "Renderer/Renderer.h"
 
 
 namespace GE {
@@ -31,8 +32,7 @@ namespace GE {
 		//Generate opengl context and store it inside unsign int
 		//bind the opengl context to current window
 		
-		m_VertexArray.reset(VertexArray::Create());
-
+	
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 			0.5f, -0.5f, 0.0f,1.0f, 0.0f, 0.0f, 1.0f,
@@ -50,8 +50,7 @@ namespace GE {
 		};
 
 		m_VertexBuffer->SetLayout(layout);
-		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-
+	
 
 		//for loop for the buffer element in the buffer layout.
 		//this should be inside vertex array
@@ -76,6 +75,10 @@ namespace GE {
 		};
 		//the count is 3 because we have 3 element in array
 		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
+
+		//////Vertex Array
+		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		m_VertexArray->AddIndexBuffer(m_IndexBuffer);
 		
 
@@ -176,18 +179,20 @@ namespace GE {
 		}
 		while (m_Running) {
 
-			glClearColor(0.2f, 0.2f, 0.2f, 1.0);
-			glClear(GL_COLOR_BUFFER_BIT);
+			
+			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0 });
+			RenderCommand::Clear();
+
+			Renderer::BeginScene();
+
 
 			m_Shader2->Bind();
-			m_SquareVA->Bind();
-			glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-
+			Renderer::Submit(m_SquareVA);
 
 			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
-			
+			Renderer::Submit(m_VertexArray);
+
+			Renderer::EndScene();
 			
 			//Layer Update in layerstack
 			for (Layer* layer : m_LayerStack) {

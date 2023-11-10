@@ -1,0 +1,389 @@
+////////////////////////////////////////create window
+	m_Data.Title = props.Title;
+	m_Data.Width = props.Width;
+	m_Data.Height = props.Height;
+
+	
+	GELog_Info("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
+	if (!s_GLFWInitialized) {
+
+		int success = glfwInit();
+		//GELog_Asse
+		glfwSetErrorCallback(GLFWErrorCallback);
+		s_GLFWInitialized = true;
+	}
+
+	m_Window = glfwCreateWindow((int)props.Width, (int)props.Height,
+		m_Data.Title.c_str(), nullptr, nullptr);
+
+	m_Context = new OpenGLContext(m_Window);
+	m_Context->Init();
+
+	
+	glfwSetWindowUserPointer(m_Window, &m_Data);
+	SetVSync(true);
+	
+
+	//All the lambda retrieve the data from the pointer that set at glfwSetWindowUserPointer
+	//everytime glfw detect the input that it set below, 
+	// it will call the binded function(which is onevent in engine application) data.EventCallback(event); 
+	// and once onevent being call, all the layer in layer stack 
+	// onevent will be called as well which is where we bind the event into the dispatcher
+
+	//Set GLFW callbacks
+	auto Resizelambda = ([](GLFWwindow* window, int Width, int Height) {
+		//Get Window data from the above setwindowuserpointer(void pointer)
+		//kinda like retrieve it from the second arguement
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+
+		data.Width = Width;
+		data.Height = Height;
+		WindowResizeEvent event(Width, Height);
+		data.EventCallback(event);
+
+
+		});
+	glfwSetWindowSizeCallback(m_Window, Resizelambda);
+
+	auto Closelambda = ([](GLFWwindow* window) {
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		WindowCloseEvent event;
+		data.EventCallback(event);
+		});
+	glfwSetWindowCloseCallback(m_Window, Closelambda);
+
+	auto Keylambda = ([](GLFWwindow* window, int key, int scancode, int action, int mods) {
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		
+
+		switch (action) {
+		case GLFW_PRESS: {
+			KeyPressedEvent event(key, 0);
+			data.EventCallback(event);
+			break;
+		}
+		case GLFW_RELEASE: {
+			KeyReleasedEvent event(key);
+			data.EventCallback(event);
+
+			break;
+		}
+		case GLFW_REPEAT: {
+			KeyPressedEvent event(key, 1);
+			data.EventCallback(event);
+			break;
+		}
+		}
+		});
+	glfwSetKeyCallback(m_Window, Keylambda);
+
+	auto KeyCharLambda = ([](GLFWwindow* window, unsigned int keycode) {
+		
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		KeyTypeEvent event(keycode);
+		data.EventCallback(event);
+		});
+	glfwSetCharCallback(m_Window, KeyCharLambda);
+
+	//MouseButton
+	auto MouseButtonlambda = ([](GLFWwindow* window, int button, int action, int mods) {
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+		switch (action) {
+		case GLFW_PRESS: {
+			MouseButtonPressedEvent event(button);
+			data.EventCallback(event);
+			break;
+		}
+		case GLFW_RELEASE: {
+			MouseButtonReleasedEvent event(button);
+			data.EventCallback(event);
+			break;
+		}
+
+		}
+		});
+	glfwSetMouseButtonCallback(m_Window, MouseButtonlambda);
+
+	//Mouse scrolled
+	auto MouseScrolledlambda = ([](GLFWwindow* window, double xoffset, double yoffset) {
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+
+		MouseScrolledEvent event((float)xoffset, (float)yoffset);
+		data.EventCallback(event);
+		});
+	glfwSetScrollCallback(m_Window, MouseScrolledlambda);
+
+	//Mouse pos
+	auto MousePoslambda = ([](GLFWwindow* window, double x, double y) {
+		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+
+		MouseMovedEvent event((float)x, (float)y);
+		data.EventCallback(event);
+		});
+	glfwSetCursorPosCallback(m_Window, MousePoslambda);
+
+	
+
+}
+
+////////////////////////////////////////////SEtup for imgui
+//set up dear imgui context
+IMGUI_CHECKVERSION();
+ImGui::CreateContext();
+ImGui::StyleColorsDark();
+
+ImGuiIO& io = ImGui::GetIO();
+io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+
+//io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
+//io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+
+ImGuiStyle& style = ImGui::GetStyle();
+
+if (io.ConfigFlags && ImGuiConfigFlags_ViewportsEnable) {
+	style.WindowRounding = 0.0f;
+	style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+}
+	
+Application& app = Application::Get();
+GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+
+
+ImGui_ImplGlfw_InitForOpenGL(window, true);
+ImGui_ImplOpenGL3_Init("#version 410");
+
+////////////////////////////////////////////Rendering
+////////VB
+
+float vertices[3 * 7] = {
+	-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+	0.5f, -0.5f, 0.0f,1.0f, 0.0f, 0.0f, 1.0f,
+	0.0f, 0.5f,0.0f,1.0f, 1.0f, 1.0f, 1.0f,
+};
+
+glCreateBuffers(1, &m_RendererID);
+glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+glBufferData(GL_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+
+BufferLayout layout = {
+	{ShaderDataType::Float3, "a_Position"},
+	{ShaderDataType::Float4, "a_Color"}
+};
+
+glBindVertexArray(m_RendererID);
+vertexBuffer->Bind();
+GE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout");
+
+
+
+//////////////////////////Index array
+m_VertexBuffer.push_back(vertexBuffer);
+
+uint32_t indices[3] = {
+	0,1,2
+};
+
+	glCreateBuffers(1, &m_RendererID);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+
+//the count is 3 because we have 3 element in array
+glBindVertexArray(m_RendererID);
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+m_IndexBuffer = indexBuffer;
+
+//////////////////////////VertexArray
+
+glCreateVertexArrays(1, &m_RendererID);
+
+//Add Vertex Buffer
+uint32_t index = 0;
+for (const auto& element : vertexBuffer->GetLayout()) {
+	glEnableVertexAttribArray(index);
+	glVertexAttribPointer(index, element.GetComponentCount(),
+		ShaderDataTypeToOpenGlBaseType(element.Type),
+		element.Normalized ? GL_TRUE : GL_FALSE,
+		vertexBuffer->GetLayout().GetStrides(), (const void*)element.Offset);
+	index++;
+}
+
+//Add Index Buffer
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+
+
+//////////////////////////Shader
+std::string vertexSrc = R"(
+#version 330 core
+
+layout(location = 0) in vec3 a_Position;
+layout(location = 1) in vec4 a_Color;
+
+out vec3 v_Position;
+out vec4 v_Color;
+void main(){
+	v_Position = a_Position;
+	v_Color = a_Color;
+	gl_Position = vec4(a_Position, 1.0);
+}
+)";
+std::string fragmentSrc = R"(
+#version 330 core
+
+layout(location = 0) out vec4 color;
+in vec3 v_Position;
+in vec4 v_Color;
+
+void main(){
+	color = v_Color;
+}
+)";
+
+//////////////////////////Shader function
+// Create an empty vertex shader handle
+GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+// Send the vertex shader source code to GL
+// Note that std::string's .c_str is NULL character terminated.
+const GLchar* source = vertexSrc.c_str();
+glShaderSource(vertexShader, 1, &source, 0);
+
+// Compile the vertex shader
+glCompileShader(vertexShader);
+
+GLint isCompiled = 0;
+glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
+if (isCompiled == GL_FALSE)
+{
+	GLint maxLength = 0;
+	glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
+
+	// The maxLength includes the NULL character
+	std::vector<GLchar> infoLog(maxLength);
+	glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
+
+	// We don't need the shader anymore.
+	glDeleteShader(vertexShader);
+
+	// Use the infoLog as you see fit.
+	GELog_Error("Vertex Shader Compilation failuer: {0}", infoLog.data());
+
+	// In this simple program, we'll just leave
+	return;
+}
+
+// Create an empty fragment shader handle
+GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+// Send the fragment shader source code to GL
+// Note that std::string's .c_str is NULL character terminated.
+source = fragmentSrc.c_str();
+glShaderSource(fragmentShader, 1, &source, 0);
+
+// Compile the fragment shader
+glCompileShader(fragmentShader);
+
+glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
+if (isCompiled == GL_FALSE)
+{
+	GLint maxLength = 0;
+	glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
+
+	// The maxLength includes the NULL character
+	std::vector<GLchar> infoLog(maxLength);
+	glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
+
+	// We don't need the shader anymore.
+	glDeleteShader(fragmentShader);
+	// Either of them. Don't leak shaders.
+	glDeleteShader(vertexShader);
+
+	// Use the infoLog as you see fit.
+	GELog_Error("Fragment Shader Compilation failuer: {0}", infoLog.data());
+
+	// In this simple program, we'll just leave
+	return;
+}
+
+// Vertex and fragment shaders are successfully compiled.
+// Now time to link them together into a program.
+// Get a program object.
+m_RendererID = glCreateProgram();
+
+// Attach our shaders to our program
+glAttachShader(m_RendererID, vertexShader);
+glAttachShader(m_RendererID, fragmentShader);
+
+// Link our program
+glLinkProgram(m_RendererID);
+
+// Note the different functions here: glGetProgram* instead of glGetShader*.
+GLint isLinked = 0;
+glGetProgramiv(m_RendererID, GL_LINK_STATUS, (int*)&isLinked);
+if (isLinked == GL_FALSE)
+{
+	GLint maxLength = 0;
+	glGetProgramiv(m_RendererID, GL_INFO_LOG_LENGTH, &maxLength);
+
+	// The maxLength includes the NULL character
+	std::vector<GLchar> infoLog(maxLength);
+	glGetProgramInfoLog(m_RendererID, maxLength, &maxLength, &infoLog[0]);
+
+	// We don't need the program anymore.
+	glDeleteProgram(m_RendererID);
+	// Don't leak shaders either.
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+
+	// Use the infoLog as you see fit.
+	GELog_Error("Linking Shader failuer: {0}", infoLog.data());
+
+	// In this simple program, we'll just leave
+	return;
+}
+
+// Always detach shaders after a successful link.
+glDetachShader(m_RendererID, vertexShader);
+glDetachShader(m_RendererID, fragmentShader);
+
+/////////////////////////////Window
+while (m_Running) {
+
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	m_Shader2->Bind();
+	m_SquareVA->Bind();
+	glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+
+	m_Shader->Bind();
+	m_VertexArray->Bind();
+	glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+	
+	
+	//Layer Update in layerstack
+	for (Layer* layer : m_LayerStack) {
+		layer->OnUpdate();
+	}
+
+	//to render every layer
+	m_ImGuiLayer->Begin();
+	for (Layer* layer : m_LayerStack) {
+		layer->OnRender();
+	}
+	m_ImGuiLayer->End();
+
+
+	//Window Update
+	m_Window->OnUpdate();
+	
+
+}
