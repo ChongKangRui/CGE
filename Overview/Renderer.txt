@@ -1,0 +1,30 @@
+Buffer.h
+
+class IndexBuffer and VertexBuffer abstraction
+-Only contain the function, not contain the data. This way allow us to implement the different implementation for both opengl and directx
+-contain bind, unbind as well as a static function to create vertex and index
+
+-enum ShaderDataType
+Our own shaderdatatype in order to input the attribute into the shader program
+//Use ShaderDataTypeSize(type) to get the size of the shader type. it is important because it let opengl to know
+//the exact input data like position, color inside the array.
+
+-struct BufferElements 
+Contain Name, Offset, Size, Normalized and Type. allow to GetComponentCount()
+
+class BufferLayout
+-buffer layout contain std::vector<BufferElements>
+-it will calculate stride and offset as well.
+
+Shader.h
+-Handle all of the shader work, use shader, delete shader, compile shader etc.
+-need to pass in vertex and fragment shader program so that it can compile shader
+
+OpenGLBuffer.h
+class OpenGLVertexVuffer : public VertexBuffer
+class OpenGLIndexBuffer : public IndexBuffer 
+- both contain the data and implementation of the opengl shader
+
+Note, the implementation will be inside the engineapplication
+
+ 

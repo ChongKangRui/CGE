@@ -15,27 +15,7 @@ namespace GE {
 
 	Application* Application::s_Instance = nullptr;
 
-	static GLenum ShaderDataTypeToOpenGlBaseType(ShaderDataType type) {
 	
-		switch (type) {
-		case ShaderDataType::Float: return GL_FLOAT;
-		case ShaderDataType::Float2: return GL_FLOAT;
-		case ShaderDataType::Float3: return GL_FLOAT;
-		case ShaderDataType::Float4: return GL_FLOAT;
-		case ShaderDataType::Mat3: return GL_FLOAT;
-		case ShaderDataType::Mat4: return GL_FLOAT;
-		case ShaderDataType::Int: return GL_INT;
-		case ShaderDataType::Int2: return GL_INT;
-		case ShaderDataType::Int3: return GL_INT;
-		case ShaderDataType::Int4: return GL_INT;
-		case ShaderDataType::Bool: return GL_BOOL;
-
-		}
-
-		GE_CORE_ASSERT(false, "UnknownShaderType");
-		return 0;
-	};
-
 	//Create window, set window event callback, everytime input trigger, callbackevent will trigger
 	GE::Application::Application()
 	{
@@ -51,8 +31,7 @@ namespace GE {
 		//Generate opengl context and store it inside unsign int
 		//bind the opengl context to current window
 		
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray.reset(VertexArray::Create());
 
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
@@ -60,7 +39,9 @@ namespace GE {
 			0.0f, 0.5f,0.0f,1.0f, 1.0f, 1.0f, 1.0f,
 		};
 
+		
 		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		
 		
 		//Because we setup iterator in the buffer layout, so we can do for loop
 		BufferLayout layout = {
@@ -69,10 +50,12 @@ namespace GE {
 		};
 
 		m_VertexBuffer->SetLayout(layout);
+		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+
 
 		//for loop for the buffer element in the buffer layout.
 		//this should be inside vertex array
-		uint32_t index = 0;
+		/*uint32_t index = 0;
 		for (const auto& element : m_VertexBuffer->GetLayout()) {
 			glEnableVertexAttribArray(index);
 			glVertexAttribPointer(index, element.GetComponentCount(),
@@ -80,9 +63,7 @@ namespace GE {
 				element.Normalized ? GL_TRUE : GL_FALSE,
 				m_VertexBuffer->GetLayout().GetStrides(), (const void*)element.Offset);
 			index++;
-		}
-
-	//	m_VertexBuffer->SetLayout(layout);
+		}*/
 
 
 
@@ -95,8 +76,38 @@ namespace GE {
 		};
 		//the count is 3 because we have 3 element in array
 		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
+		m_VertexArray->AddIndexBuffer(m_IndexBuffer);
 		
-		
+
+		/////////////////////////////////////For square 
+		m_SquareVA.reset(VertexArray::Create());
+		float squarevertices[3 * 4] = {
+			-0.75f, -0.75f, 0.0f,
+			0.75f, -0.75f, 0.0f,
+			-0.75f, 0.75f,0.0f,
+			0.75f, 0.75f,0.0f
+		};
+
+
+		std::shared_ptr<VertexBuffer> squareVB;
+		squareVB.reset(VertexBuffer::Create(squarevertices, sizeof(squarevertices)));
+
+		BufferLayout sqlayout = {
+			{ShaderDataType::Float3, "a_Position"},
+		};
+
+		squareVB->SetLayout(sqlayout);
+		m_SquareVA->AddVertexBuffer(squareVB);
+
+		uint32_t indices2[6] = {
+			0,2,1,3,2,1
+		};
+		//the count is 3 because we have 3 element in array
+		std::shared_ptr<IndexBuffer> squareIB;
+		squareIB.reset(IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t)));
+		m_SquareVA->AddIndexBuffer(squareIB);
+
+
 		//vertex handle position, fragment handle color
 		std::string vertexSrc = R"(
 		#version 330 core
@@ -125,12 +136,32 @@ namespace GE {
 		)";
 		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
 
-		//Vertex Array
-		//Vertex Buffer
-		//Index Buffer
-		 
-		// not need to do it now->Shader
-		// Default gpu aldy have the shader
+		//For blue square
+		std::string vertexSrc2 = R"(
+		#version 330 core
+		
+		layout(location = 0) in vec3 a_Position;
+		
+		out vec3 v_Position;
+		
+		void main(){
+			v_Position = a_Position;
+			gl_Position = vec4(a_Position , 1.0);
+		}
+		)";
+		std::string fragmentSrc2 = R"(
+		#version 330 core
+		
+		layout(location = 0) out vec4 color;
+		in vec3 v_Position;
+		
+		void main(){
+			color = vec4(0.2, 0.3, 0.8,1.0);
+		}
+		)";
+
+		m_Shader2.reset(new Shader(vertexSrc2, fragmentSrc2));
+
 	}
 
 	GE::Application::~Application()
@@ -147,9 +178,14 @@ namespace GE {
 
 			glClearColor(0.2f, 0.2f, 0.2f, 1.0);
 			glClear(GL_COLOR_BUFFER_BIT);
-			
+
+			m_Shader2->Bind();
+			m_SquareVA->Bind();
+			glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+
 			m_Shader->Bind();
-			//glBindVertexArray(m_VertexArray);
+			m_VertexArray->Bind();
 			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 			
 			

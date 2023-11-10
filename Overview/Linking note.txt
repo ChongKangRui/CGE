@@ -5,3 +5,5 @@ Application want to use ImGui but it only link staticly with the Engine itself
 
 solution: export imgui as dll to engine dll-> export engine dll to the application
 this allow us to solve the linking problem and use the functionality from the application
+
+///Note now the engine is not dll anymore, it is staticlib instead

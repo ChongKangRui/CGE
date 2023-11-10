@@ -78,7 +78,6 @@ namespace GE {
 			m_Data.Title.c_str(), nullptr, nullptr);
 
 		m_Context = new OpenGLContext(m_Window);
-
 		m_Context->Init();
 
 		

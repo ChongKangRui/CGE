@@ -2,7 +2,6 @@
 #include "Buffer.h"
 
 #include "Renderer.h"
-#include "Core/Core.h"
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
 
