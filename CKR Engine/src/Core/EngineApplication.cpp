@@ -7,6 +7,8 @@
 #include "Input.h"
 
 #include "Renderer/Renderer.h"
+#include "KeyCode.h"
+#include "MouseCode.h"
 
 
 namespace GE {
@@ -16,33 +18,33 @@ namespace GE {
 
 	Application* Application::s_Instance = nullptr;
 
-	
+
 	//Create window, set window event callback, everytime input trigger, callbackevent will trigger
-	GE::Application::Application()
+	GE::Application::Application() : m_Camera(-3.0f, 3.0f, -3.0f, 3.0f)
 	{
 		//GE_CORE_ASSERT(s_Instance, "Application already exists!");
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(Bind_Event_FN(OnEvent));
-		
+
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
 		//Generate opengl context and store it inside unsign int
 		//bind the opengl context to current window
-		
-	
+
+
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 			0.5f, -0.5f, 0.0f,1.0f, 0.0f, 0.0f, 1.0f,
 			0.0f, 0.5f,0.0f,1.0f, 1.0f, 1.0f, 1.0f,
 		};
 
-		
+
 		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-		
-		
+
+
 		//Because we setup iterator in the buffer layout, so we can do for loop
 		BufferLayout layout = {
 			{ShaderDataType::Float3, "a_Position"},
@@ -50,7 +52,7 @@ namespace GE {
 		};
 
 		m_VertexBuffer->SetLayout(layout);
-	
+
 
 		//for loop for the buffer element in the buffer layout.
 		//this should be inside vertex array
@@ -58,7 +60,7 @@ namespace GE {
 		for (const auto& element : m_VertexBuffer->GetLayout()) {
 			glEnableVertexAttribArray(index);
 			glVertexAttribPointer(index, element.GetComponentCount(),
-			ShaderDataTypeToOpenGlBaseType(element.Type), 
+			ShaderDataTypeToOpenGlBaseType(element.Type),
 				element.Normalized ? GL_TRUE : GL_FALSE,
 				m_VertexBuffer->GetLayout().GetStrides(), (const void*)element.Offset);
 			index++;
@@ -68,19 +70,19 @@ namespace GE {
 
 		//This will input the data into the shader program
 		//which will be the position 0 vec3 a_Position under there
-		
-		
+
+
 		uint32_t indices[3] = {
 			0,1,2
 		};
 		//the count is 3 because we have 3 element in array
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
+		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 
 		//////Vertex Array
 		m_VertexArray.reset(VertexArray::Create());
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		m_VertexArray->AddIndexBuffer(m_IndexBuffer);
-		
+
 
 		/////////////////////////////////////For square 
 		m_SquareVA.reset(VertexArray::Create());
@@ -120,10 +122,14 @@ namespace GE {
 		
 		out vec3 v_Position;
 		out vec4 v_Color;
+		
+		uniform mat4 u_ViewProjection;
+
 		void main(){
 			v_Position = a_Position;
 			v_Color = a_Color;
-			gl_Position = vec4(a_Position, 1.0);
+			gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+			
 		}
 		)";
 		std::string fragmentSrc = R"(
@@ -146,10 +152,12 @@ namespace GE {
 		layout(location = 0) in vec3 a_Position;
 		
 		out vec3 v_Position;
+
+		uniform mat4 u_ViewProjection;
 		
 		void main(){
 			v_Position = a_Position;
-			gl_Position = vec4(a_Position , 1.0);
+			gl_Position = u_ViewProjection* vec4(a_Position , 1.0);
 		}
 		)";
 		std::string fragmentSrc2 = R"(
@@ -179,21 +187,26 @@ namespace GE {
 		}
 		while (m_Running) {
 
-			
+
 			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0 });
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
+			//m_Camera.SetPosition({ 0.5f, -0.5f, 0.5f});
+			//m_Camera.SetRotation(55.0f);
+			Renderer::BeginScene(m_Camera);
 
 
-			m_Shader2->Bind();
-			Renderer::Submit(m_SquareVA);
+			//m_Shader2->Bind();
+			//m_Shader2->SetUniformMat4("u_ViewProjection", m_Camera.GetViewProjectionMatrix());
+			Renderer::Submit(m_Shader2, m_SquareVA);
 
-			m_Shader->Bind();
-			Renderer::Submit(m_VertexArray);
+			//m_Shader->Bind();
+			//m_Shader->SetUniformMat4("u_ViewProjection", m_Camera.GetViewProjectionMatrix());
+			Renderer::Submit(m_Shader, m_VertexArray);
+
 
 			Renderer::EndScene();
-			
+
 			//Layer Update in layerstack
 			for (Layer* layer : m_LayerStack) {
 				layer->OnUpdate();
@@ -209,18 +222,20 @@ namespace GE {
 
 			//Window Update
 			m_Window->OnUpdate();
-			
+
 
 		}
-		
+
 	}
 
 	//Event callback that bind to oneventcallback
 	void Application::OnEvent(Event& e)
 	{
-		EventDispatcher dispatcher(e); 
-	
+		EventDispatcher dispatcher(e);
+
 		dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_FN(OnWindowClosed));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(Bind_Event_FN(OnButtonPressed));
+		dispatcher.Dispatch<KeyPressedEvent>(Bind_Event_FN(OnKeyPressed));
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
 			(*--it)->OnEvent(e);
@@ -228,7 +243,7 @@ namespace GE {
 				break;
 		}
 
-		
+
 	}
 
 	void Application::PushLayer(Layer* layer)
@@ -253,6 +268,45 @@ namespace GE {
 
 	bool Application::OnButtonPressed(MouseButtonEvent& e)
 	{
+		switch (e.GetMouseButton()) {
+		case MOUSE_BUTTON_LEFT:
+			m_Camera.SetRotation(m_Camera.GetRotation() + 3);
+			break;
+		case MOUSE_BUTTON_RIGHT:
+			m_Camera.SetRotation(m_Camera.GetRotation() - 3);
+			break;
+
+		}
+		return true;
+	}
+
+	bool Application::OnKeyPressed(KeyPressedEvent& e)
+	{
+		switch (e.GetKeyCode()) {
+		case KEY_A: {
+
+			m_Camera.SetPosition({ m_Camera.GetPosition().x + 0.1f,  m_Camera.GetPosition().y ,  m_Camera.GetPosition().z });
+		}
+				  break;
+		case KEY_D: {
+
+			m_Camera.SetPosition({ m_Camera.GetPosition().x - 0.1f,  m_Camera.GetPosition().y ,  m_Camera.GetPosition().z });
+		}
+				  break;
+		case KEY_S: {
+
+			m_Camera.SetPosition({ m_Camera.GetPosition().x ,  m_Camera.GetPosition().y - 0.1f,  m_Camera.GetPosition().z });
+		}
+				  break;
+		case KEY_W: {
+
+			m_Camera.SetPosition({ m_Camera.GetPosition().x ,  m_Camera.GetPosition().y + 0.1f,  m_Camera.GetPosition().z });
+		}
+				  break;
+		}
+
+
+
 		return true;
 	}
 

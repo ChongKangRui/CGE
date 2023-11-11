@@ -25,6 +25,24 @@ class OpenGLVertexVuffer : public VertexBuffer
 class OpenGLIndexBuffer : public IndexBuffer 
 - both contain the data and implementation of the opengl shader
 
-Note, the implementation will be inside the engineapplication
+RendererAPI.h
+-an abstract class which use for different rendererAPI.
 
+OpenGLRendererAPI.h
+-child of the RendererAPI.h, implemented clear color, drawElement logic. 
+-RendererAPI will become a static instance in the RendererCommand
+
+RendererCommand.h
+-The actual class which use to render in the engine application. which will call the function from renderer when we call the function at the engine application
+
+Renderer.h
+-will be static as well, having the function like beginscene, endscene, submit(which call the function from renderer command as well), GetAPI
+
+
+
+
+
+////////////////////////////
+Note, the implementation will be inside the engineapplication
+Engine application is like a glue which glue everything different system together
  

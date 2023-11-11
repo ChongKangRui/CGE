@@ -12,6 +12,8 @@
 #include "Renderer/Buffer.h"
 #include "Renderer/Shader.h"
 #include "Renderer/VertexArray.h"
+
+#include "Renderer/OrthographicCamera.h"
 namespace GE {
 
 	//! This will be the base application class to setup layer, create window etc.
@@ -36,6 +38,7 @@ namespace GE {
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnButtonPressed(MouseButtonEvent& e);
+		bool OnKeyPressed(KeyPressedEvent& e);
 
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
@@ -52,6 +55,8 @@ namespace GE {
 		std::shared_ptr<VertexArray> m_VertexArray;
 
 		std::shared_ptr<VertexArray> m_SquareVA;
+
+		OrthographicCamera m_Camera;
 	private:
 		static Application* s_Instance;
 	};
