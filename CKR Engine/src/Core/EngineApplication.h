@@ -14,6 +14,7 @@
 #include "Renderer/VertexArray.h"
 
 #include "Renderer/OrthographicCamera.h"
+#include "TimeStep.h"
 namespace GE {
 
 	//! This will be the base application class to setup layer, create window etc.
@@ -37,8 +38,6 @@ namespace GE {
 		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
-		bool OnButtonPressed(MouseButtonEvent& e);
-		bool OnKeyPressed(KeyPressedEvent& e);
 
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
@@ -46,17 +45,8 @@ namespace GE {
 		bool m_Running = true;
 
 		LayerStack m_LayerStack;
-
-		//unsigned int m_VertexArray;
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<Shader> m_Shader2;
-		std::shared_ptr<VertexBuffer> m_VertexBuffer;
-		std::shared_ptr<IndexBuffer> m_IndexBuffer;
-		std::shared_ptr<VertexArray> m_VertexArray;
-
-		std::shared_ptr<VertexArray> m_SquareVA;
-
-		OrthographicCamera m_Camera;
+		
+		float m_LastFrameTime = 0.0f;
 	private:
 		static Application* s_Instance;
 	};

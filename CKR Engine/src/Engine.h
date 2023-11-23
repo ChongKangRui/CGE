@@ -11,6 +11,7 @@
 #include "Core/Input.h"
 #include "Core/KeyCode.h"
 #include "Core/MouseCode.h"
+#include "Core/TimeStep.h"
 
 
 //Rendering related
@@ -20,9 +21,6 @@
 #include "Core/Renderer/Shader.h"
 #include "Core/Renderer/VertexArray.h"
 #include "Core/Renderer/OrthographicCamera.h"
-
-
-//#include "imgui/imgui.h"
 
 // -------EntryPoint---------------
 #include "Core/EntryPoint.h"

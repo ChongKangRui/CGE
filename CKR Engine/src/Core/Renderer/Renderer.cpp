@@ -1,6 +1,8 @@
 #include "gepch.h"
 #include "Renderer.h"
 
+#include "Platform/OpenGL/OpenGLShader.h" 
+
 
 namespace GE {
 
@@ -15,10 +17,11 @@ namespace GE {
 	{
 	}
 
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& va)
+	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& va, const glm::mat4 transform)
 	{
 		shader->Bind();
-		shader->SetUniformMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMat4("u_ModelTransform", transform);
 
 		va->Bind();
 		RenderCommand::DrawIndexed(va);

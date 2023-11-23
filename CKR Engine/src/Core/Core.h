@@ -1,6 +1,6 @@
 #pragma once
 //#include "Log.h"
-//#include <Memory>
+#include <Memory>
 
 #ifdef GE_PLATFORM_WINDOW
 #if  GE_DYNAMIC_LINK
@@ -36,6 +36,14 @@
 #endif
 
 #define GE_BEVENT_FN(Func) std::bind(&Func, this, std::placeholders::_1)
+
+namespace GE {
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}
 
 
 

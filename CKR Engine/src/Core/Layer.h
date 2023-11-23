@@ -2,6 +2,7 @@
 
 #include "Core/Core.h"
 #include "Event/Event.h"
+#include "TimeStep.h"
 
 namespace GE {
 	class GE_API Layer
@@ -12,7 +13,7 @@ namespace GE {
 
 		virtual void OnAttach() {};
 		virtual void OnDetach() {};
-		virtual void OnUpdate() {};
+		virtual void OnUpdate(TimeStep deltatime) {};
 		virtual void OnRender() {};
 		virtual void OnEvent(Event& event) {};
 

@@ -36,13 +36,17 @@ RendererCommand.h
 -The actual class which use to render in the engine application. which will call the function from renderer when we call the function at the engine application
 
 Renderer.h
--will be static as well, having the function like beginscene, endscene, submit(which call the function from renderer command as well), GetAPI
+-will be static as well, having the function like beginscene, endscene, submit(which call the function from 
+renderer command as well), GetAPI
 
-
+OrthographicCamera.h
+-use to handle all OrthographicCamera position, rotation etc
+-but the actual setup for uniform is inside Renderer Submit() which will update the camera position in tick
 
 
 
 ////////////////////////////
-Note, the implementation will be inside the engineapplication
 Engine application is like a glue which glue everything different system together
+
+//Now all will be move to sandbox instead of engine application, but i would rather to keep it inside game engine application for rendering purpose
  

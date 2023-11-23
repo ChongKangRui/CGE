@@ -10,6 +10,7 @@
 #include "KeyCode.h"
 #include "MouseCode.h"
 
+#include <GLFW/glfw3.h>
 
 namespace GE {
 
@@ -20,14 +21,14 @@ namespace GE {
 
 
 	//Create window, set window event callback, everytime input trigger, callbackevent will trigger
-	GE::Application::Application() : m_Camera(-3.0f, 3.0f, -3.0f, 3.0f)
+	GE::Application::Application()
 	{
 		//GE_CORE_ASSERT(s_Instance, "Application already exists!");
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
 		m_Window->SetEventCallback(Bind_Event_FN(OnEvent));
-
+		m_Window->SetVSync(true);
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
 
@@ -44,9 +45,13 @@ namespace GE {
 			GELog_Fatal("No Window Reference created from application");
 		}
 		while (m_Running) {
+			float time = (float)glfwGetTime(); ///platform::GetTime()
+			TimeStep timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
 			//Layer Update in layerstack
 			for (Layer* layer : m_LayerStack) {
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 			}
 
 			//to render every layer
@@ -71,8 +76,7 @@ namespace GE {
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_FN(OnWindowClosed));
-		dispatcher.Dispatch<MouseButtonPressedEvent>(Bind_Event_FN(OnButtonPressed));
-		dispatcher.Dispatch<KeyPressedEvent>(Bind_Event_FN(OnKeyPressed));
+		
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
 			(*--it)->OnEvent(e);
@@ -103,48 +107,7 @@ namespace GE {
 		return true;
 	}
 
-	bool Application::OnButtonPressed(MouseButtonEvent& e)
-	{
-		switch (e.GetMouseButton()) {
-		case MOUSE_BUTTON_LEFT:
-			m_Camera.SetRotation(m_Camera.GetRotation() + 3);
-			break;
-		case MOUSE_BUTTON_RIGHT:
-			m_Camera.SetRotation(m_Camera.GetRotation() - 3);
-			break;
+	
 
-		}
-		return true;
-	}
-
-	bool Application::OnKeyPressed(KeyPressedEvent& e)
-	{
-		switch (e.GetKeyCode()) {
-		case KEY_A: {
-
-			m_Camera.SetPosition({ m_Camera.GetPosition().x + 0.1f,  m_Camera.GetPosition().y ,  m_Camera.GetPosition().z });
-		}
-				  break;
-		case KEY_D: {
-
-			m_Camera.SetPosition({ m_Camera.GetPosition().x - 0.1f,  m_Camera.GetPosition().y ,  m_Camera.GetPosition().z });
-		}
-				  break;
-		case KEY_S: {
-
-			m_Camera.SetPosition({ m_Camera.GetPosition().x ,  m_Camera.GetPosition().y - 0.1f,  m_Camera.GetPosition().z });
-		}
-				  break;
-		case KEY_W: {
-
-			m_Camera.SetPosition({ m_Camera.GetPosition().x ,  m_Camera.GetPosition().y + 0.1f,  m_Camera.GetPosition().z });
-		}
-				  break;
-		}
-
-
-
-		return true;
-	}
-
+	
 }
