@@ -48,19 +48,21 @@ public:
 
 		/////////////////////////////////////For square 
 		m_SquareVA.reset(VertexArray::Create());
-		float squarevertices[3 * 4] = {
-			-0.75f, -0.75f, 0.0f,
-			0.75f, -0.75f, 0.0f,
-			-0.75f, 0.75f,0.0f,
-			0.75f, 0.75f,0.0f
+		float squarevertices[5 * 4] = {
+			-0.75f, -0.75f, 0.0f, 0.0f, 0.0f,
+			0.75f, -0.75f, 0.0f,1.0f, 0.0f,
+			-0.75f, 0.75f,0.0f,0.0f, 1.0f,
+			0.75f, 0.75f,0.0f,1.0f, 1.0f,
 		};
 
 
 		GE::Ref<VertexBuffer> squareVB;
 		squareVB.reset(VertexBuffer::Create(squarevertices, sizeof(squarevertices)));
 
+		//Expand our layout so stride can get the correct offset
 		BufferLayout sqlayout = {
 			{ShaderDataType::Float3, "a_Position"},
+			{ShaderDataType::Float2, "a_TexCoord"}
 		};
 
 		squareVB->SetLayout(sqlayout);
@@ -140,6 +142,42 @@ public:
 
 		m_Shader2.reset(Shader::Create(vertexSrc2, fragmentSrc2));
 
+		//For texture shader
+		std::string vertexSrc3 = R"(
+		#version 330 core
+		
+		layout(location = 0) in vec3 a_Position;
+		layout(location = 1) in vec2 a_TexCoord;
+		
+		uniform mat4 u_ViewProjection;
+		uniform mat4 u_ModelTransform;
+		
+		out vec2 v_TexCoord;
+
+		void main(){
+			v_TexCoord = a_TexCoord;
+			gl_Position = u_ViewProjection* u_ModelTransform * vec4(a_Position , 1.0);
+		}
+		)";
+		std::string fragmentSrc3 = R"(
+		#version 330 core
+		
+		layout(location = 0) out vec4 color;
+		in vec2 v_TexCoord;
+
+		uniform sampler2D u_Texture;
+		
+		void main(){
+			color = texture(u_Texture, v_TexCoord);
+		}
+		)";
+
+		m_TextureShader.reset(Shader::Create(vertexSrc3, fragmentSrc3));
+		m_Texture2D = Texture2D::Create("assets/Checkerboard.png");
+
+		std::dynamic_pointer_cast<GE::OpenGLShader>(m_TextureShader)->Bind();
+		std::dynamic_pointer_cast<GE::OpenGLShader>(m_TextureShader)->SetUniformInt("u_Texture", 0);
+
 	};
 
 	void OnUpdate(GE::TimeStep deltatime) override {
@@ -157,7 +195,7 @@ public:
 
 		GE::Renderer::BeginScene(m_Camera);
 
-		glm::mat4 scales = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+		glm::mat4 scales = glm::scale(glm::mat4(1.0f), glm::vec3(0.12f));
 
 	
 		std::dynamic_pointer_cast<GE::OpenGLShader>(m_Shader2)->Bind();
@@ -177,7 +215,12 @@ public:
 				GE::Renderer::Submit(m_Shader2, m_SquareVA, glm::translate(glm::mat4(1.0f), m_TrianglePos + pos) * scales);
 			}
 		}
-		GE::Renderer::Submit(m_Shader, m_VertexArray, glm::translate(glm::mat4(1.0f), m_SquadPos));
+
+		m_Texture2D->Bind();
+
+		GE::Renderer::Submit(m_TextureShader, m_SquareVA, glm::translate(glm::mat4(3.0f), m_SquadPos + glm::vec3(-0.3)) * 0.2f);
+		//render triangle
+		//GE::Renderer::Submit(m_Shader, m_VertexArray, glm::translate(glm::mat4(1.0f), m_SquadPos));
 		GE::Renderer::EndScene();
 
 	};
@@ -240,9 +283,14 @@ public:
 private:
 	GE::Ref<GE::Shader> m_Shader;
 	GE::Ref<GE::Shader> m_Shader2;
+	GE::Ref<GE::Shader> m_TextureShader;
+
 	GE::Ref<GE::VertexBuffer> m_VertexBuffer;
 	GE::Ref<GE::IndexBuffer> m_IndexBuffer;
 	GE::Ref<GE::VertexArray> m_VertexArray;
+
+	GE::Ref<GE::Texture2D> m_Texture2D;
+
 
 	GE::Ref<GE::VertexArray> m_SquareVA;
 

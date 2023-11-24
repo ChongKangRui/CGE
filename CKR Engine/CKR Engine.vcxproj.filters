@@ -22,6 +22,9 @@
     <Filter Include="Vendor\Glm\glm\gtx">
       <UniqueIdentifier>{73BA4CFD-5F9E-0D53-C8FE-07A6B401F8D4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Vendor\stb_image">
+      <UniqueIdentifier>{EDE315D3-D9DC-3425-020F-1AAAEE661431}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
@@ -34,8 +37,14 @@
     <Filter Include="src\Core\Imgui">
       <UniqueIdentifier>{AF388104-9B06-750A-849A-E5307007516F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core\Renderer">
+      <UniqueIdentifier>{EB009555-5717-93EB-A08E-1E0D0CE46373}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Platform\OpenGL">
+      <UniqueIdentifier>{35A49437-A105-7245-2A73-B8F796D3A804}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Platform\Window">
       <UniqueIdentifier>{E807C449-5469-A157-DDD6-E7094937D816}</UniqueIdentifier>
@@ -1290,6 +1299,9 @@
     <ClInclude Include="Vendor\Glm\glm\vector_relational.hpp">
       <Filter>Vendor\Glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="Vendor\stb_image\stb_image.h">
+      <Filter>Vendor\stb_image</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Core.h">
       <Filter>src\Core</Filter>
     </ClInclude>
@@ -1332,11 +1344,62 @@
     <ClInclude Include="src\Core\MouseCode.h">
       <Filter>src\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Buffer.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\GraphicContext.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\OrthographicCamera.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\PerspectiveCamera.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Renderer.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\RendererAPI.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\RendererCommand.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Shader.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Texture.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\VertexArray.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\TimeStep.h">
+      <Filter>src\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Window.h">
       <Filter>src\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
+      <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\Window\WindowsInput.h">
       <Filter>src\Platform\Window</Filter>
@@ -1347,23 +1410,11 @@
     <ClInclude Include="src\gepch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Renderer\GraphicContext.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
-    <ClInclude Include="src\Core\Renderer\Shader.h" />
-    <ClInclude Include="src\Core\Renderer\Buffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
-    <ClInclude Include="src\Core\Renderer\Renderer.h" />
-    <ClInclude Include="src\Core\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Core\Renderer\RendererAPI.h" />
-    <ClInclude Include="src\Core\Renderer\RendererCommand.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
-    <ClInclude Include="src\Core\Renderer\OrthographicCamera.h" />
-    <ClInclude Include="src\Core\Renderer\PerspectiveCamera.h" />
-    <ClInclude Include="src\Core\TimeStep.h" />
-    <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Vendor\stb_image\std_image.cpp">
+      <Filter>Vendor\stb_image</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\EngineApplication.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
@@ -1382,6 +1433,54 @@
     <ClCompile Include="src\Core\Log.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Renderer\Buffer.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\OrthographicCamera.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\PerspectiveCamera.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\Renderer.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\RendererAPI.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\RendererCommand.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\Shader.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\Texture.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\VertexArray.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Window.cpp">
+      <Filter>src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\Window\WindowsInput.cpp">
       <Filter>src\Platform\Window</Filter>
     </ClCompile>
@@ -1391,18 +1490,5 @@
     <ClCompile Include="src\gepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
-    <ClCompile Include="src\Core\Renderer\Shader.cpp" />
-    <ClCompile Include="src\Core\Renderer\Buffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
-    <ClCompile Include="src\Core\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\Core\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\Core\Renderer\RendererAPI.cpp" />
-    <ClCompile Include="src\Core\Renderer\RendererCommand.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
-    <ClCompile Include="src\Core\Renderer\PerspectiveCamera.cpp" />
-    <ClCompile Include="src\Core\Renderer\OrthographicCamera.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>

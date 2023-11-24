@@ -16,6 +16,7 @@ IncludeDir["GLFW"] = "CKR Engine/Vendor/GLFW/include"
 IncludeDir["Glad"]	= "CKR Engine/Vendor/Glad/include"
 IncludeDir["imgui"]	= "CKR Engine/Vendor/imgui"
 IncludeDir["Glm"]	= "CKR Engine/Vendor/Glm"
+IncludeDir["stb_image"]	= "CKR Engine/Vendor/stb_image"
 
 include "CKR Engine/Vendor/GLFW"
 include "CKR Engine/Vendor/Glad"
@@ -34,10 +35,12 @@ project "CKR Engine"
 	pchheader "gepch.h"
 	pchsource "CKR Engine/src/gepch.cpp"
 
-	-- used to include the file into project
+	-- compile these files when regenerate project
 	files{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/Vendor/stb_image/**.cpp",
+		"%{prj.name}/Vendor/stb_image/**.h",
 		"%{prj.name}/Vendor/Glm/glm/**.hpp",
 		"%{prj.name}/Vendor/Glm/glm/**.inl"
 	}
@@ -54,7 +57,8 @@ project "CKR Engine"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.imgui}",
-		"%{IncludeDir.Glm}"
+		"%{IncludeDir.Glm}",
+		"%{IncludeDir.stb_image}"
 	}
 
 	links{
