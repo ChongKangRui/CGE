@@ -1,4 +1,6 @@
 Note: all of the renderer class will be abstraction class to adopt different API
+-some of the abstraction class will be handle for different api creation.
+-example like vertex and index buffer static create function which will be used to create the buffer based on chosen api
 
 Buffer.h
 
@@ -22,10 +24,6 @@ Shader.h
 -Handle all of the shader work, use shader, delete shader, compile shader etc.
 -need to pass in vertex and fragment shader program so that it can compile shader
 
-OpenGLBuffer.h
-class OpenGLVertexVuffer : public VertexBuffer
-class OpenGLIndexBuffer : public IndexBuffer 
-- both contain the data and implementation of the opengl shader
 
 RendererAPI.h
 -an abstract class which use for different rendererAPI.

@@ -11,13 +11,16 @@ typedef unsigned int GLenum;
 namespace GE {
 	class OpenGLShader : public Shader {
 	public:
-		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
+		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 		OpenGLShader(const std::string& shaderPath);
 
 		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
+
+		virtual const std::string& GetName() const override { return m_Name; };
+
 
 		void SetUniformInt(const std::string& name, const float& value);
 		void SetUniformFloat(const std::string& name, const float& value);
@@ -35,6 +38,7 @@ namespace GE {
 
 	private:
 		uint32_t m_RendererID;
+		std::string m_Name;
 	};
 }
 

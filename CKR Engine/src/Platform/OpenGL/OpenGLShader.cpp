@@ -25,7 +25,7 @@ namespace GE {
 	}
 
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc) : m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
@@ -36,10 +36,17 @@ namespace GE {
 	OpenGLShader::OpenGLShader(const std::string& shaderPath)
 	{
 		std::string shaderStringSource = ReadFile(shaderPath);
-
 		auto source = PreProcess(shaderStringSource);
-
 		Compile(source);
+
+		// assets/Shaders/Texture.glsl
+		auto lastSlash = shaderPath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		auto lastDot = shaderPath.rfind(".");
+		auto count = lastDot == std::string::npos ? shaderPath.size() - lastSlash : lastDot-lastSlash;
+		m_Name = shaderPath.substr(lastSlash, count);
+
+
 
 	}
 	OpenGLShader::~OpenGLShader()
@@ -98,7 +105,7 @@ namespace GE {
 	{
 
 		std::string result;
-		std::ifstream in(filepath, std::ios::in, std::ios::binary);
+		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
@@ -148,8 +155,9 @@ namespace GE {
 	{
 		
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIds(shaderMap.size());
-
+		GE_CORE_ASSERT(shaderMap.size() <= 2, "We only support 2 shader");
+		std::array<GLenum, 2> glShaderIds;
+		int glShaderIndex = 0;
 
 		for (auto&& [key, value] : shaderMap) {
 			
@@ -185,7 +193,7 @@ namespace GE {
 			}
 
 			glAttachShader(program, shader);
-			glShaderIds.push_back(shader);
+			glShaderIds[glShaderIndex++] = shader;
 
 			
 		}

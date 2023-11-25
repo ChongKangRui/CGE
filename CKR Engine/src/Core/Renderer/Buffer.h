@@ -91,12 +91,12 @@ namespace GE {
 			uint32_t offset = 0;
 			
 			for (auto& element : m_Elements) {
-
-				//Log_Trace("{0}", element.Size);
-
 				element.Offset = offset;
 				offset += element.Size;
-				m_Stride += element.Size;
+				m_Stride = offset;
+
+				//Just for better understanding
+				//Log_Info("offset {0}, m_Stride {1}", offset, m_Stride);
 			}
 		}
 	private:

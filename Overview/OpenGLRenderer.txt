@@ -1,0 +1,30 @@
+Note: this is the abstraction implemented class for opengl
+
+OpenGLBuffer.h
+class OpenGLVertexVuffer : public VertexBuffer
+class OpenGLIndexBuffer : public IndexBuffer 
+- both contain the data and implementation of the opengl shader
+
+OpenGLVertexArray.h
+
+
+OpenGLRendererAPI.h
+-child of the RendererAPI.h, implemented clear color, drawElement logic. 
+-RendererAPI will become a static instance in the RendererCommand
+
+OpenGLShader.h
+-This class will be used to handle all of the shader program
+-It capable to read shaderfile so we dont need to create shader everytime in our application.Shader will be a solely file that exist in our assets folder
+-it will be able to compile shader based on the read file results. It use an unordermap to store the shader enum and the shader program source(which is fragment and vertex shader string)
+-This class will also responsible to update the uniform for int, float1/2/3/4 and mat3/4
+
+OpenGLTexture.h
+-this class should be responsible to read and load the image(png, jpeg) as a texture
+-this class will also use to bind texture to slot
+
+
+
+
+
+
+ 

@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
-#include <glm/glm.hpp>
+#include <unordered_map>
+#include "Core/Core.h"
+
 
 namespace GE {
 	class Shader {
@@ -11,8 +13,26 @@ namespace GE {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		static Shader* Create(const std::string& vertexSrc, const std::string& fragmentSrc);
-		static Shader* Create(const std::string& path);
+		virtual const std::string& GetName() const =0;
 
+		static Ref<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+		static Ref<Shader> Create(const std::string& path);
+
+	};
+
+
+	class ShaderLibrary {
+	public:
+		void Add(const Ref<Shader>& shader);
+		void Add(const std::string& name, const Ref<Shader>& shader);
+
+		Ref<Shader> Load(const std::string& filepaths);
+		Ref<Shader> Load(const std::string& name, const std::string& filepaths);
+
+		Ref<Shader> Get(const std::string& name);
+
+		bool Exists(const std::string& name) const;
+	private:
+		std::unordered_map<std::string, Ref<Shader>> m_Shaders;
 	};
 }

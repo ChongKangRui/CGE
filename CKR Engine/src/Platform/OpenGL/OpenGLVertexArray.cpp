@@ -2,6 +2,8 @@
 #include "OpenGLVertexArray.h"
 #include <glad/glad.h>
 
+
+
 namespace GE {
 
 	static GLenum ShaderDataTypeToOpenGlBaseType(ShaderDataType type) {
@@ -58,12 +60,18 @@ namespace GE {
 		uint32_t index = 0;
 		for (const auto& element : vertexBuffer->GetLayout()) {
 			glEnableVertexAttribArray(index);
+
+			//Set Vertex layout here
 			glVertexAttribPointer(index, element.GetComponentCount(),
 				ShaderDataTypeToOpenGlBaseType(element.Type),
 				element.Normalized ? GL_TRUE : GL_FALSE,
 				vertexBuffer->GetLayout().GetStrides(), (const void*)element.Offset);
 			index++;
+
+			Log_Info("{0}", vertexBuffer->GetLayout().GetStrides());
 		}
+
+		
 
 		m_VertexBuffer.push_back(vertexBuffer);
 	}

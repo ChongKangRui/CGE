@@ -108,7 +108,7 @@ public:
 			color = v_Color;
 		}
 		)";
-		m_Shader.reset(Shader::Create(vertexSrc, fragmentSrc));
+		m_Shader = Shader::Create("Triangle", vertexSrc, fragmentSrc);
 
 		//For blue square
 		std::string vertexSrc2 = R"(
@@ -140,7 +140,7 @@ public:
 		}
 		)";
 
-		m_Shader2.reset(Shader::Create(vertexSrc2, fragmentSrc2));
+		m_Shader2 = Shader::Create("Square", vertexSrc2, fragmentSrc2);
 
 		//For texture shader
 		std::string vertexSrc3 = R"(
@@ -172,12 +172,14 @@ public:
 		}
 		)";
 
-		m_TextureShader.reset(Shader::Create("assets/Shader/Texture.glsl"));
+		//m_TextureShader = Shader::Create( "assets/Shader/Texture.glsl");
+		auto textureShader = m_ShaderLibrary.Load("assets/Shader/Texture.glsl");
+		
 		m_Texture2D = Texture2D::Create("assets/Textures/Checkerboard.png");
 		m_Texture2DSecond = Texture2D::Create("assets/Textures/TreeMat.png");
 
-		std::dynamic_pointer_cast<GE::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<GE::OpenGLShader>(m_TextureShader)->SetUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<GE::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<GE::OpenGLShader>(textureShader)->SetUniformInt("u_Texture", 0);
 
 	};
 
@@ -216,12 +218,13 @@ public:
 				GE::Renderer::Submit(m_Shader2, m_SquareVA, glm::translate(glm::mat4(1.0f), m_TrianglePos + pos) * scales);
 			}
 		}
+		auto textureShader = m_ShaderLibrary.Get("Texture");
 
 		m_Texture2D->Bind();
-		GE::Renderer::Submit(m_TextureShader, m_SquareVA, glm::translate(glm::mat4(3.0f), m_SquadPos + glm::vec3(-0.3)) * 0.2f);
+		GE::Renderer::Submit(textureShader, m_SquareVA, glm::translate(glm::mat4(3.0f), m_SquadPos + glm::vec3(-0.3)) * 0.2f);
 
 		m_Texture2DSecond->Bind();
-		GE::Renderer::Submit(m_TextureShader, m_SquareVA, glm::translate(glm::mat4(3.0f), glm::vec3(-0.7,-0.7,-0.3)) * 0.2f);
+		GE::Renderer::Submit(textureShader, m_SquareVA, glm::translate(glm::mat4(3.0f), glm::vec3(-0.7,-0.7,-0.3)) * 0.2f);
 		//render triangle
 		//GE::Renderer::Submit(m_Shader, m_VertexArray, glm::translate(glm::mat4(1.0f), m_SquadPos));
 		GE::Renderer::EndScene();
@@ -284,9 +287,10 @@ public:
 
 	}
 private:
+	GE::ShaderLibrary m_ShaderLibrary;
 	GE::Ref<GE::Shader> m_Shader;
 	GE::Ref<GE::Shader> m_Shader2;
-	GE::Ref<GE::Shader> m_TextureShader;
+	//GE::Ref<GE::Shader> m_TextureShader;
 
 	GE::Ref<GE::VertexBuffer> m_VertexBuffer;
 	GE::Ref<GE::IndexBuffer> m_IndexBuffer;
