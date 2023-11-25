@@ -21,4 +21,20 @@ namespace GE {
 		GE_CORE_ASSERT(false, "Unknown RendererAPI!");
 		return nullptr;
 	}
+	Shader* Shader::Create(const std::string& path)
+	{
+
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::API::None: {
+			GE_CORE_ASSERT(false, "RendererAPI::None Not supported");
+			return nullptr;
+		}
+		case RendererAPI::API::OpenGL:
+			return new OpenGLShader(path);
+
+		}
+
+		GE_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
 }

@@ -172,8 +172,9 @@ public:
 		}
 		)";
 
-		m_TextureShader.reset(Shader::Create(vertexSrc3, fragmentSrc3));
-		m_Texture2D = Texture2D::Create("assets/Checkerboard.png");
+		m_TextureShader.reset(Shader::Create("assets/Shader/Texture.glsl"));
+		m_Texture2D = Texture2D::Create("assets/Textures/Checkerboard.png");
+		m_Texture2DSecond = Texture2D::Create("assets/Textures/TreeMat.png");
 
 		std::dynamic_pointer_cast<GE::OpenGLShader>(m_TextureShader)->Bind();
 		std::dynamic_pointer_cast<GE::OpenGLShader>(m_TextureShader)->SetUniformInt("u_Texture", 0);
@@ -217,8 +218,10 @@ public:
 		}
 
 		m_Texture2D->Bind();
-
 		GE::Renderer::Submit(m_TextureShader, m_SquareVA, glm::translate(glm::mat4(3.0f), m_SquadPos + glm::vec3(-0.3)) * 0.2f);
+
+		m_Texture2DSecond->Bind();
+		GE::Renderer::Submit(m_TextureShader, m_SquareVA, glm::translate(glm::mat4(3.0f), glm::vec3(-0.7,-0.7,-0.3)) * 0.2f);
 		//render triangle
 		//GE::Renderer::Submit(m_Shader, m_VertexArray, glm::translate(glm::mat4(1.0f), m_SquadPos));
 		GE::Renderer::EndScene();
@@ -290,6 +293,7 @@ private:
 	GE::Ref<GE::VertexArray> m_VertexArray;
 
 	GE::Ref<GE::Texture2D> m_Texture2D;
+	GE::Ref<GE::Texture2D> m_Texture2DSecond;
 
 
 	GE::Ref<GE::VertexArray> m_SquareVA;

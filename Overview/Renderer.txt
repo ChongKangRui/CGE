@@ -1,3 +1,5 @@
+Note: all of the renderer class will be abstraction class to adopt different API
+
 Buffer.h
 
 class IndexBuffer and VertexBuffer abstraction
