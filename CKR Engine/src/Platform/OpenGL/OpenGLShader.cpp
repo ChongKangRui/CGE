@@ -46,7 +46,7 @@ namespace GE {
 		auto count = lastDot == std::string::npos ? shaderPath.size() - lastSlash : lastDot-lastSlash;
 		m_Name = shaderPath.substr(lastSlash, count);
 
-
+		Log_Info("Shader{0}", shaderPath);
 
 	}
 	OpenGLShader::~OpenGLShader()
@@ -131,9 +131,12 @@ namespace GE {
 		size_t pos = source.find(typeToken, 0);
 		while (pos != std::string::npos) {
 			size_t eol = source.find_first_of("\r\n", pos);
+
 			GE_CORE_ASSERT(eol != std::string::npos, "Syntax error");
+
 			size_t begin = pos + typeTokenLength + 1;
 			std::string type = source.substr(begin, eol - begin);
+
 			GE_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specific");
 
 			size_t nextlinePos = source.find_first_not_of("\r\n", eol);
@@ -143,7 +146,7 @@ namespace GE {
 			shaderSource[ShaderTypeFromString(type)] = source.substr(nextlinePos, pos -
 				(nextlinePos == std::string::npos ? source.size() - 1 : nextlinePos));
 
-
+			Log_Info("eol : {0}, begin : {1}, nextlinePos : {2}", eol, begin, nextlinePos);
 		}
 
 		return shaderSource;

@@ -18,7 +18,7 @@ class ExampleLayer : public GE::Layer {
 
 	
 public:
-	ExampleLayer() : Layer("Testing"), m_Camera(-1.0f, 1.0f, -1.0f, 1.0f), m_CameraPosition({0.0f}), m_CameraRotation(0.0f), m_TrianglePos(0.0f), m_SquadPos(0.0f){
+	ExampleLayer() : Layer("Testing"), m_CameraController(1280/720, true), m_TrianglePos(0.0f), m_SquadPos(0.0f) {
 		using namespace GE;
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
@@ -186,17 +186,16 @@ public:
 	void OnUpdate(GE::TimeStep deltatime) override {
 
 		//Log_Trace("Delta time: {0}s {1}ms", deltatime.GetSeconds(), deltatime.GetMilliseconds());
-		InputEvent(deltatime);
+		//InputEvent(deltatime);
+		m_CameraController.OnUpdate(deltatime);
 
 		GE::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0 });
 		GE::RenderCommand::Clear();
 
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
+		
 
-
-		GE::Renderer::BeginScene(m_Camera);
+		GE::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		glm::mat4 scales = glm::scale(glm::mat4(1.0f), glm::vec3(0.12f));
 
@@ -239,7 +238,7 @@ public:
 	}
 
 	void OnEvent(GE::Event& event) override {
-
+		m_CameraController.OnEvent(event);
 		
 	}
 
@@ -247,33 +246,20 @@ public:
 
 
 		float time = ts;
-		float speed = time * m_CameraMoveSpeed;
+		float speed = time * 10;
 		if (GE::Input::IsKeyPressed(KEY_TAB))
 			Log_Trace("Tab key is pressed (poll)!");
-		if (GE::Input::IsKeyPressed(KEY_LEFT))
-			m_CameraPosition.x -= speed;
-		else if (GE::Input::IsKeyPressed(KEY_RIGHT))
-			m_CameraPosition.x += speed;
+	
+		
 
-		if (GE::Input::IsKeyPressed(KEY_UP))
-			m_CameraPosition.y += speed;
-		else if (GE::Input::IsKeyPressed(KEY_DOWN))
-			m_CameraPosition.y -= speed;
-
-		if (GE::Input::IsKeyPressed(KEY_Q))
-			m_CameraRotation += speed;
-		if (GE::Input::IsKeyPressed(KEY_E))
-			m_CameraRotation -= speed;
-
-
-		if (GE::Input::IsKeyPressed(KEY_W))
+	/*	if (GE::Input::IsKeyPressed(KEY_W))
 			m_TrianglePos.y += speed;
 		else if (GE::Input::IsKeyPressed(KEY_S))
 			m_TrianglePos.y -= speed;
 		if (GE::Input::IsKeyPressed(KEY_A))
 			m_TrianglePos.x += speed;
 		if (GE::Input::IsKeyPressed(KEY_D))
-			m_TrianglePos.x -= speed;
+			m_TrianglePos.x -= speed;*/
 
 
 		if (GE::Input::IsKeyPressed(KEY_I))
@@ -299,19 +285,12 @@ private:
 	GE::Ref<GE::Texture2D> m_Texture2D;
 	GE::Ref<GE::Texture2D> m_Texture2DSecond;
 
-
 	GE::Ref<GE::VertexArray> m_SquareVA;
 
-	GE::OrthographicCamera m_Camera;
-	glm::vec3 m_CameraPosition;
+	GE::OrthographicCameraController m_CameraController;
+
 	glm::vec3 m_TrianglePos;
 	glm::vec3 m_SquadPos;
-
-	
-	float m_CameraRotation;
-
-	float m_CameraRotationSpeed = 1.0f;
-	float m_CameraMoveSpeed = 10.0f;
 
 	glm::vec4 m_SquareColor = { 1,0.3,0.4,1.0f };
 };

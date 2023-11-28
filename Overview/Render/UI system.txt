@@ -1,0 +1,2 @@
+//////need a Layout system
+///need to support different layout like 4K screen, different resolution of phone/desptop

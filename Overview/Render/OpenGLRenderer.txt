@@ -6,7 +6,10 @@ class OpenGLIndexBuffer : public IndexBuffer
 - both contain the data and implementation of the opengl shader
 
 OpenGLVertexArray.h
-
+-Responsible to process index and vertex buffer data.
+-Add index buffer will set and bind the index buffer
+-Add vertex buffer will process to a forloop and process the data
+-
 
 OpenGLRendererAPI.h
 -child of the RendererAPI.h, implemented clear color, drawElement logic. 

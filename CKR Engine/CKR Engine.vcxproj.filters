@@ -1410,6 +1410,7 @@
     <ClInclude Include="src\gepch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vendor\stb_image\std_image.cpp">
@@ -1490,5 +1491,6 @@
     <ClCompile Include="src\gepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

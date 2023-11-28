@@ -1,0 +1,52 @@
+Note: all of the renderer class will be abstraction class to adopt different API
+-some of the abstraction class will be handle for different api creation.
+-example like vertex and index buffer static create function which will be used to create the buffer based on chosen api
+
+Buffer.h
+
+class IndexBuffer and VertexBuffer abstraction
+-Only contain the function, not contain the data. This way allow us to implement the different implementation for both opengl and directx
+-contain bind, unbind as well as a static function to create vertex and index
+
+-enum ShaderDataType
+Our own shaderdatatype in order to input the attribute into the shader program
+//Use ShaderDataTypeSize(type) to get the size of the shader type. it is important because it let opengl to know
+//the exact input data like position, color inside the array.
+
+-struct BufferElements 
+Contain Name, Offset, Size, Normalized and Type. allow to GetComponentCount()
+
+class BufferLayout
+-buffer layout contain std::vector<BufferElements>
+-it will calculate stride and offset as well.
+
+Shader.h
+-Handle all of the shader work, use shader, delete shader, compile shader etc.
+-need to pass in vertex and fragment shader program so that it can compile shader
+
+
+RendererAPI.h
+-an abstract class which use for different rendererAPI.
+
+OpenGLRendererAPI.h
+-child of the RendererAPI.h, implemented clear color, drawElement logic. 
+-RendererAPI will become a static instance in the RendererCommand
+
+RendererCommand.h
+-The actual class which use to render in the engine application. which will call the function from renderer when we call the function at the engine application
+
+Renderer.h
+-will be static as well, having the function like beginscene, endscene, submit(which call the function from 
+renderer command as well), GetAPI
+
+OrthographicCamera.h
+-use to handle all OrthographicCamera position, rotation etc
+-but the actual setup for uniform is inside Renderer Submit() which will update the camera position in tick
+
+
+
+////////////////////////////
+Engine application is like a glue which glue everything different system together
+
+//Now all will be move to sandbox instead of engine application, but i would rather to keep it inside game engine application for rendering purpose
+ 

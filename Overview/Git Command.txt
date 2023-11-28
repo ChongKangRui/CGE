@@ -3,7 +3,7 @@ git commit -m "Message"
 git push
 git status
 git restore
-git submodule add website "File location"
+git submodule add github/website "File location"
 
 switching directory
 -git checkout branchname

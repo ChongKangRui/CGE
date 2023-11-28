@@ -7,6 +7,8 @@ namespace GE {
 	{
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top);
+		
+		void SetProjection(float left, float right, float bottom, float top);
 
 		const glm::vec3& GetPosition() const {
 			return m_Position;
@@ -21,6 +23,8 @@ namespace GE {
 			m_Rotation = rotation;
 			RecalculateViewMatrix();
 		}
+
+		
 		const glm::mat4& GetViewProjectionMatrix() const {
 			return m_ViewProjectionMatrix;
 		}
