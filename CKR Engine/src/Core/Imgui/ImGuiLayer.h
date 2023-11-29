@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Layer.h"
+#include "Core/Base/Layer.h"
 #include "Core/Event/KeyEvent.h"
 #include "Core/Event/MouseEvent.h"
 #include "Core/Event/ApplicationEvent.h"
@@ -16,7 +16,7 @@ namespace GE {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 		
-		virtual void OnRender() override;
+		virtual void OnImGuiRender() override;
 		void Begin();
 		void End();
 

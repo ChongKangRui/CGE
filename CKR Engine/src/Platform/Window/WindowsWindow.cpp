@@ -1,6 +1,6 @@
 #include "gepch.h"
 #include "WindowsWindow.h"
-#include "Core/Log.h"
+#include "Core/Base/Log.h"
 
 #include "Core/Event/MouseEvent.h"
 #include "Core/Event/ApplicationEvent.h"
@@ -101,6 +101,8 @@ namespace GE {
 			data.Width = Width;
 			data.Height = Height;
 			WindowResizeEvent event(Width, Height);
+			GELog_Warn("Current Window Size: {0},{1}", Width, Height);
+
 			data.EventCallback(event);
 
 

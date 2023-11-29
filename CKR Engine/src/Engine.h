@@ -3,15 +3,15 @@
 //For use by application/outside of engine client only
 //Include for Game File
 
-#include "Core/EngineApplication.h"
-#include "Core/Layer.h"
-#include "Core/Log.h"
+#include "Core/Base/EngineApplication.h"
+#include "Core/Base/Layer.h"
+#include "Core/Base/Log.h"
 #include "Core/Imgui/ImGuiLayer.h"
 
-#include "Core/Input.h"
-#include "Core/KeyCode.h"
-#include "Core/MouseCode.h"
-#include "Core/TimeStep.h"
+#include "Core/Base/Input.h"
+#include "Core/Base/KeyCode.h"
+#include "Core/Base/MouseCode.h"
+#include "Core/Base/TimeStep.h"
 
 #include "Core/OrthographicCameraController.h"
 
@@ -26,5 +26,5 @@
 #include "Core/Renderer/OrthographicCamera.h"
 
 // -------EntryPoint---------------
-#include "Core/EntryPoint.h"
+#include "Core/Base/EntryPoint.h"
 //----------------------------------

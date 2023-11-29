@@ -1,7 +1,7 @@
 #include "gepch.h"
 
 #include "OpenGLShader.h"
-#include "Core/Log.h"
+#include "Core/Base/Log.h"
 
 #include <fstream>
 

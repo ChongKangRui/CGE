@@ -1,6 +1,6 @@
 #pragma once
 #include "Renderer/OrthographicCamera.h"
-#include "Core/TimeStep.h"
+#include "Core/Base/TimeStep.h"
 
 #include "Core/Event/ApplicationEvent.h"
 #include "Core/Event/MouseEvent.h"
@@ -15,6 +15,9 @@ namespace GE {
 		OrthographicCameraController(float aspectRatio, bool rotationControl = false);
 		void OnUpdate(TimeStep ts);
 		void OnEvent(Event& e);
+
+		/*float GetZoomLevel() const { return m_ZoomLevel; }
+		void SetZoomLevel(float level) { m_ZoomLevel = level; }*/
 
 		OrthographicCamera& GetCamera(){ return m_Camera; }
 		const OrthographicCamera& GetCamera() const { return m_Camera; }

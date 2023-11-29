@@ -1305,10 +1305,10 @@
     <ClInclude Include="src\Core\Core.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\EngineApplication.h">
+    <ClInclude Include="src\Core\Base\EngineApplication.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\EntryPoint.h">
+    <ClInclude Include="src\Core\Base\EntryPoint.h">
       <Filter>src\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Event\ApplicationEvent.h">
@@ -1326,22 +1326,25 @@
     <ClInclude Include="src\Core\Imgui\ImGuiLayer.h">
       <Filter>src\Core\Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Input.h">
+    <ClInclude Include="src\Core\Base\Input.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\KeyCode.h">
+    <ClInclude Include="src\Core\Base\KeyCode.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Layer.h">
+    <ClInclude Include="src\Core\Base\Layer.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\LayerStack.h">
+    <ClInclude Include="src\Core\Base\LayerStack.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Log.h">
+    <ClInclude Include="src\Core\Base\Log.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\MouseCode.h">
+    <ClInclude Include="src\Core\Base\MouseCode.h">
+      <Filter>src\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\OrthographicCameraController.h">
       <Filter>src\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\Buffer.h">
@@ -1374,10 +1377,10 @@
     <ClInclude Include="src\Core\Renderer\VertexArray.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\TimeStep.h">
+    <ClInclude Include="src\Core\Base\TimeStep.h">
       <Filter>src\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Window.h">
+    <ClInclude Include="src\Core\Base\Window.h">
       <Filter>src\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine.h">
@@ -1410,13 +1413,12 @@
     <ClInclude Include="src\gepch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vendor\stb_image\std_image.cpp">
       <Filter>Vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\EngineApplication.cpp">
+    <ClCompile Include="src\Core\Base\EngineApplication.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Imgui\ImGuiLayer.cpp">
@@ -1425,13 +1427,16 @@
     <ClCompile Include="src\Core\Imgui\ImguiBuild.cpp">
       <Filter>src\Core\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Layer.cpp">
+    <ClCompile Include="src\Core\Base\Layer.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\LayerStack.cpp">
+    <ClCompile Include="src\Core\Base\LayerStack.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Log.cpp">
+    <ClCompile Include="src\Core\Base\Log.cpp">
+      <Filter>src\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\OrthographicCameraController.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\Buffer.cpp">
@@ -1461,7 +1466,7 @@
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Window.cpp">
+    <ClCompile Include="src\Core\Base\Window.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
@@ -1491,6 +1496,5 @@
     <ClCompile Include="src\gepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

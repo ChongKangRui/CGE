@@ -1,5 +1,5 @@
 #pragma once
-#include "Core.h"
+#include "Core/Core.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
@@ -38,7 +38,7 @@ namespace GE {
 
 //Client log macros
 #define Log_Error(...) ::GE::Log::GetClientLogger()->error(__VA_ARGS__)
-#define Log_Warm(...) ::GE::Log::GetClientLogger()->warm(__VA_ARGS__)
+#define Log_Warm(...) ::GE::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define Log_Trace(...) ::GE::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define Log_Fatal(...) ::GE::Log::GetClientLogger()->fatal(__VA_ARGS__)
+#define Log_Fatal(...) ::GE::Log::GetClientLogger()->critical(__VA_ARGS__)
 #define Log_Info(...) ::GE::Log::GetClientLogger()->info(__VA_ARGS__)

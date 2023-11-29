@@ -1,7 +1,7 @@
 #include "gepch.h"
 #include "OrthographicCameraController.h"
-#include "Core/Input.h"
-#include "Core/KeyCode.h"
+#include "Core/Base/Input.h"
+#include "Core/Base/KeyCode.h"
 
 
 namespace GE {
@@ -55,7 +55,7 @@ namespace GE {
 
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 
-		return true;
+		return false;
 	}
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
@@ -63,7 +63,7 @@ namespace GE {
 		m_AspectRatio = (float)e.GetWidth()/ (float)e.GetHeight();
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 
-		return true;
+		return false;
 	}
 
 }

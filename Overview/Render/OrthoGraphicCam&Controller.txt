@@ -1,0 +1,10 @@
+OrthographicCamera.h
+-use to handle all OrthographicCamera position, rotation, camera AspectRatio, zooming in etc
+-but the actual setup for uniform is inside Renderer Submit() which will update the camera position in tick
+////Note, the control will deploy in the controller since camera should only responsible to store the camera data
+////It should never touch the input at all
+
+OrthographicCameraController.h
+-use to handle the input of the camera right now is WASD move, QE rotate, Scroll to zoom in/out
+-responsible to held the reference of the camera as well
+-Will having event for window resize as well which will be set the aspect ratio to the camera projection when window resize

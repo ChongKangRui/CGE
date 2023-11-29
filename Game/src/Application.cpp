@@ -1,7 +1,6 @@
 // CKR Engine.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 #include <Engine.h>
-#include <Core/EngineApplication.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -230,7 +229,7 @@ public:
 
 	};
 
-	virtual void OnRender() override {
+	virtual void OnImGuiRender() override {
 		ImGui::Begin("Setting");
 		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 		ImGui::End();
@@ -250,17 +249,7 @@ public:
 		if (GE::Input::IsKeyPressed(KEY_TAB))
 			Log_Trace("Tab key is pressed (poll)!");
 	
-		
-
-	/*	if (GE::Input::IsKeyPressed(KEY_W))
-			m_TrianglePos.y += speed;
-		else if (GE::Input::IsKeyPressed(KEY_S))
-			m_TrianglePos.y -= speed;
-		if (GE::Input::IsKeyPressed(KEY_A))
-			m_TrianglePos.x += speed;
-		if (GE::Input::IsKeyPressed(KEY_D))
-			m_TrianglePos.x -= speed;*/
-
+	
 
 		if (GE::Input::IsKeyPressed(KEY_I))
 			m_SquadPos.y += speed;

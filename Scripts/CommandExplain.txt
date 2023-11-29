@@ -1,0 +1,2 @@
+pushd ..\ = cd ..
+popd = back to this original dir

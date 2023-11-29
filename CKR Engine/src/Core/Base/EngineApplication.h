@@ -1,19 +1,19 @@
 #pragma once
-#include "Core.h"
+#include "Core/Core.h"
 
 #include "Window.h"
-#include "Event/ApplicationEvent.h"
+#include "Core/Event/ApplicationEvent.h"
 //#include "Platform/Window/WindowsWindow.h"
 #include "Core/Event/MouseEvent.h"
 #include "Core/Imgui/ImGuiLayer.h"
 #include "LayerStack.h"
 
 
-#include "Renderer/Buffer.h"
-#include "Renderer/Shader.h"
-#include "Renderer/VertexArray.h"
+#include "Core/Renderer/Buffer.h"
+#include "Core/Renderer/Shader.h"
+#include "Core/Renderer/VertexArray.h"
 
-#include "Renderer/OrthographicCamera.h"
+#include "Core/Renderer/OrthographicCamera.h"
 #include "TimeStep.h"
 namespace GE {
 
@@ -38,17 +38,20 @@ namespace GE {
 		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 
 		bool m_Running = true;
+		bool m_Minimized = false;
 
 		LayerStack m_LayerStack;
 		
 		float m_LastFrameTime = 0.0f;
 	private:
 		static Application* s_Instance;
+
 	};
 	// To be define in the client
 	Application* CreateApplication();

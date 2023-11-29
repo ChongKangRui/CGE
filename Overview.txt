@@ -15,9 +15,6 @@ GUIRenderer.h && imgui_impl_opengl3_loader.h
 gepch.h
 //A precompiled file which contain all the common necessary library. Will be force to include in all the //cpp file.
 
-
-
-
 Game Project
 Application.cpp
 //Have a class of gameapplication inherit from engineapplication

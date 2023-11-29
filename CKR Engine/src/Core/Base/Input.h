@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core.h"
+#include "Core/Core.h"
 namespace GE {
 	//like a interface
 	class GE_API Input {

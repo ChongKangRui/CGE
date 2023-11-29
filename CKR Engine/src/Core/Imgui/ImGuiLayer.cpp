@@ -3,7 +3,7 @@
 //#include "ImguiBuild.cpp"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
-#include "Core/EngineApplication.h"
+#include "Core/Base/EngineApplication.h"
 
 
 //Temporary for testing
@@ -82,7 +82,7 @@ namespace GE {
 		//ImGui::Render();
 		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	//}
-	void ImGuiLayer::OnRender()
+	void ImGuiLayer::OnImGuiRender()
 	{
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);

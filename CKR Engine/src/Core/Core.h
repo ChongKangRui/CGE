@@ -26,7 +26,7 @@
 	#define GE_ENABLE_ASSERTS
 #endif 
 
-#include "Log.h"
+#include "Core/Base/Log.h"
 #ifdef GE_ENABLE_ASSERTS
  #define GE_ASSERT(x, ...) { if(!(x)) { Log_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #define GE_CORE_ASSERT(x, ...){if(!(x)) {GELog_Error("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }

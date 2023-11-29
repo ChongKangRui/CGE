@@ -1,0 +1,4 @@
+EngineApplication.h
+-Responsible for all of the basic engine event happen.
+-Basic engine event refer to window creation, window event(close window, resize window etc)
+

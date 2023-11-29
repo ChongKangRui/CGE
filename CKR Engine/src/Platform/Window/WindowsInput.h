@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Input.h"
+#include "Core/Base/Input.h"
 
 namespace GE {
 

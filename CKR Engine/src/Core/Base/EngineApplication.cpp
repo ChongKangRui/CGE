@@ -2,11 +2,11 @@
 #include "EngineApplication.h"
 
 
-#include "Event/Event.h"
+#include "Core/Event/Event.h"
 #include "Log.h"
 #include "Input.h"
 
-#include "Renderer/Renderer.h"
+#include "Core/Renderer/Renderer.h"
 #include "KeyCode.h"
 #include "MouseCode.h"
 
@@ -52,15 +52,17 @@ namespace GE {
 			TimeStep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			//Layer Update in layerstack
-			for (Layer* layer : m_LayerStack) {
-				layer->OnUpdate(timestep);
+			if (!m_Minimized) {
+				//Layer Update in layerstack
+				for (Layer* layer : m_LayerStack) {
+					layer->OnUpdate(timestep);
+				}
 			}
 
 			//to render every layer
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack) {
-				layer->OnRender();
+				layer->OnImGuiRender();
 			}
 			m_ImGuiLayer->End();
 
@@ -79,7 +81,9 @@ namespace GE {
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<WindowCloseEvent>(Bind_Event_FN(OnWindowClosed));
-		
+		dispatcher.Dispatch<WindowResizeEvent>(Bind_Event_FN(OnWindowResize));
+
+
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
 			(*--it)->OnEvent(e);
@@ -108,6 +112,19 @@ namespace GE {
 	{
 		m_Running = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0) {
+			m_Minimized = true;
+			return false;
+		}
+		m_Minimized = false;
+
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
 	}
 
 	

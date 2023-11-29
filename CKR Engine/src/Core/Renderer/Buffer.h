@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Log.h"
+#include "Core/Base/Log.h"
 namespace GE {
 
 	enum ShaderDataType {
