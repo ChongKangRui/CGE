@@ -26,5 +26,5 @@
 #include "Core/Renderer/OrthographicCamera.h"
 
 // -------EntryPoint---------------
-#include "Core/Base/EntryPoint.h"
+//#include "Core/Base/EntryPoint.h"
 //----------------------------------

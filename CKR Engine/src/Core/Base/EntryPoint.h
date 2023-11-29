@@ -12,9 +12,6 @@ int main(int argc, char** argv)
 	GE::Log::Init();
 	GELog_Info("Initialize application!");
 	
-	
-	
-
 	auto* app = GE::CreateApplication();
 	app->Run();
 	delete app;

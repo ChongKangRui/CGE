@@ -6,8 +6,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Platform/OpenGL/OpenGLShader.h"
+#include "Game2DLayer.h"
 
 #include "imgui/imgui.h"
+
+// -------EntryPoint---------------
+#include <Core/Base/EntryPoint.h>
+//----------------------------------
 
 
 
@@ -24,7 +29,7 @@ public:
 			0.5f, -0.5f, 0.0f,1.0f, 0.0f, 0.0f, 1.0f,
 			0.0f, 0.5f,0.0f,1.0f, 1.0f, 1.0f, 1.0f,
 		};
-		m_VertexBuffer.reset(GE::VertexBuffer::Create(vertices, sizeof(vertices)));
+		m_VertexBuffer = GE::VertexBuffer::Create(vertices, sizeof(vertices));
 		//Because we setup iterator in the buffer layout, so we can do for loop
 		BufferLayout layout = {
 			{ShaderDataType::Float3, "a_Position"},
@@ -37,16 +42,16 @@ public:
 		};
 
 		//the count is 3 because we have 3 element in array
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		m_IndexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
 		//////Vertex Array
-		m_VertexArray.reset(VertexArray::Create());
+		m_VertexArray = VertexArray::Create();
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		m_VertexArray->AddIndexBuffer(m_IndexBuffer);
 
 
 		/////////////////////////////////////For square 
-		m_SquareVA.reset(VertexArray::Create());
+		m_SquareVA = VertexArray::Create();
 		float squarevertices[5 * 4] = {
 			-0.75f, -0.75f, 0.0f, 0.0f, 0.0f,
 			0.75f, -0.75f, 0.0f,1.0f, 0.0f,
@@ -56,7 +61,7 @@ public:
 
 
 		GE::Ref<VertexBuffer> squareVB;
-		squareVB.reset(VertexBuffer::Create(squarevertices, sizeof(squarevertices)));
+		squareVB = (VertexBuffer::Create(squarevertices, sizeof(squarevertices)));
 
 		//Expand our layout so stride can get the correct offset
 		BufferLayout sqlayout = {
@@ -72,7 +77,7 @@ public:
 		};
 		//the count is 3 because we have 3 element in array
 		GE::Ref<IndexBuffer> squareIB;
-		squareIB.reset(IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t)));
+		squareIB = IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t));
 		m_SquareVA->AddIndexBuffer(squareIB);
 
 
@@ -288,8 +293,8 @@ private:
 class GameApplication : public GE::Application {
 public:
 	GameApplication() {
-		PushLayer(new ExampleLayer());
-		//PushOverlay(new GE::ImGuiLayer());
+		//PushLayer(new ExampleLayer());
+		PushOverlay(new Game2D_Layer());
 	}
 	~GameApplication(){
 

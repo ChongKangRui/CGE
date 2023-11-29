@@ -19,7 +19,7 @@ namespace GE {
 
 
 
-		static VertexArray* Create();
+		static Ref<VertexArray> Create();
 	};
 }
 

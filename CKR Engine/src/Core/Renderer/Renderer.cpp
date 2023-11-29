@@ -37,21 +37,5 @@ namespace GE {
 		RenderCommand::DrawIndexed(va);
 	}
 
-	void Renderer2D::Init()
-	{
-	}
-
-	void Renderer2D::BeginScene(OrthographicCamera& camera)
-	{
-	}
-
-	void Renderer2D::EndScene()
-	{
-	}
-
-	void Renderer2D::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& va, const glm::mat4 transform)
-	{
-	}
-
 }
 
