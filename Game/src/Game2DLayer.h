@@ -22,11 +22,14 @@ private:
 	GE::Ref<GE::Shader> m_ColorShader;
 	//GE::Ref<GE::Shader> m_TextureShader;
 
-	GE::Ref<GE::Texture2D> m_Texture2D;
+	GE::Ref<GE::Texture2D> m_Texture2DExample;
 	
 
 	GE::Ref<GE::VertexArray> m_SquareVA;
 
+
+	glm::vec3 m_SquadPos = { 0.0f, 0.0f, 0.0f };
+	float m_Rotation = 0;
 
 	glm::vec4 m_SquareColor = { 1,0.3,0.4,1.0f };
 };

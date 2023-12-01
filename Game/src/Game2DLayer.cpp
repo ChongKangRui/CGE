@@ -14,39 +14,12 @@ Game2D_Layer::Game2D_Layer() : Layer("Application 2D Renderer"), m_CameraControl
 
 void Game2D_Layer::OnAttach()
 {
-	using namespace GE;
-	/////////////////////////////////////For square 
-	m_SquareVA = VertexArray::Create();
-	float squarevertices[5 * 4] = {
-		-0.75f, -0.75f, 0.0f, 
-		0.75f, -0.75f, 0.0f,
-		-0.75f, 0.75f,0.0f,
-		0.75f, 0.75f,0.0f
-	};
-
-
-	GE::Ref<VertexBuffer> squareVB = (VertexBuffer::Create(squarevertices, sizeof(squarevertices)));
-
-	//Expand our layout so stride can get the correct offset
-	BufferLayout sqlayout = {
-		{ShaderDataType::Float3, "a_Position"}
-	};
-
-	squareVB->SetLayout(sqlayout);
-	m_SquareVA->AddVertexBuffer(squareVB);
-
-	uint32_t indices2[6] = {
-		0,2,1,3,2,1
-	};
-	//the count is 3 because we have 3 element in array
-	GE::Ref<IndexBuffer> squareIB = IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t));
-	m_SquareVA->AddIndexBuffer(squareIB);
-
-	m_ColorShader = Shader::Create("assets/Shader/ColorShader.glsl");
+	m_Texture2DExample = GE::Texture2D::Create("assets/Textures/TreeMat.png");
 }
 
 void Game2D_Layer::OnDetach()
 {
+	
 }
 
 void Game2D_Layer::OnUpdate(GE::TimeStep ts)
@@ -57,18 +30,32 @@ void Game2D_Layer::OnUpdate(GE::TimeStep ts)
 	GE::RenderCommand::Clear();
 
 
+	//Temp for testing only
+	if (GE::Input::IsKeyPressed(KEY_I))
+		m_SquadPos.y += 1 * ts;
+	else if (GE::Input::IsKeyPressed(KEY_K))
+		m_SquadPos.y -= 1 * ts ;
+	if (GE::Input::IsKeyPressed(KEY_J))
+		m_SquadPos.x -= 1 * ts ;
+	else if (GE::Input::IsKeyPressed(KEY_L))
+		m_SquadPos.x += 1 * ts ;
+
+	if (GE::Input::IsKeyPressed(KEY_U))
+		m_Rotation += 1 * ts;
+	else if (GE::Input::IsKeyPressed(KEY_O))
+		m_Rotation -= 1 * ts;
 
 
-	GE::Renderer::BeginScene(m_CameraController.GetCamera());
+	GE::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y}, { 1.0f, 1.0f }, { 1.0f,1.0f,1.0f,1.0f });
+	GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y + 1.0f, -0.1f }, { 1.0f, 1.0f }, m_Texture2DExample);
+	GE::Renderer2D::EndScene();
 
-	
-	std::dynamic_pointer_cast<GE::OpenGLShader>(m_ColorShader)->Bind();
-	std::dynamic_pointer_cast<GE::OpenGLShader>(m_ColorShader)->SetUniformFloat4("u_Color", m_SquareColor);
-	
-	m_ColorShader->Bind();
-	GE::Renderer::Submit(m_ColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
+	//Todo Shader::SetMAt4, Shader::SetFloat4 etc;
+	//GE::Renderer::Submit(m_ColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
+	//std::dynamic_pointer_cast<GE::OpenGLShader>(m_ColorShader)->Bind();
+	//std::dynamic_pointer_cast<GE::OpenGLShader>(m_ColorShader)->SetUniformFloat4("u_Color", m_SquareColor);
 
-	GE::Renderer::EndScene();
 
 }
 

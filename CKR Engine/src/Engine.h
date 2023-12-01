@@ -17,6 +17,7 @@
 
 //Rendering related
 #include "Core/Renderer/Renderer.h"
+#include "Core/Renderer/Renderer2D.h"
 #include "Core/Renderer/RendererCommand.h"
 
 #include "Core/Renderer/Buffer.h"

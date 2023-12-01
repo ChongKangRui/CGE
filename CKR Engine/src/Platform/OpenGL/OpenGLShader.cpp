@@ -62,6 +62,25 @@ namespace GE {
 	{
 		glUseProgram(0);
 	}
+	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
+	{
+		SetUniformFloat3(name, value);
+
+	}
+	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
+	{
+		SetUniformFloat4(name, value);
+
+	}
+	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& matrix)
+	{
+		SetUniformMat4(name, matrix);
+
+	}
+	void OpenGLShader::SetInt(const std::string& name, const int& value)
+	{
+		SetUniformInt(name, value);
+	}
 	void OpenGLShader::SetUniformInt(const std::string& name, const float& value)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
