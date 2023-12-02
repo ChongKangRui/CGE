@@ -33,6 +33,9 @@ namespace GE {
 	}
 	OpenGLShader::OpenGLShader(const std::string& shaderPath)
 	{
+		GE_PROFILE_FUNCTION();
+
+
 		std::string shaderStringSource = ReadFile(shaderPath);
 		auto source = PreProcess(shaderStringSource);
 		Compile(source);
@@ -49,34 +52,51 @@ namespace GE {
 	}
 	OpenGLShader::~OpenGLShader()
 	{
+		GE_PROFILE_FUNCTION();
+
+
 		glDeleteProgram(m_RendererID);
 	}
 	void OpenGLShader::Bind() const
 	{
+		GE_PROFILE_FUNCTION();
+
 		//called before we start rendering with this shader
 		glUseProgram(m_RendererID);
 	}
 	void OpenGLShader::Unbind() const
 	{
+		GE_PROFILE_FUNCTION();
+
 		glUseProgram(0);
 	}
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
+		GE_PROFILE_FUNCTION();
+
+
 		SetUniformFloat3(name, value);
 
 	}
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 	{
+		GE_PROFILE_FUNCTION();
+
+
 		SetUniformFloat4(name, value);
 
 	}
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& matrix)
 	{
+		GE_PROFILE_FUNCTION();
+
 		SetUniformMat4(name, matrix);
 
 	}
 	void OpenGLShader::SetInt(const std::string& name, const int& value)
 	{
+		GE_PROFILE_FUNCTION();
+
 		SetUniformInt(name, value);
 	}
 	void OpenGLShader::SetUniformInt(const std::string& name, const float& value)
@@ -120,6 +140,8 @@ namespace GE {
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
+		GE_PROFILE_FUNCTION();
+
 
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
@@ -141,6 +163,9 @@ namespace GE {
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+		GE_PROFILE_FUNCTION();
+
+
 		std::unordered_map<GLenum, std::string> shaderSource;
 
 		const char* typeToken = "#type";
@@ -173,6 +198,8 @@ namespace GE {
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderMap)
 	{
+		GE_PROFILE_FUNCTION();
+
 		
 		GLuint program = glCreateProgram();
 		GE_CORE_ASSERT(shaderMap.size() <= 2, "We only support 2 shader");

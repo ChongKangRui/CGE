@@ -26,15 +26,21 @@ namespace GE {
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
+		GE_PROFILE_FUNCTION();
+
 		GELog_Info("Window Initialization");
 		Init(props);
 	}
 	WindowsWindow::~WindowsWindow()
 	{
+		GE_PROFILE_FUNCTION();
+
+		Shutdown();
 	}
 	void WindowsWindow::OnUpdate()
 	{
 		if (m_Window) {
+			GE_PROFILE_FUNCTION();
 			glfwPollEvents();
 			m_Context->SwapBuffers();
 			
@@ -45,6 +51,7 @@ namespace GE {
 	}
 	void WindowsWindow::SetVSync(bool enabled)
 	{
+		GE_PROFILE_FUNCTION();
 		if (enabled)
 			glfwSwapInterval(1);
 		else
@@ -193,6 +200,7 @@ namespace GE {
 	}
 	void WindowsWindow::Shutdown()
 	{
+		GE_PROFILE_FUNCTION();
 		glfwDestroyWindow(m_Window);
 	}
 

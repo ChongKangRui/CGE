@@ -1,0 +1,2 @@
+frametime = ms/1000
+fps = 1/frametime

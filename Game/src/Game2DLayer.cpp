@@ -6,43 +6,43 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 //Basic Timer Example
-#include <Chrono>
-
-template<typename fn>
-class Timer {
-public:
-	Timer(const char* name, fn&& function) : m_Name(name), m_Func(function), m_Stopped(false) {
-		m_StartTP = std::chrono::high_resolution_clock::now();
-	}
-
-	~Timer() {
-		if (!m_Stopped)
-			Stop();
-	}
-
-	void Stop() {
-		auto endTP = std::chrono::high_resolution_clock::now();
-		auto start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTP).time_since_epoch().count();
-		auto End = std::chrono::time_point_cast<std::chrono::microseconds>(endTP).time_since_epoch().count();
-
-		float duration = End - start;
-		float ms = duration * 0.001f;
-
-		m_Stopped = true;
-
-		//Log_Info("{0} Duration: {1}",m_Name ,ms);
-		m_Func({ m_Name, ms });
-	}
-
-private:
-	const char* m_Name;
-	std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTP;
-	bool m_Stopped;
-
-	fn m_Func;
-
-};
-#define PROFILE_SCOPE(name) Timer timer##__LINE__(name, [&](ProfileResults profileResult) {m_ProfileResults.push_back(profileResult); })
+//#include <Chrono>
+//
+//template<typename fn>
+//class Timer {
+//public:
+//	Timer(const char* name, fn&& function) : m_Name(name), m_Func(function), m_Stopped(false) {
+//		m_StartTP = std::chrono::high_resolution_clock::now();
+//	}
+//
+//	~Timer() {
+//		if (!m_Stopped)
+//			Stop();
+//	}
+//
+//	void Stop() {
+//		auto endTP = std::chrono::high_resolution_clock::now();
+//		auto start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTP).time_since_epoch().count();
+//		auto End = std::chrono::time_point_cast<std::chrono::microseconds>(endTP).time_since_epoch().count();
+//
+//		float duration = End - start;
+//		float ms = duration * 0.001f;
+//
+//		m_Stopped = true;
+//
+//		//Log_Info("{0} Duration: {1}",m_Name ,ms);
+//		m_Func({ m_Name, ms });
+//	}
+//
+//private:
+//	const char* m_Name;
+//	std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTP;
+//	bool m_Stopped;
+//
+//	fn m_Func;
+//
+//};
+//#define PROFILE_SCOPE(name) Timer timer##__LINE__(name, [&](ProfileResults profileResult) {m_ProfileResults.push_back(profileResult); })
 
 Game2D_Layer::Game2D_Layer() : Layer("Application 2D Renderer"), m_CameraController(1280 / 720, true)
 {
@@ -51,18 +51,21 @@ Game2D_Layer::Game2D_Layer() : Layer("Application 2D Renderer"), m_CameraControl
 
 void Game2D_Layer::OnAttach()
 {
+	GE_PROFILE_FUNCTION();
+
 	m_Texture2DExample = GE::Texture2D::Create("assets/Textures/TreeMat.png");
 }
 
 void Game2D_Layer::OnDetach()
 {
-	
+	GE_PROFILE_FUNCTION();
 }
 
 void Game2D_Layer::OnUpdate(GE::TimeStep ts)
 {
+	GE_PROFILE_FUNCTION();
 	m_CameraController.OnUpdate(ts);
-	PROFILE_SCOPE("Sandbox2D::OnUpdate");
+	
 
 	GE::RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0 });
 	GE::RenderCommand::Clear();
@@ -85,7 +88,7 @@ void Game2D_Layer::OnUpdate(GE::TimeStep ts)
 
 
 	{
-		PROFILE_SCOPE("Sandbox2D::OnRenderer");
+		GE_PROFILE_SCOPE("Sandbox2D::OnRenderer");
 
 		GE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		//White Diamond
@@ -109,18 +112,10 @@ void Game2D_Layer::OnUpdate(GE::TimeStep ts)
 
 void Game2D_Layer::OnImGuiRender()
 {
+	GE_PROFILE_FUNCTION();
+
 	ImGui::Begin("Setting");
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
-
-	//Profiler
-	for (auto& result : m_ProfileResults) {
-		char label[50];
-		strcpy(label, result.Name);
-		strcat(label, "  %.3fms");
-		ImGui::Text(label, result.Time);
-	}
-	m_ProfileResults.clear();
-
 	ImGui::End();
 }
 

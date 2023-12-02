@@ -1,0 +1,34 @@
+Instrumentor.h
+
+basically using the defined macro to check the ms for each function
+
+Example here in EngineApplication.cpp loop
+
+while (m_Running) {
+
+	GE_PROFILE_SCOPE("Engine::RunLoop()");
+
+	float time = (float)glfwGetTime(); ///platform::GetTime()
+	TimeStep timestep = time - m_LastFrameTime;
+	m_LastFrameTime = time;
+
+	if (!m_Minimized) {
+		//Layer Update in layerstack
+		{
+			GE_PROFILE_SCOPE("LayerStack::Layer::OnUpdate()");
+			for (Layer* layer : m_LayerStack) {
+				layer->OnUpdate(timestep);
+			}
+		}
+
+		//to render every layer
+		m_ImGuiLayer->Begin();
+		{
+			GE_PROFILE_SCOPE("LayerStack::Layer::OnImGuiRender()");
+			for (Layer* layer : m_LayerStack) {
+				layer->OnImGuiRender();
+			}
+		}
+		m_ImGuiLayer->End();
+
+	}

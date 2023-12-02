@@ -21,6 +21,8 @@ namespace GE {
 	}
 	void ImGuiLayer::OnAttach()
 	{
+		GE_PROFILE_FUNCTION();
+
 		//set up dear imgui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -53,37 +55,18 @@ namespace GE {
 	}
 	void ImGuiLayer::OnDetach()
 	{
+		GE_PROFILE_FUNCTION();
+
 		//clean up
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
-	//void ImGuiLayer::OnUpdate()
-	//{
-		//
-
-		//ImGuiIO& io = ImGui::GetIO();
-		//Application& app = Application::Get();
-		//io.DisplaySize = ImVec2(app.GetWindow().GetWidth(), app.GetWindow().GetHeight());
-
-		////delta time 60 frame
-		//float time = (float)glfwGetTime();
-		//io.DeltaTime = m_Time > 0.0? (time - m_Time) : (1.0f / 60.0f);
-		//m_Time = time;
-
-		//ImGui_ImplOpenGL3_NewFrame();
-		//ImGui::NewFrame();
-
-		////show a demo video
-		//static bool show = true;
-		//ImGui::ShowDemoWindow(&show);
-
-		////Renderer
-		//ImGui::Render();
-		//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	//}
+	
 	void ImGuiLayer::OnImGuiRender()
 	{
+		GE_PROFILE_FUNCTION();
+
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);
 
@@ -93,6 +76,7 @@ namespace GE {
 	}
 	void ImGuiLayer::Begin()
 	{
+		GE_PROFILE_FUNCTION();
 
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -100,6 +84,8 @@ namespace GE {
 	}
 	void ImGuiLayer::End()
 	{
+		GE_PROFILE_FUNCTION();
+
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 

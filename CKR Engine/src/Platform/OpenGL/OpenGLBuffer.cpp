@@ -11,6 +11,8 @@ namespace GE {
 
 	OpenGLVertexBuffer::OpenGLVertexBuffer(float* indices, uint32_t size)
 	{
+		GE_PROFILE_FUNCTION();
+
 		glCreateBuffers(1, &m_RendererID);
 		//glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 		Bind();
@@ -19,14 +21,20 @@ namespace GE {
 	}
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
 	{
+		GE_PROFILE_FUNCTION();
+
 		glDeleteBuffers(1, &m_RendererID);
 	}
 	void OpenGLVertexBuffer::Bind() const
 	{
+		GE_PROFILE_FUNCTION();
+
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 	}
 	void OpenGLVertexBuffer::Unbind() const
 	{
+		GE_PROFILE_FUNCTION();
+
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
@@ -52,10 +60,14 @@ namespace GE {
 	}
 	void OpenGLIndexBuffer::Bind() const
 	{
+		GE_PROFILE_FUNCTION();
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 	}
 	void OpenGLIndexBuffer::Unbind() const
 	{
+		GE_PROFILE_FUNCTION();
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }
