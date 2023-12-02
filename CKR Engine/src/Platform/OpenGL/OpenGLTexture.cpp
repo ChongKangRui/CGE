@@ -1,9 +1,21 @@
 #include "gepch.h"
 #include "OpenGLTexture.h"
 
-#include "glad/glad.h"
+
 
 namespace GE {
+	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height) : m_Width(width), m_Height(height)
+	{
+		m_InternalFormat = GL_RGBA8;
+		m_Format = GL_RGBA;
+		
+		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	}
 	OpenGLTexture2D::OpenGLTexture2D(const std::string& path) : m_Path(path)
 	{
 		int width, height, channels;
@@ -29,6 +41,8 @@ namespace GE {
 			internalFormat = GL_RGB8;
 			dataFormat = GL_RGB;
 		}
+		m_InternalFormat = internalFormat;
+		m_Format = dataFormat;
 
 		GE_CORE_ASSERT(internalFormat & dataFormat, "Format not supported");
 
@@ -50,8 +64,19 @@ namespace GE {
 	{
 		glDeleteTextures(1, &m_RendererID);
 	}
+	void OpenGLTexture2D::SetData(void* data, uint32_t size)
+	{
+		uint32_t bpp = m_Format == GL_RGBA ? 4 : 3;
+		GE_CORE_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture");
+		glTextureSubImage2D(m_RendererID,0, 0, 0, m_Width, m_Height, m_Format, GL_UNSIGNED_BYTE, data);
+
+	}
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
 		glBindTextureUnit(slot, m_RendererID);
+	}
+	void OpenGLTexture2D::Unbind()
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }

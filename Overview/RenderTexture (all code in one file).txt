@@ -1,0 +1,146 @@
+////////////////Vertex Array, 3 element is Position, 2 elements is Texture coordinate
+QuadVA = VertexArray::Create();
+		float squarevertices[5 * 4] = {
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			0.5f, -0.5f, 0.0f,  1.0f, 0.0f,
+			-0.5f, 0.5f,0.0f, 0.0f, 1.0f,
+			0.5f, 0.5f,0.0f, 1.0f, 1.0f,
+		};
+
+
+/////////////////////Create buffer
+glCreateBuffers(1, &m_RendererID);
+glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+glBufferData(GL_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+
+
+
+////////////////////set buffer data
+BufferLayout sqlayout = {
+	{ShaderDataType::Float3, "a_Position"},
+	{ShaderDataType::Float2, "a_TexCoord"}
+};
+
+glBindVertexArray(m_RendererID);
+glBindVertexArray(m_RendererID);
+GE_CORE_ASSERT(sqlayout.GetElements().size(), "Vertex Buffer has no layout");
+
+
+///////////////////////Calculate stride and offset
+uint32_t offset = 0, m_Stride = 0;
+
+for (auto& element : m_Elements) {
+	element.Offset = offset;
+	offset += element.Size;
+	m_Stride = offset;
+
+	//Just for better understanding
+	//Log_Info("offset {0}, m_Stride {1}", offset, m_Stride);
+}
+
+///////////////////Set vertex attribute array
+//////////////////pass in data to fragment and vertex shader
+uint32_t index = 0;
+for (const auto& element : sqlayout) {
+	glEnableVertexAttribArray(index);
+
+	//Set Vertex layout here
+	glVertexAttribPointer(index, element.GetComponentCount(),
+		ShaderDataTypeToOpenGlBaseType(element.Type),
+		element.Normalized ? GL_TRUE : GL_FALSE,
+		Stride, (const void*)offset);
+	index++;
+}
+
+
+///////////////////////Set up index buffer
+uint32_t indices2[6] = {
+	0,2,1,3,2,1
+};
+//the count is 3 because we have 3 element in array
+glCreateBuffers(1, &m_RendererID);
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
+
+glBindVertexArray(m_RendererID);
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
+
+//////////////////////////We read shader file 
+m_Data->TextureShader = Shader::Create("assets/Shader/Texture.glsl");
+glUseProgram(m_RendererID);
+s_Data->TextureShader->SetInt("u_Texture", 0);
+
+///////set the texture slot
+GLint location = glGetUniformLocation(m_RendererID, "u_Texture");
+glUniform1i(location, value);
+
+
+////////////Upload view projection location
+GLint location = glGetUniformLocation(m_RendererID, "u_ViewProjection");
+glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+
+//////////Create Texture by using glad lbirary and stbi_Image.h
+int width, height, channels;
+
+///Flip image so the image can be output correctly from the ///button left as starting point
+stbi_set_flip_vertically_on_load(1);
+stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+
+GE_CORE_ASSERT(data, "Failed to load image");
+
+m_Width = width;
+m_Height = height;
+
+GLenum internalFormat = 0, dataFormat = 0;
+
+//To Transform the enum based on the channel data
+//4 mean rgba 4 channels and 3 mean rgb three channel
+if (channels == 4) {
+	internalFormat = GL_RGBA8;
+	dataFormat = GL_RGBA;
+}
+else if(channels == 3)
+{
+	internalFormat = GL_RGB8;
+	dataFormat = GL_RGB;
+}
+m_InternalFormat = internalFormat;
+m_Format = dataFormat;
+
+glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
+
+glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+//////Use it only when wan to repeat texture
+//glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+//passing all of the data into shader
+glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE,data);
+
+//Free memory
+stbi_image_free(data);
+
+
+
+
+///////////////////////////////LOOP/////////////////////////
+///////////Setup Texture
+glUniform4f(location, color.x, color.y, color.z, color.w);
+
+glBindTextureUnit(slot, m_RendererID);
+
+glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+//Update transform to uniform in shader
+s_Data->TextureShader->SetMat4("u_ModelTransform", transform);
+
+glBindVertexArray(m_RendererID);
+glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+//////Unbind texture
+glBindTextureUnit(slot, m_0);
+
+
