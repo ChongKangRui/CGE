@@ -1,6 +1,5 @@
 #include "gepch.h"
 #include "WindowsWindow.h"
-#include "Core/Base/Log.h"
 
 #include "Core/Event/MouseEvent.h"
 #include "Core/Event/ApplicationEvent.h"

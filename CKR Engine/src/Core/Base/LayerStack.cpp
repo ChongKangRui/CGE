@@ -1,6 +1,7 @@
 #include "gepch.h"
 #include "LayerStack.h"
-#include "Log.h"
+
+
 
 namespace GE {
 	LayerStack::LayerStack()

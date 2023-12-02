@@ -27,6 +27,13 @@ private:
 
 	GE::Ref<GE::VertexArray> m_SquareVA;
 
+	struct ProfileResults {
+		const char* Name;
+		float Time;
+
+	};
+
+	std::vector<ProfileResults> m_ProfileResults;
 
 	glm::vec3 m_SquadPos = { 0.0f, 0.0f, 0.0f };
 	float m_Rotation = 0;

@@ -12,6 +12,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "Core/Debug/instrumentor.h"
+#include "Core/Base/Log.h"
 
 
 #ifdef GE_PLATFORM_WINDOW

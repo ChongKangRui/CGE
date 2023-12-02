@@ -5,7 +5,6 @@
 #include <glad/glad.h>
 #include <GL/GL.h>
 
-#include "Core/Base/Log.h"
 
 namespace GE {
 	OpenGLContext::OpenGLContext(GLFWwindow* window): m_WindowHandle(window)

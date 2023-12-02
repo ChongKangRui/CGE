@@ -3,7 +3,8 @@
 
 
 #include "Core/Event/Event.h"
-#include "Log.h"
+
+
 #include "Input.h"
 
 #include "Core/Renderer/Renderer.h"

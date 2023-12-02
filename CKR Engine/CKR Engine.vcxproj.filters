@@ -1414,6 +1414,7 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Core\Debug\instrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vendor\stb_image\std_image.cpp">

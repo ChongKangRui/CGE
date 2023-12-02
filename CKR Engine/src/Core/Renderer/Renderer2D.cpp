@@ -11,7 +11,9 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 
 
+
 namespace GE {
+
 
 	struct Renderer2DStorage {
 		Ref<VertexArray> QuadVA;

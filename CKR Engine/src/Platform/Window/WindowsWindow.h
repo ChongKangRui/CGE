@@ -2,8 +2,6 @@
 
 #include "Core/Base/Window.h"
 
-#include "Core/Base/Log.h"
-
 #include <glfw/glfw3.h>
 #include "Core/Renderer/GraphicContext.h"
 

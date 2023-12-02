@@ -1,8 +1,6 @@
 #include "gepch.h"
 
 #include "OpenGLShader.h"
-#include "Core/Base/Log.h"
-
 #include <fstream>
 
 #include <glm/gtc/type_ptr.hpp>
