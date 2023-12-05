@@ -11,6 +11,8 @@ namespace GE {
 		//Shader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		virtual ~Shader() = default;
 
+		virtual void SetFloat1(const std::string& name, const float& value) = 0;
+		virtual void SetFloat2(const std::string& name, const glm::vec2& value) = 0;
 		virtual void SetFloat3(const std::string& name, const glm::vec3& value) = 0;
 		virtual void SetFloat4(const std::string& name, const glm::vec4& value) = 0;
 

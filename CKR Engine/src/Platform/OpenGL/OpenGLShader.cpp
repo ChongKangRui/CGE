@@ -70,6 +70,20 @@ namespace GE {
 
 		glUseProgram(0);
 	}
+	void OpenGLShader::SetFloat1(const std::string& name, const float& value)
+	{
+		GE_PROFILE_FUNCTION();
+
+
+		SetUniformFloat(name, value);
+	}
+	void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& value)
+	{
+		GE_PROFILE_FUNCTION();
+
+
+		SetUniformFloat2(name, value);
+	}
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
 		GE_PROFILE_FUNCTION();

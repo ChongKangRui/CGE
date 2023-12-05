@@ -1,7 +1,7 @@
 Instrumentor.h
-
-basically using the defined macro to check the ms for each function
-
+-Use to deal with the timer, generate json file that contain the tracing information 
+-basically contain the defined macro to check the ms for each function
+//////////////////////////////////////////////
 Example here in EngineApplication.cpp loop
 
 while (m_Running) {
@@ -32,3 +32,8 @@ while (m_Running) {
 		m_ImGuiLayer->End();
 
 	}
+
+///////////////////////////////////////
+
+The generated json file in Game folder can be drag to 
+chrome://tracing/ to check the tracing of marked function

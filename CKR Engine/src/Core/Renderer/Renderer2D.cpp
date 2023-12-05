@@ -89,19 +89,25 @@ namespace GE {
 		GE_PROFILE_FUNCTION();
 
 	}
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
-		DrawQuad({ position.x, position.y, 0 }, size, color);
+		DrawQuad({ position.x, position.y, 0 }, size, rotation, color);
 
 	}
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
 		GE_PROFILE_FUNCTION();
 
 		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat1("u_TilingFactor", 1.0f);
 		s_Data->WhiteTexture->Bind();
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)* glm::rotate(glm::mat4(1.0f), glm::radians(45.0f), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		auto PosMatrix = glm::translate(glm::mat4(1.0f), position);
+		auto RotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0, 0, 1));
+		auto ScaleMatrix = glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+
+		glm::mat4 transform = PosMatrix * RotationMatrix * ScaleMatrix;
 		s_Data->TextureShader->SetMat4("u_ModelTransform", transform);
 
 
@@ -112,21 +118,25 @@ namespace GE {
 	}
 	
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, const glm::vec4& color, float TilingMultiplier)
 	{
 	
-		DrawQuad({ position.x, position.y, 0 }, size, texture);
+		DrawQuad({ position.x, position.y, 0 }, size, rotation, texture, color, TilingMultiplier);
 
 	}
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, const glm::vec4& color, float TilingMultiplier)
 	{
 		GE_PROFILE_FUNCTION();
 
 		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat1("u_TilingFactor", TilingMultiplier);
 		texture->Bind();
 
+		auto PosMatrix = glm::translate(glm::mat4(1.0f), position);
+		auto RotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(rotation), glm::vec3(0, 0, 1));
+		auto ScaleMatrix = glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		glm::mat4 transform = PosMatrix * RotationMatrix * ScaleMatrix;
 		s_Data->TextureShader->SetMat4("u_ModelTransform", transform);
 		
 		s_Data->QuadVA->Bind();
