@@ -76,7 +76,7 @@ namespace GE {
 			return m_Elements;
 		}
 
-		inline const uint32_t& GetStrides() const {
+		inline const uint32_t& GetStride() const {
 			//Log_Trace("{0}", m_Stride);
 			return m_Stride;
 		}
@@ -112,12 +112,15 @@ namespace GE {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+		virtual void SetData(const void* data, uint32_t size) = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 		virtual const BufferLayout& GetLayout() const = 0;
 
 		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(uint32_t size);
 	};
 
+	// Currently only support 32-bit index buffer
 	class IndexBuffer {
 	public:
 		virtual ~IndexBuffer() = default;
@@ -127,6 +130,6 @@ namespace GE {
 
 		virtual uint32_t GetCount() const = 0;
 
-		static Ref<IndexBuffer> Create(uint32_t* vertices, uint32_t size);
+		static Ref<IndexBuffer> Create(uint32_t* vertices, uint32_t count);
 	};
 }

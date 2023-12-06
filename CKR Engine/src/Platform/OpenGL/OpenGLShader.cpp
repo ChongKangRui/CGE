@@ -113,6 +113,10 @@ namespace GE {
 
 		SetUniformInt(name, value);
 	}
+	void OpenGLShader::SetIntArray(const std::string& name, const int* values, uint32_t count)
+	{
+		SetUniformIntArray(name, values, count);
+	}
 	void OpenGLShader::SetUniformInt(const std::string& name, const float& value)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
@@ -139,6 +143,12 @@ namespace GE {
 
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform4f(location, vec4.x, vec4.y, vec4.z, vec4.w);
+	}
+	void OpenGLShader::SetUniformIntArray(const std::string& name, const int* values, uint32_t count)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniform1iv(location,count, values);
+
 	}
 	void OpenGLShader::SetUniformMat3(const std::string& name, const glm::mat3& matrix)
 	{

@@ -37,7 +37,7 @@ namespace GE {
 		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetUniformMat4("u_ModelTransform", transform);
 
 		va->Bind();
-		RenderCommand::DrawIndexed(va);
+		//RenderCommand::DrawIndexed(va);
 	}
 
 }

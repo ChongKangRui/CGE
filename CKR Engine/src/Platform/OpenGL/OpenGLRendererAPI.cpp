@@ -31,10 +31,11 @@ namespace GE {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLRendererAPI::DrawIndexed(const GE::Ref<VertexArray>& vertexArray)
+	void OpenGLRendererAPI::DrawIndexed(const GE::Ref<VertexArray>& vertexArray, uint32_t IndexCount)
 	{
-		glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-
+		uint32_t count = IndexCount ? vertexArray->GetIndexBuffer()->GetCount() : IndexCount;
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+		
 	}
 
 }

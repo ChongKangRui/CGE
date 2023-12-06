@@ -27,6 +27,7 @@ namespace GE {
 		virtual void SetFloat4(const std::string& name, const glm::vec4& value) override;
 		virtual void SetMat4(const std::string& name, const glm::mat4& matrix) override;
 		virtual void SetInt(const std::string& name, const int& value) override;
+		virtual void SetIntArray(const std::string& name, const int* values, uint32_t count) override;
 
 
 
@@ -35,6 +36,7 @@ namespace GE {
 		void SetUniformFloat2(const std::string& name, const glm::vec2& value);
 		void SetUniformFloat3(const std::string& name, const glm::vec3& value);
 		void SetUniformFloat4(const std::string& name, const glm::vec4& value);
+		void SetUniformIntArray(const std::string& name, const int* values, uint32_t count);
 
 		void SetUniformMat3(const std::string& name, const glm::mat3& matrix);
 		void SetUniformMat4(const std::string& name, const glm::mat4& matrix);

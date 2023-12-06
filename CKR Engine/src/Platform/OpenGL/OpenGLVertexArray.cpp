@@ -61,28 +61,45 @@ namespace GE {
 	}
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
+		// Profile the function using a profiler (for profiling performance)
 		GE_PROFILE_FUNCTION();
 
+		// Bind the vertex array object
 		glBindVertexArray(m_RendererID);
+
+		// Bind the given vertex buffer
 		vertexBuffer->Bind();
+
+		// Ensure that the vertex buffer has a layout
 		GE_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout");
 
+		// Initialize index for vertex attribute arrays
 		uint32_t index = 0;
+
+		// Iterate over each element in the vertex buffer layout
 		for (const auto& element : vertexBuffer->GetLayout()) {
+			// Enable the vertex attribute array at the specified index
 			glEnableVertexAttribArray(index);
 
-			//Set Vertex layout here
-			glVertexAttribPointer(index, element.GetComponentCount(),
-				ShaderDataTypeToOpenGlBaseType(element.Type),
-				element.Normalized ? GL_TRUE : GL_FALSE,
-				vertexBuffer->GetLayout().GetStrides(), (const void*)element.Offset);
+			// Set up the vertex attribute pointer
+			glVertexAttribPointer(
+				index,                           // Index of the generic vertex attribute
+				element.GetComponentCount(),    // Number of components per attribute
+				ShaderDataTypeToOpenGlBaseType(element.Type),  // Data type of each component
+				element.Normalized ? GL_TRUE : GL_FALSE,        // Whether data should be normalized
+				vertexBuffer->GetLayout().GetStride(),           // Stride between consecutive generic vertex attributes
+				(const void*)element.Offset       // Offset of the first component of the first generic vertex attribute in the array
+			);
+
+			// Increment the index for the next vertex attribute array
 			index++;
 
-			Log_Info("{0}", vertexBuffer->GetLayout().GetStrides());
+			// Log information about the stride of the vertex layout
+			Log_Info("{0}", vertexBuffer->GetLayout().GetStride());
 		}
 
-		
-
-		m_VertexBuffer.push_back(vertexBuffer);
+		// Store the vertex buffer in the list of vertex buffers associated with the vertex array
+		m_VertexBuffers.push_back(vertexBuffer);
 	}
+
 }

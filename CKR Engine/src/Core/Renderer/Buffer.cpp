@@ -22,7 +22,8 @@ namespace GE {
 		return nullptr;
 	}
 
-	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* vertices, uint32_t size) {
+	Ref<VertexBuffer> VertexBuffer::Create(uint32_t size)
+	{
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::None: {
 			GE_CORE_ASSERT(false, "RendererAPI::None Not supported");
@@ -30,7 +31,23 @@ namespace GE {
 		}
 			break;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLIndexBuffer>(vertices, size);
+			return std::make_shared<OpenGLVertexBuffer>(size);
+			break;
+		}
+
+		GE_CORE_ASSERT(false, "Unknown RendererAPI!");
+		return nullptr;
+	}
+
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* vertices, uint32_t count) {
+		switch (Renderer::GetAPI()) {
+		case RendererAPI::API::None: {
+			GE_CORE_ASSERT(false, "RendererAPI::None Not supported");
+			return nullptr;
+		}
+			break;
+		case RendererAPI::API::OpenGL:
+			return std::make_shared<OpenGLIndexBuffer>(vertices, count);
 			break;
 		}
 

@@ -17,8 +17,8 @@ namespace GE {
 
 		
 
-		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray) {
-			s_RendererAPI->DrawIndexed(vertexArray);
+		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t IndexCount) {
+			s_RendererAPI->DrawIndexed(vertexArray, IndexCount);
 		}
 	private:
 		static RendererAPI* s_RendererAPI;
