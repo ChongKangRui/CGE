@@ -92,13 +92,13 @@ void Game2D_Layer::OnUpdate(GE::TimeStep ts)
 
 		GE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 		//White Diamond
-		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y }, { 1.0f, 1.0f }, 45.0f,{ 1.0f,1.0f,1.0f,1.0f });
+		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y + 1  }, { 1.0f, 1.0f }, 45.0f,{ 1.0f,1.0f,1.0f,1.0f });
 
 		//Blue Diamond
-		GE::Renderer2D::DrawQuad({ m_SquadPos.x + 1,m_SquadPos.y + 1 }, { 1.0f, 1.0f },25.0f, { 1.0f,0.3f,1.0f,1.0f });
+		GE::Renderer2D::DrawQuad({  2,2 }, { 1.0f, 1.0f },0.0f, { 1.0f,0.3f,1.0f,1.0f });
 
 		//Tree Texture
-		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 5.0f, 0.1f }, { 10.0f, 10.0f }, 0.0f,m_Texture2DExample, { 0.5,0.5,1.0,1.0 }, 10.0f);
+		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 1.0f, 0.2f }, { 1.0f, 1.0f }, 1.0f,m_Texture2DExample, { 0.5,0.5,1.0,1.0 }, 1.0f);
 		GE::Renderer2D::EndScene();
 	}
 
