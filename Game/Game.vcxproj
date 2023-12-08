@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="src\Game2DLayer.cpp" />
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\ParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CKR Engine\CKR Engine.vcxproj">
@@ -141,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game2DLayer.h" />
+    <ClInclude Include="src\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Shader\ColorShader.glsl" />

@@ -7,6 +7,18 @@
 
 
 namespace GE {
+
+	struct OrthographicCameraBounds
+	{
+		float Left, Right;
+		float Bottom, Top;
+
+		float GetWidth() { return Right - Left; }
+		float GetHeight() { return Top - Bottom; }
+	};
+
+
+
 	class OrthographicCameraController
 	{
 	public:
@@ -22,6 +34,8 @@ namespace GE {
 		OrthographicCamera& GetCamera(){ return m_Camera; }
 		const OrthographicCamera& GetCamera() const { return m_Camera; }
 
+		const OrthographicCameraBounds& GetBounds() const { return m_Bounds; }
+
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
@@ -33,7 +47,9 @@ namespace GE {
 		bool  m_Rotation;
 		float m_AspectRatio;
 		float m_ZoomLevel = 1.0f;
+		OrthographicCameraBounds m_Bounds;
 		OrthographicCamera m_Camera;
+		
 
 		float m_CameraRotation = 0.0f;
 		glm::vec3 m_CameraPosition = {0.0f, 0.0f, 0.0f};
@@ -41,7 +57,7 @@ namespace GE {
 		float m_CameraMoveSpeed = 1.0f;
 		float m_CameraRotationSpeed = 1.0f;
 
-
+		
 
 
 	};
