@@ -7,6 +7,7 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "Game2DLayer.h"
+#include "MapLayer.h"
 
 #include "imgui/imgui.h"
 
@@ -22,170 +23,170 @@ class ExampleLayer : public GE::Layer {
 
 	
 public:
-	ExampleLayer() : Layer("Testing"), m_CameraController(1280/720, true), m_TrianglePos(0.0f), m_SquadPos(0.0f) {
-		using namespace GE;
-		float vertices[3 * 7] = {
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
-			0.5f, -0.5f, 0.0f,1.0f, 0.0f, 0.0f, 1.0f,
-			0.0f, 0.5f,0.0f,1.0f, 1.0f, 1.0f, 1.0f,
-		};
-		m_VertexBuffer = GE::VertexBuffer::Create(vertices, sizeof(vertices));
-		//Because we setup iterator in the buffer layout, so we can do for loop
-		BufferLayout layout = {
-			{ShaderDataType::Float3, "a_Position"},
-			{ShaderDataType::Float4, "a_Color"}
-		};
+	//ExampleLayer() : Layer("Testing"), m_CameraController(1280/720, true), m_TrianglePos(0.0f), m_SquadPos(0.0f) {
+	//	using namespace GE;
+	//	float vertices[3 * 7] = {
+	//		-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+	//		0.5f, -0.5f, 0.0f,1.0f, 0.0f, 0.0f, 1.0f,
+	//		0.0f, 0.5f,0.0f,1.0f, 1.0f, 1.0f, 1.0f,
+	//	};
+	//	m_VertexBuffer = GE::VertexBuffer::Create(vertices, sizeof(vertices));
+	//	//Because we setup iterator in the buffer layout, so we can do for loop
+	//	BufferLayout layout = {
+	//		{ShaderDataType::Float3, "a_Position"},
+	//		{ShaderDataType::Float4, "a_Color"}
+	//	};
 
-		m_VertexBuffer->SetLayout(layout);
-		uint32_t indices[3] = {
-			0,1,2
-		};
+	//	m_VertexBuffer->SetLayout(layout);
+	//	uint32_t indices[3] = {
+	//		0,1,2
+	//	};
 
-		//the count is 3 because we have 3 element in array
-		m_IndexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+	//	//the count is 3 because we have 3 element in array
+	//	m_IndexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
-		//////Vertex Array
-		m_VertexArray = VertexArray::Create();
-		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-		m_VertexArray->AddIndexBuffer(m_IndexBuffer);
-
-
-		/////////////////////////////////////For square 
-		m_SquareVA = VertexArray::Create();
-		float squarevertices[5 * 4] = {
-			-0.75f, -0.75f, 0.0f, 0.0f, 0.0f,
-			0.75f, -0.75f, 0.0f,1.0f, 0.0f,
-			-0.75f, 0.75f,0.0f,0.0f, 1.0f,
-			0.75f, 0.75f,0.0f,1.0f, 1.0f,
-		};
+	//	//////Vertex Array
+	//	m_VertexArray = VertexArray::Create();
+	//	m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+	//	m_VertexArray->AddIndexBuffer(m_IndexBuffer);
 
 
-		GE::Ref<VertexBuffer> squareVB;
-		squareVB = (VertexBuffer::Create(squarevertices, sizeof(squarevertices)));
-
-		//Expand our layout so stride can get the correct offset
-		BufferLayout sqlayout = {
-			{ShaderDataType::Float3, "a_Position"},
-			{ShaderDataType::Float2, "a_TexCoord"}
-		};
-
-		squareVB->SetLayout(sqlayout);
-		m_SquareVA->AddVertexBuffer(squareVB);
-
-		uint32_t indices2[6] = {
-			0,2,1,3,2,1
-		};
-		//the count is 3 because we have 3 element in array
-		GE::Ref<IndexBuffer> squareIB;
-		squareIB = IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t));
-		m_SquareVA->AddIndexBuffer(squareIB);
+	//	/////////////////////////////////////For square 
+	//	m_SquareVA = VertexArray::Create();
+	//	float squarevertices[5 * 4] = {
+	//		-0.75f, -0.75f, 0.0f, 0.0f, 0.0f,
+	//		0.75f, -0.75f, 0.0f,1.0f, 0.0f,
+	//		-0.75f, 0.75f,0.0f,0.0f, 1.0f,
+	//		0.75f, 0.75f,0.0f,1.0f, 1.0f,
+	//	};
 
 
-		//vertex handle position, fragment handle color
-		std::string vertexSrc = R"(
-		#version 330 core
-		
-		layout(location = 0) in vec3 a_Position;
-		layout(location = 1) in vec4 a_Color;
-		
-		out vec3 v_Position;
-		out vec4 v_Color;
-		
-		uniform mat4 u_ViewProjection;
-		uniform mat4 u_ModelTransform;
+	//	GE::Ref<VertexBuffer> squareVB;
+	//	squareVB = (VertexBuffer::Create(squarevertices, sizeof(squarevertices)));
 
-		void main(){
-			v_Position = a_Position;
-			v_Color = a_Color;
-			gl_Position = u_ViewProjection * u_ModelTransform * vec4(a_Position, 1.0);
-			
-		}
-		)";
-		std::string fragmentSrc = R"(
-		#version 330 core
-		
-		layout(location = 0) out vec4 color;
-		in vec3 v_Position;
-		in vec4 v_Color;
+	//	//Expand our layout so stride can get the correct offset
+	//	BufferLayout sqlayout = {
+	//		{ShaderDataType::Float3, "a_Position"},
+	//		{ShaderDataType::Float2, "a_TexCoord"}
+	//	};
 
-		void main(){
-			color = v_Color;
-		}
-		)";
-		m_Shader = Shader::Create("Triangle", vertexSrc, fragmentSrc);
+	//	squareVB->SetLayout(sqlayout);
+	//	m_SquareVA->AddVertexBuffer(squareVB);
 
-		//For blue square
-		std::string vertexSrc2 = R"(
-		#version 330 core
-		
-		layout(location = 0) in vec3 a_Position;
-		
-		out vec3 v_Position;
+	//	uint32_t indices2[6] = {
+	//		0,2,1,3,2,1
+	//	};
+	//	//the count is 3 because we have 3 element in array
+	//	GE::Ref<IndexBuffer> squareIB;
+	//	squareIB = IndexBuffer::Create(indices2, sizeof(indices2) / sizeof(uint32_t));
+	//	m_SquareVA->AddIndexBuffer(squareIB);
 
-		uniform mat4 u_ViewProjection;
-		uniform mat4 u_ModelTransform;
-		
 
-		void main(){
-			v_Position = a_Position;
-			gl_Position = u_ViewProjection* u_ModelTransform * vec4(a_Position , 1.0);
-		}
-		)";
-		std::string fragmentSrc2 = R"(
-		#version 330 core
-		
-		layout(location = 0) out vec4 color;
-		in vec3 v_Position;
+	//	//vertex handle position, fragment handle color
+	//	std::string vertexSrc = R"(
+	//	#version 330 core
+	//	
+	//	layout(location = 0) in vec3 a_Position;
+	//	layout(location = 1) in vec4 a_Color;
+	//	
+	//	out vec3 v_Position;
+	//	out vec4 v_Color;
+	//	
+	//	uniform mat4 u_ViewProjection;
+	//	uniform mat4 u_ModelTransform;
 
-		uniform vec4 u_Color;
-		
-		void main(){
-			color = u_Color;
-		}
-		)";
+	//	void main(){
+	//		v_Position = a_Position;
+	//		v_Color = a_Color;
+	//		gl_Position = u_ViewProjection * u_ModelTransform * vec4(a_Position, 1.0);
+	//		
+	//	}
+	//	)";
+	//	std::string fragmentSrc = R"(
+	//	#version 330 core
+	//	
+	//	layout(location = 0) out vec4 color;
+	//	in vec3 v_Position;
+	//	in vec4 v_Color;
 
-		m_Shader2 = Shader::Create("Square", vertexSrc2, fragmentSrc2);
+	//	void main(){
+	//		color = v_Color;
+	//	}
+	//	)";
+	//	m_Shader = Shader::Create("Triangle", vertexSrc, fragmentSrc);
 
-		//For texture shader
-		std::string vertexSrc3 = R"(
-		#version 330 core
-		
-		layout(location = 0) in vec3 a_Position;
-		layout(location = 1) in vec2 a_TexCoord;
-		
-		uniform mat4 u_ViewProjection;
-		uniform mat4 u_ModelTransform;
-		
-		out vec2 v_TexCoord;
+	//	//For blue square
+	//	std::string vertexSrc2 = R"(
+	//	#version 330 core
+	//	
+	//	layout(location = 0) in vec3 a_Position;
+	//	
+	//	out vec3 v_Position;
 
-		void main(){
-			v_TexCoord = a_TexCoord;
-			gl_Position = u_ViewProjection* u_ModelTransform * vec4(a_Position , 1.0);
-		}
-		)";
-		std::string fragmentSrc3 = R"(
-		#version 330 core
-		
-		layout(location = 0) out vec4 color;
-		in vec2 v_TexCoord;
+	//	uniform mat4 u_ViewProjection;
+	//	uniform mat4 u_ModelTransform;
+	//	
 
-		uniform sampler2D u_Texture;
-		
-		void main(){
-			color = texture(u_Texture, v_TexCoord);
-		}
-		)";
+	//	void main(){
+	//		v_Position = a_Position;
+	//		gl_Position = u_ViewProjection* u_ModelTransform * vec4(a_Position , 1.0);
+	//	}
+	//	)";
+	//	std::string fragmentSrc2 = R"(
+	//	#version 330 core
+	//	
+	//	layout(location = 0) out vec4 color;
+	//	in vec3 v_Position;
 
-		//m_TextureShader = Shader::Create( "assets/Shader/Texture.glsl");
-		auto textureShader = m_ShaderLibrary.Load("assets/Shader/Texture.glsl");
-		
-		m_Texture2D = Texture2D::Create("assets/Textures/Checkerboard.png");
-		m_Texture2DSecond = Texture2D::Create("assets/Textures/TreeMat.png");
+	//	uniform vec4 u_Color;
+	//	
+	//	void main(){
+	//		color = u_Color;
+	//	}
+	//	)";
 
-		std::dynamic_pointer_cast<GE::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<GE::OpenGLShader>(textureShader)->SetUniformInt("u_Texture", 0);
+	//	m_Shader2 = Shader::Create("Square", vertexSrc2, fragmentSrc2);
 
-	};
+	//	//For texture shader
+	//	std::string vertexSrc3 = R"(
+	//	#version 330 core
+	//	
+	//	layout(location = 0) in vec3 a_Position;
+	//	layout(location = 1) in vec2 a_TexCoord;
+	//	
+	//	uniform mat4 u_ViewProjection;
+	//	uniform mat4 u_ModelTransform;
+	//	
+	//	out vec2 v_TexCoord;
+
+	//	void main(){
+	//		v_TexCoord = a_TexCoord;
+	//		gl_Position = u_ViewProjection* u_ModelTransform * vec4(a_Position , 1.0);
+	//	}
+	//	)";
+	//	std::string fragmentSrc3 = R"(
+	//	#version 330 core
+	//	
+	//	layout(location = 0) out vec4 color;
+	//	in vec2 v_TexCoord;
+
+	//	uniform sampler2D u_Texture;
+	//	
+	//	void main(){
+	//		color = texture(u_Texture, v_TexCoord);
+	//	}
+	//	)";
+
+	//	//m_TextureShader = Shader::Create( "assets/Shader/Texture.glsl");
+	//	auto textureShader = m_ShaderLibrary.Load("assets/Shader/Texture.glsl");
+	//	
+	//	m_Texture2D = Texture2D::Create("assets/Textures/Checkerboard.png");
+	//	m_Texture2DSecond = Texture2D::Create("assets/Textures/TreeMat.png");
+
+	//	std::dynamic_pointer_cast<GE::OpenGLShader>(textureShader)->Bind();
+	//	std::dynamic_pointer_cast<GE::OpenGLShader>(textureShader)->SetUniformInt("u_Texture", 0);
+
+	//};
 
 	void OnUpdate(GE::TimeStep deltatime) override {
 
@@ -294,7 +295,7 @@ class GameApplication : public GE::Application {
 public:
 	GameApplication() {
 		//PushLayer(new ExampleLayer());
-		PushOverlay(new Game2D_Layer());
+		PushOverlay(new Map_Layer());
 	}
 	~GameApplication(){
 

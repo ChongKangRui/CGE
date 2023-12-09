@@ -4,11 +4,11 @@
 
 
 
-class Game2D_Layer : public GE::Layer
+class Map_Layer : public GE::Layer
 {
 public:
-	Game2D_Layer();
-	virtual ~Game2D_Layer() = default;
+	Map_Layer();
+	virtual ~Map_Layer() = default;
 
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
@@ -42,5 +42,10 @@ private:
 
 	ParticleSystem m_ParticleSystem;
 	ParticleProps m_Particle;
+
+	uint32_t m_MapHeight, m_MapWidth;
+
+
+	std::unordered_map<char, GE::Ref<GE::SubTexture2D>> s_TextureMap;
 };
 

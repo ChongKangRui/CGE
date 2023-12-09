@@ -28,8 +28,9 @@ namespace GE {
 		void OnUpdate(TimeStep ts);
 		void OnEvent(Event& e);
 
-		/*float GetZoomLevel() const { return m_ZoomLevel; }
-		void SetZoomLevel(float level) { m_ZoomLevel = level; }*/
+		float GetZoomLevel() const { return m_ZoomLevel; }
+		void SetZoomLevel(float level) { m_ZoomLevel = level; CalculateView();
+		}
 
 		OrthographicCamera& GetCamera(){ return m_Camera; }
 		const OrthographicCamera& GetCamera() const { return m_Camera; }
@@ -37,10 +38,11 @@ namespace GE {
 		const OrthographicCameraBounds& GetBounds() const { return m_Bounds; }
 
 	private:
+		void CalculateView();
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
 
-
+	
 
 	private:
 		//the order of initialization

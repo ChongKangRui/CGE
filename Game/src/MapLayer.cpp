@@ -1,4 +1,4 @@
-#include "Game2DLayer.h"
+#include "MapLayer.h"
 #include "imgui/imgui.h"
 
 #include <glm/gtc/type_ptr.hpp>
@@ -6,23 +6,50 @@
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
-Game2D_Layer::Game2D_Layer() : Layer("Application 2D Renderer"), m_CameraController(1280 / 720, true), m_ParticleSystem(10000)
+static const uint32_t s_MapWidth = 36;
+static const char* s_MapTiles =
+"TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+"T0000000000000000000000000000000000T"
+"T0000001111111111111111111100000000T"
+"T0000000000011111111111111110000000T"
+"T0000001111111111111111111111110000T"
+"T0000000001111111111111111000000000T"
+"T000000000000000000000TTTTTTTTT0000T"
+"T0000111111111111111111111111111100T"
+"T0000011111111111111111111111110000T"
+"T0000TTTTTTTTTT00000000000000000000T"
+"T0000011111111111111111111111000000T"
+"T0000000000000000000000000000000000T"
+"T0000000000000000000000000000000000T"
+"T0000000000000000000000000000000000T"
+"TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+"TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT";
+
+
+
+
+Map_Layer::Map_Layer() : Layer("Application 2D Renderer"), m_CameraController(1280 / 720, true), m_ParticleSystem(10000)
 {
 
 }
 
-void Game2D_Layer::OnAttach()
+void Map_Layer::OnAttach()
 {
 	GE_PROFILE_FUNCTION();
 
 	m_Texture2DExample = GE::Texture2D::Create("assets/Textures/TreeMat.png");
 	m_SpriteSheet = GE::Texture2D::Create("assets/Textures/RPGpack_sheet.png");
 	//m_Subtexture = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7,6 }, { 128/2,128/2 });
-	m_TextureStairs = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 0,11 }, { 128 / 2,128 / 2 }, {1,2});
-	m_TextureTree = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2,1 }, { 128 / 2,128 / 2 }, { 1,2 });
-	m_TextureBarrel = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1,11 }, { 128 / 2,128 / 2 });
+	s_TextureMap['T'] = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 1,11 }, { 128 / 2,128 / 2 }, {1,1});
 
+	m_TextureTree = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, {2,1}, {128 / 2,128 / 2}, {1,2});
 
+	s_TextureMap['1'] = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 11,11 }, { 128 / 2,128 / 2 });
+	s_TextureMap['0'] = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 6,11 }, { 128 / 2,128 / 2 });
+	//s_TextureMap['T'] = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2,1 }, { 128 / 2,128 / 2 }, { 1,2 });
+
+	m_MapWidth = s_MapWidth;
+	m_MapHeight = strlen(s_MapTiles) / s_MapWidth;
 
 	//ParticleInitialize
 	m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
@@ -32,14 +59,17 @@ void Game2D_Layer::OnAttach()
 	m_Particle.Velocity = { 0.0f, 0.0f };
 	m_Particle.VelocityVariation = { 3.0f, 1.0f };
 	m_Particle.Position = { 0.0f, 0.0f };
+
+
+	m_CameraController.SetZoomLevel(3);
 }
 
-void Game2D_Layer::OnDetach()
+void Map_Layer::OnDetach()
 {
 	GE_PROFILE_FUNCTION();
 }
 
-void Game2D_Layer::OnUpdate(GE::TimeStep ts)
+void Map_Layer::OnUpdate(GE::TimeStep ts)
 {
 	GE_PROFILE_FUNCTION();
 	m_CameraController.OnUpdate(ts);
@@ -88,33 +118,38 @@ void Game2D_Layer::OnUpdate(GE::TimeStep ts)
 
 		GE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		//Blue Diamond
-		GE::Renderer2D::DrawQuad({ m_SquadPos.y + 7,m_SquadPos.y + 2 }, { 1.0f, 2.0f }, 0.0f, { 1.0f,0.3f,1.0f,1.0f });
-
-		//White Diamond
-		GE::Renderer2D::DrawQuad({ m_SquadPos.x + 6,m_SquadPos.y + 5}, { 1.0f, 1.0f }, 0.0f, { 1.0f,1.0f,0.0f,1.0f });
-
-		//Tree Texture
-		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 1.0f, 0.2f }, { 1.0f, 1.0f }, 0.0f, m_Texture2DExample,{ 0.5,0.5,1.0,1.0 });
-
 		//GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 3.0f, 0.2f }, { 1.0f, 1.0f }, 0.0f, m_SpriteSheet);
-		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 3.0f, 0.2f }, { 1.0f, 2.0f }, 0.0f, m_TextureStairs);
+		/*GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 3.0f, 0.2f }, { 1.0f, 2.0f }, 0.0f, m_TextureStairs);
+		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y + 1.0f, 0.2f }, { 1.0f, 2.0f }, 0.0f, m_TextureTree);
+		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y + 3.0f, 0.2f }, { 1.0f, 2.0f }, 0.0f, m_TextureBarrel);*/
 
-		GE::Renderer2D::EndScene();
+		for (uint32_t y = 0; y < m_MapHeight; y++) {
+			for (uint32_t x = 0; x < m_MapWidth; x++) {
+			
+				char tileType = s_MapTiles[x + y * m_MapWidth];
+				GE::Ref<GE::SubTexture2D> texture;
 
-		
-		GE::Renderer2D::BeginScene(m_CameraController.GetCamera());
-		for (float y = -5.0f; y < 5.0f; y += 0.5f) {
-			for (float x = -5.0f; x < 5.0f; x += 0.5f) {
 
-				glm::vec4 ccccc = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f };
+				if (s_TextureMap.find(tileType) != s_TextureMap.end()) {
+					texture = s_TextureMap[tileType];
+				}
+				else
+					texture = m_TextureTree;
 
-				GE::Renderer2D::DrawQuad({ x + 10, y + 10 }, { 0.45f, 0.45f },0.0f,  { 0.5,0.5,1.0,1.0 });
+				//if (tileType == 'T') {
+				//	//GE::Renderer2D::DrawQuad({ x - m_MapWidth / 2.0f,y - m_MapHeight / 2.0f + 1, 0.4f }, { 1.0f, 2.0f }, 0.0f, texture);
+
+				//	auto gtexture = s_TextureMap['0'];
+				//	GE::Renderer2D::DrawQuad({ x - m_MapWidth / 2.0f,y - m_MapHeight / 2.0f + 1, 0.2f }, { 1.0f, 1.0f }, 0.0f, gtexture);
+				//}
+				//else
+					GE::Renderer2D::DrawQuad({ x - m_MapWidth / 2.0f,y - m_MapHeight / 2.0f, 0.2f }, { 1.0f, 1.0f }, 0.0f, texture);
 
 			}
-		}
-		GE::Renderer2D::EndScene();
 
+		}
+
+		GE::Renderer2D::EndScene();
 
 
 
@@ -130,7 +165,7 @@ void Game2D_Layer::OnUpdate(GE::TimeStep ts)
 
 }
 
-void Game2D_Layer::OnImGuiRender()
+void Map_Layer::OnImGuiRender()
 {
 	GE_PROFILE_FUNCTION();
 
@@ -150,7 +185,7 @@ void Game2D_Layer::OnImGuiRender()
 	ImGui::End();
 }
 
-void Game2D_Layer::OnEvent(GE::Event& e)
+void Map_Layer::OnEvent(GE::Event& e)
 {
 	m_CameraController.OnEvent(e);
 }

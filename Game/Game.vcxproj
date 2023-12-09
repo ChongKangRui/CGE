@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="src\Game2DLayer.cpp" />
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\MapLayer.cpp" />
     <ClCompile Include="src\ParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game2DLayer.h" />
+    <ClInclude Include="src\MapLayer.h" />
     <ClInclude Include="src\ParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
