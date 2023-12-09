@@ -1415,6 +1415,7 @@
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Core\Debug\instrumentor.h" />
+    <ClInclude Include="src\Core\Renderer\SubTexture2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vendor\stb_image\std_image.cpp">
@@ -1499,5 +1500,6 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\Renderer2D.cpp" />
+    <ClCompile Include="src\Core\Renderer\SubTexture2D.cpp" />
   </ItemGroup>
 </Project>

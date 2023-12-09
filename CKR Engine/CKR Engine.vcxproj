@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="src\Core\Debug\instrumentor.h" />
     <ClInclude Include="src\Core\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Core\Renderer\SubTexture2D.h" />
     <ClInclude Include="Vendor\Glm\glm\common.hpp" />
     <ClInclude Include="Vendor\Glm\glm\detail\_features.hpp" />
     <ClInclude Include="Vendor\Glm\glm\detail\_fixes.hpp" />
@@ -599,6 +600,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Renderer\Renderer2D.cpp" />
+    <ClCompile Include="src\Core\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="Vendor\stb_image\std_image.cpp" />
     <ClCompile Include="src\Core\Base\EngineApplication.cpp" />
     <ClCompile Include="src\Core\Imgui\ImGuiLayer.cpp" />

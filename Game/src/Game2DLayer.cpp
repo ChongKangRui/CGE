@@ -16,7 +16,9 @@ void Game2D_Layer::OnAttach()
 	GE_PROFILE_FUNCTION();
 
 	m_Texture2DExample = GE::Texture2D::Create("assets/Textures/TreeMat.png");
-
+	m_SpriteSheet = GE::Texture2D::Create("assets/Textures/RPGpack_sheet.png");
+	//m_Subtexture = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7,6 }, { 128/2,128/2 });
+	m_Subtexture = GE::SubTexture2D::CreateFromCoords(m_SpriteSheet, { 2,1 }, { 128 / 2,128 / 2 }, {1,2});
 	//ParticleInitialize
 	m_Particle.ColorBegin = { 254 / 255.0f, 212 / 255.0f, 123 / 255.0f, 1.0f };
 	m_Particle.ColorEnd = { 254 / 255.0f, 109 / 255.0f, 41 / 255.0f, 1.0f };
@@ -90,7 +92,8 @@ void Game2D_Layer::OnUpdate(GE::TimeStep ts)
 		//Tree Texture
 		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 1.0f, 0.2f }, { 1.0f, 1.0f }, 0.0f, m_Texture2DExample,{ 0.5,0.5,1.0,1.0 });
 
-		//	GE::Renderer2D::DrawQuad({ 2,1 }, { 0.45f, 0.45f }, 0.0f, { 0.5,0.5,1.0,1.0 });
+		//GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 3.0f, 0.2f }, { 1.0f, 1.0f }, 0.0f, m_SpriteSheet);
+		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 3.0f, 0.2f }, { 1.0f, 2.0f }, 0.0f, m_Subtexture);
 
 		GE::Renderer2D::EndScene();
 
@@ -106,6 +109,9 @@ void Game2D_Layer::OnUpdate(GE::TimeStep ts)
 			}
 		}
 		GE::Renderer2D::EndScene();
+
+
+
 
 		
 	}

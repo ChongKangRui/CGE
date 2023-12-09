@@ -27,7 +27,8 @@ private:
 	//GE::Ref<GE::Shader> m_TextureShader;
 
 	GE::Ref<GE::Texture2D> m_Texture2DExample;
-	
+	GE::Ref<GE::Texture2D> m_SpriteSheet;
+	GE::Ref<GE::SubTexture2D> m_Subtexture;
 
 	GE::Ref<GE::VertexArray> m_SquareVA;
 
