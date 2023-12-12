@@ -136,6 +136,11 @@ namespace GE {
 
 
 
+	void Application::CloseApplication()
+	{
+		m_Running = false;
+	}
+
 	bool Application::OnWindowClosed(WindowCloseEvent& e)
 	{
 		m_Running = false;

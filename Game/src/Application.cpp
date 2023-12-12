@@ -294,8 +294,8 @@ private:
 class GameApplication : public GE::Application {
 public:
 	GameApplication() {
-		//PushLayer(new ExampleLayer());
-		PushOverlay(new Map_Layer());
+		PushLayer(new Game2D_Layer());
+		//PushOverlay(new Map_Layer());
 	}
 	~GameApplication(){
 

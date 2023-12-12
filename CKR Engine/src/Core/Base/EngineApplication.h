@@ -36,6 +36,8 @@ namespace GE {
 
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
+
+		void CloseApplication();
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);

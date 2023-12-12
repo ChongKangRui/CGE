@@ -140,6 +140,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLFrameBuffer.h" />
+    <ClInclude Include="src\Core\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Core\Debug\instrumentor.h" />
     <ClInclude Include="src\Core\Renderer\Renderer2D.h" />
     <ClInclude Include="src\Core\Renderer\SubTexture2D.h" />
@@ -599,6 +601,8 @@
     <ClInclude Include="src\gepch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
+    <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Core\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Core\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="Vendor\stb_image\std_image.cpp" />

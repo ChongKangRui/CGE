@@ -26,14 +26,12 @@ private:
 	GE::Ref<GE::Shader> m_ColorShader;
 	//GE::Ref<GE::Shader> m_TextureShader;
 
-	GE::Ref<GE::Texture2D> m_Texture2DExample;
+	GE::Ref<GE::Texture2D> m_TextureTree;
 	GE::Ref<GE::Texture2D> m_SpriteSheet;
 
-	GE::Ref<GE::SubTexture2D> m_TextureStairs;
-	GE::Ref<GE::SubTexture2D> m_TextureTree;
-	GE::Ref<GE::SubTexture2D> m_TextureBarrel;
-
 	GE::Ref<GE::VertexArray> m_SquareVA;
+
+	GE::Ref<GE::FrameBuffer> m_FrameBuffer;
 
 	glm::vec3 m_SquadPos = { 0.0f, 0.0f, 0.0f };
 	float m_Rotation = 0;

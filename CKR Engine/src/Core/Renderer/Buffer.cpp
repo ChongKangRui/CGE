@@ -14,7 +14,7 @@ namespace GE {
 		}
 			break;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLVertexBuffer>(vertices, size);
+			return CreateRef<OpenGLVertexBuffer>(vertices, size);
 			break;
 		}
 
@@ -31,7 +31,7 @@ namespace GE {
 		}
 			break;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLVertexBuffer>(size);
+			return CreateRef<OpenGLVertexBuffer>(size);
 			break;
 		}
 
@@ -47,7 +47,7 @@ namespace GE {
 		}
 			break;
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLIndexBuffer>(vertices, count);
+			return CreateRef<OpenGLIndexBuffer>(vertices, count);
 			break;
 		}
 
