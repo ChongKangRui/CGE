@@ -22,7 +22,7 @@ namespace GE {
 	class GE_API Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "C Game Engine");
 
 		//will be inherited from game aplication
 		virtual ~Application();

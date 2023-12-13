@@ -4,11 +4,11 @@
 
 
 
-class Game2D_Layer : public GE::Layer
+class EditorLayer : public GE::Layer
 {
 public:
-	Game2D_Layer();
-	virtual ~Game2D_Layer() = default;
+	EditorLayer();
+	virtual ~EditorLayer() = default;
 
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;

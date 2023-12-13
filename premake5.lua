@@ -150,3 +150,54 @@ project "Game"
 	defines "GE_DIST"
 	runtime "Release"
 	optimize "on"
+
+
+	project "CKREngine-Editor"
+	location "CKREngine-Editor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++20"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
+
+	
+	files{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs{
+		"CKR Engine/Vendor/spdlog/include",
+		"CKR Engine/src",
+		"CKR Engine/Vendor",
+		"%{IncludeDir.Glm}"
+		
+	}
+
+	links{
+		"CKR Engine"
+	}
+
+	filter "system:windows"
+	systemversion "latest"
+
+	defines{
+		"GE_PLATFORM_WINDOW"
+	}
+
+	filter "configurations:Debug"
+	defines "GE_DEBUG"
+	runtime "Debug"
+	symbols "on"
+
+	filter "configurations:Release"
+	defines "GE_RELEASE"
+	runtime "Release"
+	optimize "on"
+
+	filter "configurations:Dist"
+	defines "GE_DIST"
+	runtime "Release"
+	optimize "on"

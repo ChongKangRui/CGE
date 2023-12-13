@@ -22,14 +22,14 @@ namespace GE {
 
 
 	//Create window, set window event callback, everytime input trigger, callbackevent will trigger
-	GE::Application::Application()
+	GE::Application::Application(const std::string& name)
 	{
 		GE_PROFILE_FUNCTION();
 		//GE_CORE_ASSERT(s_Instance, "Application already exists!");
 		s_Instance = this;
 		//GE_CORE_ASSERT(!s_Instance, "Application aldy exist");
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name)));
 		m_Window->SetEventCallback(Bind_Event_FN(OnEvent));
 		m_Window->SetVSync(true);
 

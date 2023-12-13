@@ -291,20 +291,20 @@ private:
 };
 
 
-class GameApplication : public GE::Application {
+class Editor : public GE::Application {
 public:
-	GameApplication() {
-		PushLayer(new Game2D_Layer());
+	Editor() {
+		PushLayer(new EditorLayer());
 		//PushOverlay(new Map_Layer());
 	}
-	~GameApplication(){
+	~Editor(){
 
 	}
 
 };
 
 GE::Application* GE::CreateApplication() {
-	return new GameApplication();
+	return new Editor();
 }
 
 
