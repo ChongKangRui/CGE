@@ -31,6 +31,7 @@ namespace GE {
 
 		m_Window = std::unique_ptr<Window>(Window::Create(WindowProps(name)));
 		m_Window->SetEventCallback(Bind_Event_FN(OnEvent));
+		
 		m_Window->SetVSync(true);
 
 		Renderer::Init();
@@ -110,7 +111,7 @@ namespace GE {
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
 		{
 			(*--it)->OnEvent(e);
-			if (e.m_Handled)
+			if (e.Handled)
 				break;
 		}
 

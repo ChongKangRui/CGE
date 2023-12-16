@@ -13,7 +13,12 @@
 #include "Core/Base/MouseCode.h"
 #include "Core/Base/TimeStep.h"
 
-#include "Core/OrthographicCameraController.h"
+#include "Core/Renderer/OrthographicCameraController.h"
+
+#include "Core/Scene/Scene.h"
+#include "Core/Scene/Entity.h"
+#include "Core/Scene/Component.h"
+
 
 //Rendering related
 #include "Core/Renderer/Renderer.h"

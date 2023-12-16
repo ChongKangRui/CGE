@@ -107,7 +107,7 @@ namespace GE {
 			data.Width = Width;
 			data.Height = Height;
 			WindowResizeEvent event(Width, Height);
-			GELog_Warn("Current Window Size: {0},{1}", Width, Height);
+			//GELog_Warn("Current Window Size: {0},{1}", Width, Height);
 
 			data.EventCallback(event);
 

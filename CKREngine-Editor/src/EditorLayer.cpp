@@ -5,6 +5,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Platform/OpenGL/OpenGLShader.h"
+
+#include "Core/Scene/Entity.h"
+
 namespace GE {
 	EditorLayer::EditorLayer() : Layer("Application 2D Renderer"), m_CameraController(1280 / 720, true)
 	{
@@ -19,14 +22,20 @@ namespace GE {
 		m_SpriteSheet = Texture2D::Create("assets/Textures/RPGpack_sheet.png");
 		//m_Subtexture = SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7,6 }, { 128/2,128/2 });
 
-		
+
 		FrameBufferSpecification spec;
 		spec.width = 1280;
 		spec.height = 720;
 
 		m_FrameBuffer = FrameBuffer::Create(spec);
 
+		m_ActiveScene = CreateRef<Scene>();
 
+		m_SquareTest = m_ActiveScene->CreateEntity("Square");
+
+		m_SquareTest.AddComponent<SpriteComponent>(glm::vec4(1.0f,0.0f,0.0f,1.0f));
+
+	
 	}
 
 	void EditorLayer::OnDetach()
@@ -37,16 +46,18 @@ namespace GE {
 	void EditorLayer::OnUpdate(TimeStep ts)
 	{
 		GE_PROFILE_FUNCTION();
-		m_CameraController.OnUpdate(ts);
+
+
+
+		if (m_ViewportFocus)
+			m_CameraController.OnUpdate(ts);
 
 		Renderer2D::ResetStats();
-		{
-			GE_PROFILE_SCOPE("Renderer Prep");
 
-			m_FrameBuffer->Bind();
-			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0 });
-			RenderCommand::Clear();
-		}
+		m_FrameBuffer->Bind();
+		RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0 });
+		RenderCommand::Clear();
+
 
 
 		//Temp for testing only
@@ -66,41 +77,19 @@ namespace GE {
 
 
 
-		{
-			GE_PROFILE_SCOPE("Sandbox2D::OnRenderer");
 
-			Renderer2D::BeginScene(m_CameraController.GetCamera());
+		Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-			//Blue Diamond
-			Renderer2D::DrawQuad({ m_SquadPos.y + 7,m_SquadPos.y + 2 }, { 1.0f, 2.0f }, 0.0f, { 1.0f,0.3f,1.0f,1.0f });
+		//Update scene
+		m_ActiveScene->OnUpdate(ts);
 
-			//White Diamond
-			Renderer2D::DrawQuad({ m_SquadPos.x + 6,m_SquadPos.y + 5 }, { 1.0f, 1.0f }, 0.0f, { 1.0f,1.0f,0.0f,1.0f });
-
-			//Tree Texture
-			Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 1.0f, 0.2f }, { 1.0f, 1.0f }, 0.0f, m_TextureTree, { 0.5,0.5,1.0,1.0 });
-
-
-			Renderer2D::EndScene();
-
-
-			Renderer2D::BeginScene(m_CameraController.GetCamera());
-			for (float y = -5.0f; y < 5.0f; y += 0.5f) {
-				for (float x = -5.0f; x < 5.0f; x += 0.5f) {
-
-					glm::vec4 TileColor = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f };
-
-					Renderer2D::DrawQuad({ x + 10, y + 10 }, { 0.45f, 0.45f }, 0.0f, { TileColor });
-
-				}
-			}
-			Renderer2D::EndScene();
-			m_FrameBuffer->Unbind();
+		Renderer2D::EndScene();
+		m_FrameBuffer->Unbind();
 
 
 
 
-		}
+
 
 
 		//Todo Shader::SetMAt4, Shader::SetFloat4 etc;
@@ -199,6 +188,8 @@ namespace GE {
 		}
 
 
+
+
 		ImGui::Begin("Setting");
 		auto stat = Renderer2D::GetStats();
 		ImGui::Text("Renderer2D Stat: ");
@@ -206,7 +197,11 @@ namespace GE {
 		ImGui::Text("Quad Count: %d", stat.QuadCount);
 		ImGui::Text("Vertices: %d", stat.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stat.GetTotalIndexCount());
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+
+		if (m_SquareTest) {
+			auto& squareColor = m_SquareTest.GetComponent<SpriteComponent>().Color;
+			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+		}
 		ImGui::End();
 
 		ImGui::Begin("Tes");
@@ -220,17 +215,23 @@ namespace GE {
 
 		//////////////////////////viewport
 		ImGui::Begin("ViewPort");
+
+		m_ViewportFocus = ImGui::IsWindowFocused();
+		m_ViewportHover = ImGui::IsWindowHovered();
+
+		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocus || !m_ViewportHover);
+
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
-		if (m_ViewportSize != *(glm::vec2*)&viewportPanelSize) {
-			
+		if (m_ViewportSize != *(glm::vec2*)&viewportPanelSize && viewportPanelSize.x > 0 && viewportPanelSize.y > 0) {
+
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		
-			
+
+
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
-		
-		
+
+
 		}
 
 		uint32_t FBtextureID = m_FrameBuffer->GetColorAttachmentRendererID();

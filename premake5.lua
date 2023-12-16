@@ -17,6 +17,7 @@ IncludeDir["Glad"]	= "CKR Engine/Vendor/Glad/include"
 IncludeDir["imgui"]	= "CKR Engine/Vendor/imgui"
 IncludeDir["Glm"]	= "CKR Engine/Vendor/Glm"
 IncludeDir["stb_image"]	= "CKR Engine/Vendor/stb_image"
+IncludeDir["entt"]	= "CKR Engine/Vendor/entt"
 
 include "CKR Engine/Vendor/GLFW"
 include "CKR Engine/Vendor/Glad"
@@ -43,6 +44,7 @@ project "CKR Engine"
 		"%{prj.name}/Vendor/stb_image/**.h",
 		"%{prj.name}/Vendor/Glm/glm/**.hpp",
 		"%{prj.name}/Vendor/Glm/glm/**.inl"
+		--"%{prj.name}/Vendor/entt/**.hpp"
 	}
 
 
@@ -58,7 +60,8 @@ project "CKR Engine"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.Glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
 	}
 
 	links{
@@ -152,7 +155,7 @@ project "Game"
 	optimize "on"
 
 
-	project "CKREngine-Editor"
+project "CKREngine-Editor"
 	location "CKREngine-Editor"
 	kind "ConsoleApp"
 	language "C++"
@@ -172,7 +175,8 @@ project "Game"
 		"CKR Engine/Vendor/spdlog/include",
 		"CKR Engine/src",
 		"CKR Engine/Vendor",
-		"%{IncludeDir.Glm}"
+		"%{IncludeDir.Glm}",
+		"%{IncludeDir.entt}"
 		
 	}
 

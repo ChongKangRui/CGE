@@ -1359,7 +1359,7 @@
     <ClInclude Include="src\Core\Imgui\ImGuiLayer.h">
       <Filter>src\Core\Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\OrthographicCameraController.h">
+    <ClInclude Include="src\Core\Renderer\OrthographicCameraController.h">
       <Filter>src\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\Buffer.h">
@@ -1425,15 +1425,15 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\Window\WindowsInput.h">
-      <Filter>src\Platform\Window</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\Window\WindowsWindow.h">
       <Filter>src\Platform\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\gepch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Scene\Scene.h" />
+    <ClInclude Include="src\Core\Scene\Component.h" />
+    <ClInclude Include="src\Core\Scene\Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vendor\stb_image\std_image.cpp">
@@ -1460,7 +1460,7 @@
     <ClCompile Include="src\Core\Imgui\ImguiBuild.cpp">
       <Filter>src\Core\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\OrthographicCameraController.cpp">
+    <ClCompile Include="src\Core\Renderer\OrthographicCameraController.cpp">
       <Filter>src\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\Buffer.cpp">
@@ -1529,5 +1529,7 @@
     <ClCompile Include="src\gepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Scene\Scene.cpp" />
+    <ClCompile Include="src\Core\Scene\Entity.cpp" />
   </ItemGroup>
 </Project>

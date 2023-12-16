@@ -21,7 +21,10 @@ namespace GE {
 	class FrameBuffer
 	{
 	public:
+
 		static Ref<FrameBuffer> Create(const FrameBufferSpecification& spec);
+
+		virtual ~FrameBuffer() = default;
 
 		virtual const FrameBufferSpecification& GetSpecification() const = 0;
 		virtual uint32_t GetColorAttachmentRendererID() const = 0;

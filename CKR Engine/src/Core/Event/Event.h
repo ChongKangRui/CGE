@@ -41,8 +41,6 @@ namespace GE {
 
 	class GE_API Event {
 
-		friend class EventDispatcher;
-		friend class Application;
 	public:
 		virtual EventType GetEventType() const = 0;
 		virtual const char* GetName() const = 0;
@@ -55,8 +53,7 @@ namespace GE {
 			return GetCategoryFlags() & category;
 		}
 
-	protected:
-		bool m_Handled = false;
+		bool Handled = false;
 	};
 
 	class EventDispatcher {
@@ -70,7 +67,7 @@ namespace GE {
 		bool Dispatch(EventFn<T> func) {
 			
 			if (m_Event.GetEventType() == T::GetStaticType()) {
-				m_Event.m_Handled = func(*(T*)&m_Event);
+				m_Event.Handled = func(*(T*)&m_Event);
 				return true;
 			}
 			return false;

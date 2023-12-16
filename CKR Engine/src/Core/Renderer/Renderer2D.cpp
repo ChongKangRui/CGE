@@ -149,7 +149,7 @@ namespace GE {
 		s_Data.QuadVB->SetData(s_Data.QuadVertexBufferBase, datasize);
 
 
-		//GELog_Info("Base {0}, PTr {1}", s_Data.QuadVertexBufferBase.)
+		//GELog_Info("Base {0}, PTr {1}", s_Data.QuadVertexBufferBase->Position.x, )
 
 		Flush();
 	}
@@ -186,10 +186,23 @@ namespace GE {
 	{
 		GE_PROFILE_FUNCTION();
 
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
+			glm::rotate(glm::mat4(1.0f), rotation, { 0.0f,0.0f,1.0f })
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+		
+		DrawQuad(transform, color);
+
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	{
+		GE_PROFILE_FUNCTION();
+
 		//If exceed max indices, start a new drawcall
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
 			FlushAndReset();
-			
+
 		}
 
 		const float TilingFactor = 1.0f;
@@ -199,9 +212,7 @@ namespace GE {
 
 		//GELog_Info("{0}", position);
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
-			glm::rotate(glm::mat4(1.0f), rotation, { 0.0f,0.0f,1.0f })
-			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+	
 		constexpr glm::vec2 TexCoord[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f },{ 0.0f, 1.0f } };
 
 		constexpr size_t quadVertexCount = 4;
@@ -221,6 +232,7 @@ namespace GE {
 
 		s_Data.Stats.QuadCount++;
 
+
 	}
 	
 
@@ -237,6 +249,14 @@ namespace GE {
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
 			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }) *
 			glm::rotate(glm::mat4(1.0f), rotation, { 0.0f,0.0f,1.0f });
+
+		DrawQuad(transform, texture,color,TilingMultiplier);
+
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& color, float TilingMultiplier)
+	{
+		GE_PROFILE_FUNCTION();
 
 		constexpr glm::vec2 TexCoord[] = {
 			{ 0.0f, 0.0f },
@@ -267,7 +287,7 @@ namespace GE {
 
 		}
 
-		
+
 
 		for (size_t i = 0; i < quadVertexCount; i++) {
 
@@ -282,8 +302,6 @@ namespace GE {
 		s_Data.QuadIndexCount += 6;
 
 		s_Data.Stats.QuadCount++;
-
-
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& texture, const glm::vec4& color , float TilingMultiplier) {

@@ -167,22 +167,22 @@ namespace GE {
 		GE_PROFILE_FUNCTION();
 
 
-		std::string result;
-		std::ifstream in(filepath, std::ios::in | std::ios::binary);
-		if (in)
-		{
-			in.seekg(0, std::ios::end);
-			result.resize(in.tellg());
-			in.seekg(0, std::ios::beg);
-			in.read(&result[0], result.size());
-			in.close();
+		std::string result; // Declare a string to store the file content.
+		std::ifstream in(filepath, std::ios::in | std::ios::binary); // Open the file in binary mode for input.
 
+		if (in) { // Check if the file is successfully opened.
+			in.seekg(0, std::ios::end); // Move the file pointer to the end of the file.
+			result.resize(in.tellg()); // Resize the result string to match the file size.
+			in.seekg(0, std::ios::beg); // Move the file pointer back to the beginning.
+			in.read(&result[0], result.size()); // Read the content of the file into the result string.
+			in.close(); // Close the file stream.
 		}
 		else {
+			// If the file couldn't be opened, assert with an error message.
 			GE_CORE_ASSERT("Could not open file '{0}'", filepath);
 		}
 
-		return result;
+		return result; // Return the content of the file as a string.
 	}
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
@@ -196,21 +196,36 @@ namespace GE {
 		size_t typeTokenLength = strlen(typeToken);
 		size_t pos = source.find(typeToken, 0);
 		while (pos != std::string::npos) {
+
+			//Get end of line from line
+			//If first loop, the end of line will be after 'vertex'
 			size_t eol = source.find_first_of("\r\n", pos);
 
 			GE_CORE_ASSERT(eol != std::string::npos, "Syntax error");
 
+			//Get begin line, so it will start from after #type 
+			//The +1 was because we have a space between #type and type string
 			size_t begin = pos + typeTokenLength + 1;
+
+			//Now get the type whether is fragment or vertex shader.
+			//if vertex for example, begin will start from after #type and the size of it which is end of line - begin. like start from 'v' and end for 'x'
+			// end of line - begin 12 - 6. So start from 6 and +6 to get vertex string 
+			//so the sybstr result will be vertex
 			std::string type = source.substr(begin, eol - begin);
 
 			GE_CORE_ASSERT(ShaderTypeFromString(type), "Invalid shader type specific");
 
+			//This will get the next start position line in order to find the next shader 
 			size_t nextlinePos = source.find_first_not_of("\r\n", eol);
+
+			//will find the #type from nextlinePos, so this should return the fragment shader position at the end of first loop
 			pos = source.find(typeToken, nextlinePos);
 
-			//shaderSource[ShaderTypeFromString(type)] = (pos == std::string::npos) ? source.substr(nextlinePos) : source.substr(nextlinePos, pos - nextlinePos);
-			shaderSource[ShaderTypeFromString(type)] = source.substr(nextlinePos, pos -
-				(nextlinePos == std::string::npos ? source.size() - 1 : nextlinePos));
+			//if we still find got shader need to assign, then we should use nextlinePos as the offset
+			size_t offset = (nextlinePos == std::string::npos ? source.size() - 1 : nextlinePos);
+
+			//Lastly we assign the type(fragment or vertex) and give the string of the result
+			shaderSource[ShaderTypeFromString(type)] = source.substr(nextlinePos, pos - offset);
 
 			Log_Info("eol : {0}, begin : {1}, nextlinePos : {2}", eol, begin, nextlinePos);
 		}

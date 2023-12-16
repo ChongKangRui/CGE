@@ -38,6 +38,9 @@ namespace GE {
 		inline Window& GetWindow() { return *m_Window; }
 
 		void CloseApplication();
+
+
+		ImGuiLayer* GetImGuiLayer() const { return m_ImGuiLayer; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);

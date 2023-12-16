@@ -4,6 +4,9 @@
 
 
 namespace GE {
+
+	
+
 	class EditorLayer : public Layer
 	{
 	public:
@@ -33,12 +36,17 @@ namespace GE {
 
 		Ref<FrameBuffer> m_FrameBuffer;
 
+		Ref<Scene> m_ActiveScene;
+		Entity m_SquareTest;
+
 		glm::vec3 m_SquadPos = { 0.0f, 0.0f, 0.0f };
 		float m_Rotation = 0;
 
 		glm::vec4 m_SquareColor = { 1,0.3,0.4,1.0f };
 
 		glm::vec2 m_ViewportSize;
+
+		bool m_ViewportFocus = false, m_ViewportHover = false;
 
 		
 	};
