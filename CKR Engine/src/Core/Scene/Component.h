@@ -1,5 +1,8 @@
 #pragma once
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
+
+#include "Core/Renderer/OrthographicCamera.h"
+#include "SceneCamera.h"
 
 namespace GE {
 	struct TagComponent {
@@ -33,6 +36,19 @@ namespace GE {
 		SpriteComponent(const SpriteComponent&) = default;
 
 		SpriteComponent(const glm::vec4& color) : Color(color) {}
+
+	};
+
+	struct CameraComponent {
+		SceneCamera Camera;
+		bool Primary = true;
+		bool FixedAspectRatio = false;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+
+		CameraComponent(const glm::mat4& projection) {}
+
 
 	};
 

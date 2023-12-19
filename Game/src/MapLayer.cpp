@@ -97,7 +97,7 @@ void Map_Layer::OnUpdate(GE::TimeStep ts)
 
 
 	if (GE::Input::IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-		auto [x, y] = GE::Input::GetMousePos();
+		auto [x, y] = GE::Input::GetMousePosition();
 		auto width = GE::Application::Get().GetWindow().GetWidth();
 		auto height = GE::Application::Get().GetWindow().GetHeight();
 

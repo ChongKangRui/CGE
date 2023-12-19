@@ -46,6 +46,9 @@
     <Filter Include="src\Core\Renderer">
       <UniqueIdentifier>{EB009555-5717-93EB-A08E-1E0D0CE46373}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core\Scene">
+      <UniqueIdentifier>{82A83005-6E76-240B-570A-953143770070}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Platform">
       <UniqueIdentifier>{21CA02E5-0D2D-9289-B6B2-CA3FA2F45D0C}</UniqueIdentifier>
     </Filter>
@@ -1359,10 +1362,10 @@
     <ClInclude Include="src\Core\Imgui\ImGuiLayer.h">
       <Filter>src\Core\Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Renderer\OrthographicCameraController.h">
-      <Filter>src\Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Renderer\Buffer.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\Camera.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\FrameBuffer.h">
@@ -1372,6 +1375,9 @@
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\OrthographicCamera.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\OrthographicCameraController.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\PerspectiveCamera.h">
@@ -1400,6 +1406,18 @@
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\VertexArray.h">
       <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\Component.h">
+      <Filter>src\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\Entity.h">
+      <Filter>src\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\Scene.h">
+      <Filter>src\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\SceneCamera.h">
+      <Filter>src\Core\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine.h">
       <Filter>src</Filter>
@@ -1431,9 +1449,6 @@
     <ClInclude Include="src\gepch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Scene\Scene.h" />
-    <ClInclude Include="src\Core\Scene\Component.h" />
-    <ClInclude Include="src\Core\Scene\Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vendor\stb_image\std_image.cpp">
@@ -1460,9 +1475,6 @@
     <ClCompile Include="src\Core\Imgui\ImguiBuild.cpp">
       <Filter>src\Core\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Renderer\OrthographicCameraController.cpp">
-      <Filter>src\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\Renderer\Buffer.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
@@ -1470,6 +1482,9 @@
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\OrthographicCamera.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\OrthographicCameraController.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\PerspectiveCamera.cpp">
@@ -1498,6 +1513,15 @@
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp">
       <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Scene\Entity.cpp">
+      <Filter>src\Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Scene\Scene.cpp">
+      <Filter>src\Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Scene\SceneCamera.cpp">
+      <Filter>src\Core\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
@@ -1529,7 +1553,5 @@
     <ClCompile Include="src\gepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Scene\Scene.cpp" />
-    <ClCompile Include="src\Core\Scene\Entity.cpp" />
   </ItemGroup>
 </Project>

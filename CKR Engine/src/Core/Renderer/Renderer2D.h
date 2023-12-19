@@ -3,14 +3,21 @@
 #include "Texture.h"
 #include "SubTexture2D.h"
 
+#include "Core/Renderer/Camera.h"
+
 namespace GE {
 	class Renderer2D
 	{
 	public: 
+
+		
+
 		static void Init();
 		static void ShutDown();
 
 		static void BeginScene(OrthographicCamera& camera);
+		static void BeginScene(const Camera& camera, const glm::mat4& transform);
+
 		static void EndScene();
 		static void Flush();
 

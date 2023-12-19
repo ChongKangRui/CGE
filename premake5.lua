@@ -124,8 +124,8 @@ project "Game"
 		"CKR Engine/Vendor/spdlog/include",
 		"CKR Engine/src",
 		"CKR Engine/Vendor",
-		"%{IncludeDir.Glm}"
-		
+		"%{IncludeDir.Glm}",
+		"%{IncludeDir.entt}"
 	}
 
 	links{

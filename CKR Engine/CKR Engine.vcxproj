@@ -140,9 +140,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\Scene\Component.h" />
-    <ClInclude Include="src\Core\Scene\Entity.h" />
-    <ClInclude Include="src\Core\Scene\Scene.h" />
     <ClInclude Include="Vendor\Glm\glm\common.hpp" />
     <ClInclude Include="Vendor\Glm\glm\detail\_features.hpp" />
     <ClInclude Include="Vendor\Glm\glm\detail\_fixes.hpp" />
@@ -577,11 +574,12 @@
     <ClInclude Include="src\Core\Event\KeyEvent.h" />
     <ClInclude Include="src\Core\Event\MouseEvent.h" />
     <ClInclude Include="src\Core\Imgui\ImGuiLayer.h" />
-    <ClInclude Include="src\Core\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\Core\Renderer\Buffer.h" />
+    <ClInclude Include="src\Core\Renderer\Camera.h" />
     <ClInclude Include="src\Core\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Core\Renderer\GraphicContext.h" />
     <ClInclude Include="src\Core\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\Core\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\Core\Renderer\PerspectiveCamera.h" />
     <ClInclude Include="src\Core\Renderer\Renderer.h" />
     <ClInclude Include="src\Core\Renderer\Renderer2D.h" />
@@ -591,6 +589,10 @@
     <ClInclude Include="src\Core\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\Core\Renderer\Texture.h" />
     <ClInclude Include="src\Core\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Core\Scene\Component.h" />
+    <ClInclude Include="src\Core\Scene\Entity.h" />
+    <ClInclude Include="src\Core\Scene\Scene.h" />
+    <ClInclude Include="src\Core\Scene\SceneCamera.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
@@ -603,8 +605,6 @@
     <ClInclude Include="src\gepch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Core\Scene\Entity.cpp" />
-    <ClCompile Include="src\Core\Scene\Scene.cpp" />
     <ClCompile Include="Vendor\stb_image\std_image.cpp" />
     <ClCompile Include="src\Core\Base\EngineApplication.cpp" />
     <ClCompile Include="src\Core\Base\Layer.cpp" />
@@ -613,10 +613,10 @@
     <ClCompile Include="src\Core\Base\Window.cpp" />
     <ClCompile Include="src\Core\Imgui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Core\Imgui\ImguiBuild.cpp" />
-    <ClCompile Include="src\Core\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Core\Renderer\OrthographicCamera.cpp" />
+    <ClCompile Include="src\Core\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Core\Renderer\PerspectiveCamera.cpp" />
     <ClCompile Include="src\Core\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Core\Renderer\Renderer2D.cpp" />
@@ -626,6 +626,9 @@
     <ClCompile Include="src\Core\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\Core\Renderer\Texture.cpp" />
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Core\Scene\Entity.cpp" />
+    <ClCompile Include="src\Core\Scene\Scene.cpp" />
+    <ClCompile Include="src\Core\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLFrameBuffer.cpp" />

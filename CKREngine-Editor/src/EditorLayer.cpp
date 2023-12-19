@@ -35,7 +35,13 @@ namespace GE {
 
 		m_SquareTest.AddComponent<SpriteComponent>(glm::vec4(1.0f,0.0f,0.0f,1.0f));
 
-	
+
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
+		m_CameraEntity.AddComponent<CameraComponent>();
+
+		m_SecondCameraEntity = m_ActiveScene->CreateEntity("second Camera");
+		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>();
+		cc.Primary = false;
 	}
 
 	void EditorLayer::OnDetach()
@@ -47,7 +53,19 @@ namespace GE {
 	{
 		GE_PROFILE_FUNCTION();
 
+		//m_ActiveScene->OnViewportResize
 
+		//////Move from imgui render update to on update so can fix the flickering camera issue when resize
+		//Flickering is because recreate the color attachment, then right next draw using it before new texture is drawn to.
+		//Maybe first draw the viewport, even if the size is wrong, then resize if needed.Would flicker less.
+		if (FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
+			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
+			(spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y)) 
+		{
+			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+		}
 
 		if (m_ViewportFocus)
 			m_CameraController.OnUpdate(ts);
@@ -59,43 +77,18 @@ namespace GE {
 		RenderCommand::Clear();
 
 
-
-		//Temp for testing only
-		if (Input::IsKeyPressed(KEY_I))
-			m_SquadPos.y += 1 * ts;
-		else if (Input::IsKeyPressed(KEY_K))
-			m_SquadPos.y -= 1 * ts;
-		if (Input::IsKeyPressed(KEY_J))
-			m_SquadPos.x -= 1 * ts;
-		else if (Input::IsKeyPressed(KEY_L))
-			m_SquadPos.x += 1 * ts;
-
-		if (Input::IsKeyPressed(KEY_U))
-			m_Rotation += 1 * ts;
-		else if (Input::IsKeyPressed(KEY_O))
-			m_Rotation -= 1 * ts;
-
-
-
-
-		Renderer2D::BeginScene(m_CameraController.GetCamera());
-
 		//Update scene
 		m_ActiveScene->OnUpdate(ts);
 
-		Renderer2D::EndScene();
+
+
+
+		//Renderer2D::EndScene();
 		m_FrameBuffer->Unbind();
 
 
 
 
-
-
-
-		//Todo Shader::SetMAt4, Shader::SetFloat4 etc;
-		//Renderer::Submit(m_ColorShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.0f)));
-		//std::dynamic_pointer_cast<OpenGLShader>(m_ColorShader)->Bind();
-		//std::dynamic_pointer_cast<OpenGLShader>(m_ColorShader)->SetUniformFloat4("u_Color", m_SquareColor);
 
 
 	}
@@ -165,24 +158,15 @@ namespace GE {
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				//// Disabling fullscreen would allow the window to be moved to the front of other windows,
-				//// which we can't undo at the moment without finer window depth/z control.
-				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-				//ImGui::MenuItem("Padding", NULL, &opt_padding);
-				//ImGui::Separator();
 
-				//if (ImGui::MenuItem("Flag: NoDockingOverCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingOverCentralNode) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingOverCentralNode; }
-				//if (ImGui::MenuItem("Flag: NoDockingSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingSplit) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingSplit; }
-				//if (ImGui::MenuItem("Flag: NoUndocking", "", (dockspace_flags & ImGuiDockNodeFlags_NoUndocking) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoUndocking; }
-				//if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoResize; }
-				//if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; }
-				//if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen)) { dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; }
-				//ImGui::Separator();
 
 				if (ImGui::MenuItem("Exit", NULL, false))
 					Application::Get().CloseApplication();
 				ImGui::EndMenu();
 			}
+
+
+
 
 			ImGui::EndMenuBar();
 		}
@@ -202,6 +186,30 @@ namespace GE {
 			auto& squareColor = m_SquareTest.GetComponent<SpriteComponent>().Color;
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
 		}
+
+		ImGui::DragFloat3("Camera Transform", 
+			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
+
+		if (ImGui::Checkbox("Camera A", &primaryCamera)) {
+			auto& cc = m_SecondCameraEntity.GetComponent<CameraComponent>();
+			cc.Primary = !primaryCamera;
+
+			auto& c1 = m_CameraEntity.GetComponent<CameraComponent>();
+			c1.Primary = primaryCamera;
+
+		}
+
+
+		{
+			auto& cc = m_SecondCameraEntity.GetComponent<CameraComponent>();
+			float orthosize = cc.Camera.GetOrthographicSize();
+			if(ImGui::DragFloat("SceoncCam ortho size", &orthosize)){
+				cc.Camera.SetOrthographicSize(orthosize);
+			}
+		}
+
+		
+
 		ImGui::End();
 
 		ImGui::Begin("Tes");
@@ -222,17 +230,8 @@ namespace GE {
 		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocus || !m_ViewportHover);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
-		if (m_ViewportSize != *(glm::vec2*)&viewportPanelSize && viewportPanelSize.x > 0 && viewportPanelSize.y > 0) {
-
-			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-
-
-			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
-
-
-		}
 
 		uint32_t FBtextureID = m_FrameBuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)FBtextureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));

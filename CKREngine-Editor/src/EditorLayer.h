@@ -39,12 +39,17 @@ namespace GE {
 		Ref<Scene> m_ActiveScene;
 		Entity m_SquareTest;
 
+		Entity m_CameraEntity;
+		Entity m_SecondCameraEntity;
+
+		bool primaryCamera = true;
+
 		glm::vec3 m_SquadPos = { 0.0f, 0.0f, 0.0f };
 		float m_Rotation = 0;
 
 		glm::vec4 m_SquareColor = { 1,0.3,0.4,1.0f };
 
-		glm::vec2 m_ViewportSize;
+		glm::vec2 m_ViewportSize{0.0f,0.0f };
 
 		bool m_ViewportFocus = false, m_ViewportHover = false;
 

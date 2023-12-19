@@ -45,7 +45,7 @@
 #define GE_CORE_ASSERT(x,...)
 #endif
 
-#define GE_BEVENT_FN(Func) std::bind(&Func, this, std::placeholders::_1)
+#define GE_BEVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
 
 namespace GE {
 	template<typename T>
