@@ -69,7 +69,7 @@ void Map_Layer::OnDetach()
 	GE_PROFILE_FUNCTION();
 }
 
-void Map_Layer::OnUpdate(GE::TimeStep ts)
+void Map_Layer::OnUpdate(GE::Timestep ts)
 {
 	GE_PROFILE_FUNCTION();
 	m_CameraController.OnUpdate(ts);

@@ -17,6 +17,7 @@
 
 #include "Core/Scene/Scene.h"
 #include "Core/Scene/Entity.h"
+#include "Core/Scene/ScriptableEntity.h"
 #include "Core/Scene/Component.h"
 
 

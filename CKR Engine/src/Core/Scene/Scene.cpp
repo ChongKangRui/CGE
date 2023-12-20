@@ -25,8 +25,32 @@ namespace GE {
 
 	}
 
-	void Scene::OnUpdate(TimeStep ts)
+	void Scene::OnUpdate(Timestep ts)
 	{
+		/////Update Scripts
+
+		{
+			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc){
+				
+				// Todo: Move to Scene::OnScenePlay
+				
+				if (!nsc.Instance) {
+
+					nsc.Instance = nsc.InstantiateScript();
+					nsc.Instance->m_Entity = Entity{ entity , this};
+
+					nsc.Instance->OnCreate();
+
+				}
+				nsc.Instance->OnUpdate(ts);
+
+				});
+
+
+		}
+
+
+
 
 		Camera* cam = nullptr;
 		glm::mat4* camtransform = nullptr;

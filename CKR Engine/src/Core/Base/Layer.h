@@ -13,7 +13,7 @@ namespace GE {
 
 		virtual void OnAttach() {};
 		virtual void OnDetach() {};
-		virtual void OnUpdate(TimeStep deltatime) {};
+		virtual void OnUpdate(Timestep deltatime) {};
 		virtual void OnImGuiRender() {};
 		virtual void OnEvent(Event& event) {};
 

@@ -14,7 +14,7 @@ namespace GE {
 		Scene();
 		~Scene();
 
-		void OnUpdate(TimeStep ts);
+		void OnUpdate(Timestep ts);
 
 		//Temp 
 		entt::registry& Reg() { return m_Registry; }

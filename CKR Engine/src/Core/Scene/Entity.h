@@ -25,7 +25,7 @@ namespace GE {
 			return m_Scene->m_Registry.emplace<T>(m_EntityID, std::forward<Args>(args)...);
 		}
 
-		template<typename T, typename... Args>
+		template<typename T>
 		T& GetComponent() {
 			GE_CORE_ASSERT(HasComponent<T>(), "Entity does not has component");
 
@@ -49,4 +49,10 @@ namespace GE {
 		Scene* m_Scene = nullptr;
 
 	};
+
+	
+
+
+
+
 }

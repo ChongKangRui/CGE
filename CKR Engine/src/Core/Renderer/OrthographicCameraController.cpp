@@ -11,7 +11,7 @@ namespace GE {
 
 	}
 
-	void OrthographicCameraController::OnUpdate(TimeStep ts)
+	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
 		GE_PROFILE_FUNCTION();
 

@@ -25,7 +25,7 @@ namespace GE {
 		// start at 2 units in space
 		// aspectratio * 2 units
 		OrthographicCameraController(float aspectRatio, bool rotationControl = false);
-		void OnUpdate(TimeStep ts);
+		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
 
 		void OnResize(float width, float height);

@@ -61,7 +61,7 @@ namespace GE {
 			GE_PROFILE_SCOPE("Engine::RunLoop()");
 
 			float time = (float)glfwGetTime(); ///platform::GetTime()
-			TimeStep timestep = time - m_LastFrameTime;
+			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
 			if (!m_Minimized) {

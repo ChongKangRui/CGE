@@ -15,7 +15,7 @@ class ParticleSystem
 public:
 	ParticleSystem(uint32_t maxParticle);
 
-	void OnUpdate(GE::TimeStep ts);
+	void OnUpdate(GE::Timestep ts);
 	void OnRender(GE::OrthographicCamera& camera);
 
 	void Emit(const ParticleProps& particleProps);

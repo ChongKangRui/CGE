@@ -36,7 +36,7 @@ void EditorLayer::OnDetach()
 	GE_PROFILE_FUNCTION();
 }
 
-void EditorLayer::OnUpdate(GE::TimeStep ts)
+void EditorLayer::OnUpdate(GE::Timestep ts)
 {
 	GE_PROFILE_FUNCTION();
 	m_CameraController.OnUpdate(ts);

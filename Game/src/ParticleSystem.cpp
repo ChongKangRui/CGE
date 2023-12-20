@@ -33,7 +33,7 @@ ParticleSystem::ParticleSystem(uint32_t maxParticle) : m_PoolIndex(maxParticle -
 	m_ParticlePool.resize(maxParticle);
 }
 
-void ParticleSystem::OnUpdate(GE::TimeStep ts)
+void ParticleSystem::OnUpdate(GE::Timestep ts)
 {
 	for (auto& particle : m_ParticlePool)
 	{

@@ -13,7 +13,7 @@ public:
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 
-	virtual void OnUpdate(GE::TimeStep ts) override;
+	virtual void OnUpdate(GE::Timestep ts) override;
 	virtual void OnImGuiRender() override;
 	virtual void OnEvent(GE::Event& e) override;
 

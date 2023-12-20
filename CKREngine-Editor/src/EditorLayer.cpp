@@ -42,6 +42,43 @@ namespace GE {
 		m_SecondCameraEntity = m_ActiveScene->CreateEntity("second Camera");
 		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>();
 		cc.Primary = false;
+
+
+		class CameraController : public ScriptableEntity {
+		public:
+		 void OnCreate() {
+				
+			}
+
+		 void OnDestroy(){
+			}
+
+		 void OnUpdate(Timestep ts) {
+				auto& transform = GetComponent<TransformComponent>().Transform;
+				auto& prim = GetComponent<CameraComponent>().Primary;
+			
+
+				if (prim) {
+					if (GE::Input::IsKeyPressed(KEY_A))
+						transform[3][0] -= 5.0 * ts;
+					else if (GE::Input::IsKeyPressed(KEY_D))
+						transform[3][0] += 5.0 * ts;
+
+
+					if (Input::IsKeyPressed(KEY_W))
+						transform[3][1] += 5.0 * ts;
+					else if (Input::IsKeyPressed(KEY_S))
+						transform[3][1] -= 5.0 * ts;
+
+				}
+			
+			
+			
+			}
+		};
+
+		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
 	}
 
 	void EditorLayer::OnDetach()
@@ -49,7 +86,7 @@ namespace GE {
 		GE_PROFILE_FUNCTION();
 	}
 
-	void EditorLayer::OnUpdate(TimeStep ts)
+	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		GE_PROFILE_FUNCTION();
 
@@ -87,10 +124,7 @@ namespace GE {
 		m_FrameBuffer->Unbind();
 
 
-
-
-
-
+		
 	}
 
 	void EditorLayer::OnImGuiRender()

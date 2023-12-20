@@ -188,7 +188,7 @@ public:
 
 	//};
 
-	void OnUpdate(GE::TimeStep deltatime) override {
+	void OnUpdate(GE::Timestep deltatime) override {
 
 		//Log_Trace("Delta time: {0}s {1}ms", deltatime.GetSeconds(), deltatime.GetMilliseconds());
 		//InputEvent(deltatime);
@@ -247,7 +247,7 @@ public:
 		
 	}
 
-	void InputEvent(GE::TimeStep ts) {
+	void InputEvent(GE::Timestep ts) {
 
 
 		float time = ts;
