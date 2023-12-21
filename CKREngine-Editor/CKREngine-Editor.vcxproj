@@ -131,9 +131,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\SceneHierarchyPanel.h" />
     <ClInclude Include="src\EditorLayer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\SceneHierarchyPanel.cpp" />
     <ClCompile Include="src\Editor.cpp" />
     <ClCompile Include="src\EditorLayer.cpp" />
   </ItemGroup>

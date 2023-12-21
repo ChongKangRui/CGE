@@ -79,6 +79,8 @@ namespace GE {
 
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
+
+		m_SHP.SetContext(m_ActiveScene);
 	}
 
 	void EditorLayer::OnDetach()
@@ -206,7 +208,7 @@ namespace GE {
 		}
 
 
-
+		m_SHP.OnImGuiRender();
 
 		ImGui::Begin("Setting");
 		auto stat = Renderer2D::GetStats();

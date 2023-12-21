@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine.h"
-
+#include "SceneHierarchyPanel.h"
 
 
 namespace GE {
@@ -53,6 +53,7 @@ namespace GE {
 
 		bool m_ViewportFocus = false, m_ViewportHover = false;
 
+		SceneHierarchyPanel m_SHP;
 		
 	};
 }
