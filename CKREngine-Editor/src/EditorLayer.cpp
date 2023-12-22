@@ -248,12 +248,7 @@ namespace GE {
 
 		ImGui::End();
 
-		ImGui::Begin("Tes");
-		ImGui::Text("just a friking testing");
-
-
-
-		ImGui::End();
+	
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 
@@ -273,7 +268,6 @@ namespace GE {
 		ImGui::Image((void*)FBtextureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 		ImGui::PopStyleVar();
-
 
 		ImGui::End();
 
