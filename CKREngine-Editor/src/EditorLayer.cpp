@@ -54,10 +54,10 @@ namespace GE {
 			}
 
 		 void OnUpdate(Timestep ts) {
-				auto& pos = GetComponent<TransformComponent>().Position;
+				/*auto& pos = GetComponent<TransformComponent>().Position;
 				auto& prim = GetComponent<CameraComponent>().Primary;
 			
-
+				
 				if (prim) {
 					if (GE::Input::IsKeyPressed(KEY_A))
 						pos -= 5.0 * ts;
@@ -71,7 +71,7 @@ namespace GE {
 						pos -= 5.0 * ts;
 
 				}
-			
+			*/
 			
 			
 			}
@@ -218,12 +218,12 @@ namespace GE {
 		ImGui::Text("Vertices: %d", stat.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stat.GetTotalIndexCount());
 
-		if (m_SquareTest) {
+		/*if (m_SquareTest) {
 			auto& squareColor = m_SquareTest.GetComponent<SpriteComponent>().Color;
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-		}
+		}*/
 
-		ImGui::DragFloat3("Camera Transform", 
+		/*ImGui::DragFloat3("Camera Transform", 
 			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
 
 		if (ImGui::Checkbox("Camera A", &primaryCamera)) {
@@ -242,7 +242,7 @@ namespace GE {
 			if(ImGui::DragFloat("SceoncCam ortho size", &orthosize)){
 				cc.Camera.SetOrthographicSize(orthosize);
 			}
-		}
+		}*/
 
 		
 

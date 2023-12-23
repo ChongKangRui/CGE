@@ -36,14 +36,49 @@ namespace GE {
 			m_SelectedEntity = {};
 		}
 
+		//Right-click on blank space
+		if (ImGui::BeginPopupContextWindow(0, 1 | ImGuiPopupFlags_NoOpenOverItems)) {
+			if (ImGui::MenuItem("Create Empty Entity")) 
+				m_Context->CreateEntity("Empty Entity");
+
+			ImGui::EndPopup();
+			
+		}
 
 		ImGui::End();
 
 
 		ImGui::Begin("Properties");
 
-		if(m_SelectedEntity)
+		if (m_SelectedEntity) {
+
 			DrawComponents(m_SelectedEntity);
+
+			//If button click, open pop up
+			if (ImGui::Button("Add Component")) {
+				ImGui::OpenPopup("AddComponent");
+			}
+
+			if (ImGui::BeginPopup("AddComponent")) {
+
+
+				///Temporary, in the future, should do loop iteration
+				if (ImGui::MenuItem("Camera")) {
+					m_SelectedEntity.AddComponent<CameraComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
+				if (ImGui::MenuItem("SpriteRender")) {
+					m_SelectedEntity.AddComponent<SpriteComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
+
+				ImGui::EndPopup();
+			}
+
+
+		}
 
 		ImGui::End();
 
@@ -51,10 +86,9 @@ namespace GE {
 
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
 	{
+
 		auto& tc = entity.GetComponent<TagComponent>();
 		
-		
-
 		//set the visualization of flag being selected
 		ImGuiTreeNodeFlags flags = ((m_SelectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		
@@ -67,11 +101,31 @@ namespace GE {
 
 		}
 
+		bool entityDeleted = false;
+		if (ImGui::BeginPopupContextItem()) {
+			if (ImGui::MenuItem("Delete Entity")) {
+				entityDeleted = true;
+				
+			}
+			ImGui::EndPopup();
+		}
+
 		if (opened) {
 
 			ImGui::TreePop();
 
 		}
+
+
+		if (entityDeleted) {
+			if (m_SelectedEntity == entity)
+				m_SelectedEntity = {};
+			m_Context->DestroyEntity(entity);
+			
+
+		}
+			
+
 	}
 
 	static void DrawButton(const std::string& buttonName, float& value,ImVec2& buttonSize, ImVec4 buttonColor, ImVec4 buttonHoverColor, ImVec4 buttonPressColor, float resetValues = 0.0f) {
@@ -202,14 +256,19 @@ namespace GE {
 			
 			}
 
-		}
+		}    
 
+		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
 
 
 		if (entity.HasComponent<TransformComponent>()) {
 
+			bool open = ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), treeNodeFlags, "Transform");
 			
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+			
+
+
+			if (open)
 			{
 				auto& transform = entity.GetComponent<TransformComponent>();
 
@@ -224,17 +283,33 @@ namespace GE {
 				//ImGui::DragFloat3("Position", glm::value_ptr(transform.Position), 0.1f);
 
 				
-				ImGui::TreePop();
+				
 			}
-
-
+			ImGui::TreePop();
 		}
 
 		if (entity.HasComponent<CameraComponent>()) {
 
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(4, 4));
+			bool open = ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), treeNodeFlags, "Camera");
 			
+			ImGui::SameLine();
+			if (ImGui::Button("+")) {
+				ImGui::OpenPopup("ComponentSettings");
+			}
+			
+			ImGui::PopStyleVar();
 
-			if (ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
+			bool removeComponent = false;
+
+			if (ImGui::BeginPopup("ComponentSettings")) {
+				if (ImGui::MenuItem("Remove Component"))
+					removeComponent = true;
+
+				ImGui::EndPopup();
+			}
+
+			if (open)
 			{
 				
 				auto& camera = entity.GetComponent<CameraComponent>().Camera;
@@ -246,7 +321,7 @@ namespace GE {
 				ImGui::Checkbox("Primary", &cameraComp.Primary);
 
 				
-				if (ImGui::BeginCombo("Projection ", currentProjectionTypeString)) {
+				if (ImGui::BeginCombo("Projection", currentProjectionTypeString)) {
 
 					for (auto currentType : projectionTypeStrings) {
 						bool isSelected = currentProjectionTypeString == currentType;
@@ -299,11 +374,13 @@ namespace GE {
 				}
 
 
-
-
 				ImGui::TreePop();
 
 			}
+
+			if (removeComponent)
+				entity.RemoveComponent<CameraComponent>();
+
 
 
 		}

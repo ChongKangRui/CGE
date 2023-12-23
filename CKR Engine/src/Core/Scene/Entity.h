@@ -22,7 +22,10 @@ namespace GE {
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args) {
 			GE_CORE_ASSERT(!HasComponent<T>(), "Entity already has component");
-			return m_Scene->m_Registry.emplace<T>(m_EntityID, std::forward<Args>(args)...);
+
+			T& component = m_Scene->m_Registry.emplace<T>(m_EntityID, std::forward<Args>(args)...);
+			
+			return component;
 		}
 
 		template<typename T>
@@ -38,8 +41,10 @@ namespace GE {
 		}
 
 		operator bool() const { return m_EntityID != entt::null; }
-
+		operator entt::entity() const { return m_EntityID; }
 		operator uint32_t() const { return (uint32_t)m_EntityID; }
+
+
 
 		bool operator ==(const Entity& other) const {
 			return m_EntityID == other.m_EntityID && m_Scene == other.m_Scene;

@@ -20,6 +20,8 @@ namespace GE {
 		entt::registry& Reg() { return m_Registry; }
 
 		Entity CreateEntity(const std::string& name = std::string());
+		void DestroyEntity(Entity entity);
+
 
 		void OnViewportResize(uint32_t width, uint32_t height);
 
@@ -32,4 +34,5 @@ namespace GE {
 		friend class Entity;
 		friend class SceneHierarchyPanel;
 	};
+
 }
