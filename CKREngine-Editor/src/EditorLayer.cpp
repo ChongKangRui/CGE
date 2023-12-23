@@ -54,21 +54,21 @@ namespace GE {
 			}
 
 		 void OnUpdate(Timestep ts) {
-				auto& transform = GetComponent<TransformComponent>().Transform;
+				auto& pos = GetComponent<TransformComponent>().Position;
 				auto& prim = GetComponent<CameraComponent>().Primary;
 			
 
 				if (prim) {
 					if (GE::Input::IsKeyPressed(KEY_A))
-						transform[3][0] -= 5.0 * ts;
+						pos -= 5.0 * ts;
 					else if (GE::Input::IsKeyPressed(KEY_D))
-						transform[3][0] += 5.0 * ts;
+						pos += 5.0 * ts;
 
 
 					if (Input::IsKeyPressed(KEY_W))
-						transform[3][1] += 5.0 * ts;
+						pos += 5.0 * ts;
 					else if (Input::IsKeyPressed(KEY_S))
-						transform[3][1] -= 5.0 * ts;
+						pos -= 5.0 * ts;
 
 				}
 			

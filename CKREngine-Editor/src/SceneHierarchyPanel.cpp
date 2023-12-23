@@ -1,5 +1,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <Imgui/imgui.h>
+#include <imgui/imgui_internal.h>
+
+
 #include "SceneHierarchyPanel.h"
 #include "Core/Scene/Component.h"
 
@@ -71,6 +74,117 @@ namespace GE {
 		}
 	}
 
+	static void DrawButton(const std::string& buttonName, float& value,ImVec2& buttonSize, ImVec4 buttonColor, ImVec4 buttonHoverColor, ImVec4 buttonPressColor, float resetValues = 0.0f) {
+
+		ImGui::PushStyleColor(ImGuiCol_Button, buttonColor);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, buttonHoverColor);
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, buttonPressColor);
+
+		if (ImGui::Button(buttonName.c_str(), buttonSize)) {
+			value = resetValues;
+		}
+
+		ImGui::PopStyleColor(3);
+
+		//ImGui::SameLine(); instructs ImGui to place the next widget on the same line as the previous one.
+		
+
+		std::string name = "##" + buttonName;
+		const char* charName = name.c_str();
+
+		ImGui::SameLine();
+		ImGui::DragFloat(charName, &value, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+	}
+
+	//our own widget
+	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValues = 0.0f, float columnWidth = 100.0f) {
+		
+		//make each row vec3 being individual so each transform, scale and rotation value wont tie together
+		ImGui::PushID(label.c_str());
+		
+		//Initialize 2 column
+		ImGui::Columns(2);
+
+		//Set the first column with column width
+		ImGui::SetColumnWidth(0, columnWidth);
+
+		ImGui::Text(label.c_str());
+
+		//Move the column reference into next column
+		ImGui::NextColumn();
+
+		/*ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth()); is used to push the widths of multiple items. 
+		In this case, it pushes widths for three items. This is often used in conjunction with PopItemWidth().*/
+		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+
+		//Spacing between each items(vector slider)
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0,0 });
+
+		//Calculate the height based on imgui font size
+		//Set the button size of the button that beside the slider button
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight + 3.0f , lineHeight };
+
+
+		std::unordered_map<std::string, ImVec4> map = { {"X",ImVec4{ 0.8f,0.1f,0.15f,1.0f } } };
+
+		
+		/*DrawButton("x", values.x, buttonSize, ImVec4{ 0.1f,0.7f,0.15f,1.0f }, ImVec4{ 1.0f,0.2f,0.2f,1.0f }, ImVec4{ 0.8f,0.1f,0.15f,1.0f });
+		DrawButton("y", values.y, buttonSize, ImVec4{ 0.8f,0.1f,0.15f,1.0f }, ImVec4{ 0.2f,0.9f,0.2f,1.0f }, ImVec4{ 0.1f,0.8f,0.15f,1.0f });
+		DrawButton("z", values.z, buttonSize, ImVec4{ 0.1f,0.2f,0.7f,1.0f }, ImVec4{ 0.2f,0.1f,0.9f,1.0f }, ImVec4{ 0.1f,0.2f,0.8f,1.0f }, 1.0f);*/
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f,0.1f,0.15f,1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 1.0f,0.2f,0.2f,1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.8f,0.1f,0.15f,1.0f });
+		if (ImGui::Button("X", buttonSize))
+			values.x = resetValues;
+
+		ImGui::PopStyleColor(3);
+
+		//ImGui::SameLine(); instructs ImGui to place the next widget on the same line as the previous one.
+		ImGui::SameLine();
+		ImGui::DragFloat("##x", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f,0.7f,0.15f,1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f,0.9f,0.2f,1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f,0.8f,0.15f,1.0f });
+
+		if (ImGui::Button("Y", buttonSize))
+			values.y = resetValues;
+
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.1f,0.2f,0.7f,1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.2f,0.1f,0.9f,1.0f });
+		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4{ 0.1f,0.2f,0.8f,1.0f });
+
+		if (ImGui::Button("Z", buttonSize))
+			values.z = resetValues;
+
+		ImGui::PopStyleColor(3);
+
+		ImGui::SameLine();
+		ImGui::DragFloat("##z", &values.z, 0.1f,0.0f, 0.0f, "%.2f");
+		ImGui::PopItemWidth();
+		ImGui::SameLine();
+
+		ImGui::PopStyleVar();
+
+		ImGui::Columns(1);
+
+
+		ImGui::PopID();
+	}
+
 	void SceneHierarchyPanel::DrawComponents(Entity entity)
 	{
 
@@ -94,13 +208,22 @@ namespace GE {
 
 		if (entity.HasComponent<TransformComponent>()) {
 
-			auto& transform = entity.GetComponent<TransformComponent>().Transform;
-
+			
 			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "Transform"))
 			{
-				if (ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f)) {
+				auto& transform = entity.GetComponent<TransformComponent>();
 
-				}
+				DrawVec3Control("Position", transform.Position);
+
+				//Transform rotation into degree
+				glm::vec3 rotation = glm::degrees(transform.Rotation);
+				DrawVec3Control("Rotation", rotation);
+				transform.Rotation = glm::radians(rotation);
+
+				DrawVec3Control("Scale", transform.Scale, 1.0f);
+				//ImGui::DragFloat3("Position", glm::value_ptr(transform.Position), 0.1f);
+
+				
 				ImGui::TreePop();
 			}
 

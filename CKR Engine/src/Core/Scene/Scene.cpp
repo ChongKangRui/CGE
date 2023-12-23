@@ -52,32 +52,32 @@ namespace GE {
 
 
 
-		Camera* cam = nullptr;
-		glm::mat4* camtransform = nullptr;
+		Camera* mainCamera = nullptr;
+		glm::mat4 camtransform;
 		{
 			auto view = m_Registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view) {
 				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 
 				if (camera.Primary) {
-					cam = &camera.Camera;
-					camtransform = &transform.Transform;
+					mainCamera = &camera.Camera;
+					camtransform = transform.GetTransform();
 					break;
 				}
 			}
 		}
 
 
-		if (cam) {
+		if (mainCamera) {
 			
-			Renderer2D::BeginScene(cam->GetProjection(), *camtransform);
+			Renderer2D::BeginScene(mainCamera->GetProjection(), camtransform);
 
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 
 			for (auto gr : group) {
 
 				auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(gr);
-				Renderer2D::DrawQuad(transform, sprite.Color);
+				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
 
 			}
 
