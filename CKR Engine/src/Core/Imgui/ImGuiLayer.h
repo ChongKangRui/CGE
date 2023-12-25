@@ -22,6 +22,8 @@ namespace GE {
 		void End();
 
 		void SetBlockEvents(bool block) { m_BlockEvents = block; }
+
+		void SetDarkThemeColor();
 	private:
 		float m_Time = 0.0f;
 		bool m_BlockEvents = true;

@@ -40,6 +40,8 @@ namespace GE {
 		//io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
 		//io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
+
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/OpenSans/OpenSans_Condensed-Bold.ttf", 18.0f);
 		ImGuiStyle& style = ImGui::GetStyle();
 
 		if (io.ConfigFlags && ImGuiConfigFlags_ViewportsEnable) {
@@ -47,6 +49,8 @@ namespace GE {
 			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 		}
 	
+		SetDarkThemeColor();
+
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
@@ -116,6 +120,37 @@ namespace GE {
 		
 	
 	
+	}
+
+	void ImGuiLayer::SetDarkThemeColor()
+	{
+		auto& color = ImGui::GetStyle().Colors;
+
+		color[ImGuiCol_WindowBg] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+
+		//Header
+		color[ImGuiCol_Header] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_HeaderHovered] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_HeaderActive] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+
+
+		color[ImGuiCol_Button] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_ButtonHovered] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_ButtonActive] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+
+		color[ImGuiCol_FrameBg] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_FrameBgHovered] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_FrameBgActive] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+
+		color[ImGuiCol_Tab] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_TabHovered] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_TabActive] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_TabUnfocused] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_TabUnfocusedActive] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+
+		color[ImGuiCol_TitleBg] = ImVec4(0.1f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_TitleBgActive] = ImVec4(0.5f, 0.105f, 0.11f, 1.0f);
+		color[ImGuiCol_TitleBgCollapsed] = ImVec4(1, 0.105f, 0.11f, 1.0f);
 	}
 
 }
