@@ -13,3 +13,6 @@
 [submodule "CKR Engine/Vendor/Glm"]
 	path = CKR Engine/Vendor/Glm
 	url = https://github.com/g-truc/glm
+[submodule "CKR Engine/Vendor/yaml"]
+	path = CKR Engine/Vendor/yaml
+	url = https://github.com/ChongKangRui/yaml-cpp.git

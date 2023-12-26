@@ -1419,6 +1419,12 @@
     <ClInclude Include="src\Core\Scene\SceneCamera.h">
       <Filter>src\Core\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Scene\SceneSerializer.h">
+      <Filter>src\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Scene\ScriptableEntity.h">
+      <Filter>src\Core\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Engine.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -1449,7 +1455,7 @@
     <ClInclude Include="src\gepch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Scene\ScriptableEntity.h" />
+    <ClInclude Include="src\Core\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vendor\stb_image\std_image.cpp">
@@ -1524,6 +1530,9 @@
     <ClCompile Include="src\Core\Scene\SceneCamera.cpp">
       <Filter>src\Core\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Scene\SceneSerializer.cpp">
+      <Filter>src\Core\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1554,5 +1563,6 @@
     <ClCompile Include="src\gepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\Window\WindowPlatformUtils.cpp" />
   </ItemGroup>
 </Project>

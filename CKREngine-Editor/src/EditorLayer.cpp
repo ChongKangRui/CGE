@@ -8,6 +8,9 @@
 
 #include "Core/Scene/Entity.h"
 
+#include "Core/Scene/SceneSerializer.h"
+#include "Core/Utils/PlatformUtils.h"
+
 namespace GE {
 	EditorLayer::EditorLayer() : Layer("Application 2D Renderer"), m_CameraController(1280 / 720, true)
 	{
@@ -31,9 +34,11 @@ namespace GE {
 
 		m_ActiveScene = CreateRef<Scene>();
 
+
+#if 0
 		m_SquareTest = m_ActiveScene->CreateEntity("Square");
 
-		m_SquareTest.AddComponent<SpriteComponent>(glm::vec4(1.0f,0.0f,0.0f,1.0f));
+		m_SquareTest.AddComponent<SpriteComponent>(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
@@ -46,18 +51,18 @@ namespace GE {
 
 		class CameraController : public ScriptableEntity {
 		public:
-		 void OnCreate() {
-				
+			void OnCreate() {
+
 			}
 
-		 void OnDestroy(){
+			void OnDestroy() {
 			}
 
-		 void OnUpdate(Timestep ts) {
+			void OnUpdate(Timestep ts) {
 				/*auto& pos = GetComponent<TransformComponent>().Position;
 				auto& prim = GetComponent<CameraComponent>().Primary;
-			
-				
+
+
 				if (prim) {
 					if (GE::Input::IsKeyPressed(KEY_A))
 						pos -= 5.0 * ts;
@@ -72,15 +77,18 @@ namespace GE {
 
 				}
 			*/
-			
-			
+
+
 			}
 		};
 
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
-
+#endif
 		m_SHP.SetContext(m_ActiveScene);
+
+
+
 	}
 
 	void EditorLayer::OnDetach()
@@ -99,7 +107,7 @@ namespace GE {
 		//Maybe first draw the viewport, even if the size is wrong, then resize if needed.Would flicker less.
 		if (FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
 			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
-			(spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y)) 
+			(spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y))
 		{
 			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
@@ -126,7 +134,7 @@ namespace GE {
 		m_FrameBuffer->Unbind();
 
 
-		
+
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -202,6 +210,26 @@ namespace GE {
 			if (ImGui::BeginMenu("File"))
 			{
 
+				if (ImGui::MenuItem("New", "Ctrl+N")) {
+
+					NewScene();
+
+				}
+
+
+				if (ImGui::MenuItem("Open ...", "Ctrl+O")) {
+					LoadScene();
+				}
+
+
+				if (ImGui::MenuItem("Save as ...", "Ctrl+Shift+S", false)) {
+					SaveScene();
+				}
+
+				/*if (ImGui::MenuItem("Serialize", NULL, false)) {
+					SceneSerializer serializer(m_ActiveScene);
+					serializer.Serialize("assets/scenes/Example.GE");
+				}*/
 
 				if (ImGui::MenuItem("Exit", NULL, false))
 					Application::Get().CloseApplication();
@@ -230,7 +258,7 @@ namespace GE {
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
 		}*/
 
-		/*ImGui::DragFloat3("Camera Transform", 
+		/*ImGui::DragFloat3("Camera Transform",
 			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
 
 		if (ImGui::Checkbox("Camera A", &primaryCamera)) {
@@ -251,11 +279,11 @@ namespace GE {
 			}
 		}*/
 
-		
+
 
 		ImGui::End();
 
-	
+
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 
@@ -284,5 +312,71 @@ namespace GE {
 	void EditorLayer::OnEvent(Event& e)
 	{
 		m_CameraController.OnEvent(e);
+
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(GE_BEVENT_FN(EditorLayer::OnKeyPressed));
+	}
+	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
+	{
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool ctrl = Input::IsKeyPressed(KEY_LEFT_CONTROL) || Input::IsKeyPressed(KEY_RIGHT_CONTROL);
+		bool shift = Input::IsKeyPressed(KEY_LEFT_SHIFT) || Input::IsKeyPressed(KEY_RIGHT_SHIFT);
+
+		switch (e.GetKeyCode()) {
+		case KEY_S:
+		{
+			if (ctrl && shift) {
+				SaveScene();
+			}
+			break;
+		}
+		case KEY_N:
+		{
+			if (ctrl) {
+				NewScene();
+			}
+			break;
+		}
+		case KEY_O:
+		{
+			if (ctrl) {
+				LoadScene();
+			}
+			break;
+		}
+
+
+		}
+		return false;
+	}
+	void EditorLayer::NewScene()
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		m_SHP.SetContext(m_ActiveScene);
+	}
+	void EditorLayer::LoadScene()
+	{
+		std::string filepath = FileDialogs::OpenFile("Scene (*.GE)\0*.GE\0");
+		if (!filepath.empty()) {
+			m_ActiveScene = CreateRef<Scene>();
+			m_SHP.SetContext(m_ActiveScene);
+
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Deserialize(filepath);
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		}
+	}
+	void EditorLayer::SaveScene()
+	{
+		std::string filepath = FileDialogs::SaveFile("Scene (*.GE)\0*.GE\0");
+		if (!filepath.empty()) {
+			SceneSerializer serializer(m_ActiveScene);
+			serializer.Serialize(filepath);
+		}
+		SceneSerializer serializer(m_ActiveScene);
+		serializer.Serialize("assets/scenes/Example.GE");
 	}
 }

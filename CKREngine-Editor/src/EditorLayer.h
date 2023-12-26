@@ -19,7 +19,13 @@ namespace GE {
 		virtual void OnUpdate(Timestep ts) override;
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& e) override;
+	private:
+		bool OnKeyPressed(KeyPressedEvent& e);
 
+
+		void NewScene();
+		void LoadScene();
+		void SaveScene();
 
 	private:
 		OrthographicCameraController m_CameraController;

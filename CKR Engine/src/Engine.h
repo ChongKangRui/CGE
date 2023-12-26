@@ -33,7 +33,6 @@
 #include "Core/Renderer/SubTexture2D.h"
 #include "Core/Renderer/VertexArray.h"
 #include "Core/Renderer/OrthographicCamera.h"
-
 // -------EntryPoint---------------
 //#include "Core/Base/EntryPoint.h"
 //----------------------------------

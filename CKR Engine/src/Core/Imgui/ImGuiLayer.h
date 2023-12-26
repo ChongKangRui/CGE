@@ -23,7 +23,7 @@ namespace GE {
 
 		void SetBlockEvents(bool block) { m_BlockEvents = block; }
 
-		void SetDarkThemeColor();
+		void SetUIThemeColor();
 	private:
 		float m_Time = 0.0f;
 		bool m_BlockEvents = true;

@@ -18,10 +18,13 @@ IncludeDir["imgui"]	= "CKR Engine/Vendor/imgui"
 IncludeDir["Glm"]	= "CKR Engine/Vendor/Glm"
 IncludeDir["stb_image"]	= "CKR Engine/Vendor/stb_image"
 IncludeDir["entt"]	= "CKR Engine/Vendor/entt"
+IncludeDir["yaml"]	= "CKR Engine/Vendor/yaml/include"
 
+-- Include this so that it can link to the project
 include "CKR Engine/Vendor/GLFW"
 include "CKR Engine/Vendor/Glad"
 include "CKR Engine/Vendor/imgui"
+include "CKR Engine/Vendor/yaml"
 
 project "CKR Engine"
 	location "CKR Engine"
@@ -61,13 +64,15 @@ project "CKR Engine"
 		"%{IncludeDir.imgui}",
 		"%{IncludeDir.Glm}",
 		"%{IncludeDir.stb_image}",
-		"%{IncludeDir.entt}"
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.yaml}"
 	}
 
 	links{
 		"GLFW",
 		"Glad",
 		"imgui",
+		"yaml-cpp",
 		"opengl32.lib",
 		"dwmapi.lib"
 		
@@ -80,6 +85,7 @@ project "CKR Engine"
 		"GE_BUILD_DLL",
 		"GE_PLATFORM_WINDOW",
 		"GLFW_INCLUDE_NONE",
+		"YAML_CPP_STATIC_DEFINE"
 	}
 	
 	--dont need for static library
@@ -188,7 +194,8 @@ project "CKREngine-Editor"
 	systemversion "latest"
 
 	defines{
-		"GE_PLATFORM_WINDOW"
+		"GE_PLATFORM_WINDOW",
+		--"YAML_CPP_STATIC_DEFINE"
 	}
 
 	filter "configurations:Debug"

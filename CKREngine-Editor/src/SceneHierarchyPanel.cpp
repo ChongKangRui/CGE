@@ -18,6 +18,7 @@ namespace GE {
 
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& scene)
 	{
+		m_SelectedEntity = {};
 		m_Context = scene;
 	}
 
@@ -195,9 +196,9 @@ namespace GE {
 		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 		ImVec2 buttonSize = { lineHeight + 3.0f , lineHeight };
 		
-		DrawButton("x", values.x, buttonSize, ImVec4{ 0.1f,0.7f,0.15f,1.0f }, ImVec4{ 1.0f,0.2f,0.2f,1.0f }, ImVec4{ 0.8f,0.1f,0.15f,1.0f });
-		DrawButton("y", values.y, buttonSize, ImVec4{ 0.8f,0.1f,0.15f,1.0f }, ImVec4{ 0.2f,0.9f,0.2f,1.0f }, ImVec4{ 0.1f,0.8f,0.15f,1.0f });
-		DrawButton("z", values.z, buttonSize, ImVec4{ 0.1f,0.2f,0.7f,1.0f }, ImVec4{ 0.2f,0.1f,0.9f,1.0f }, ImVec4{ 0.1f,0.2f,0.8f,1.0f }, 1.0f);
+		DrawButton("x", values.x, buttonSize, ImVec4{ 0.8f,0.1f,0.1f,1.0f }, ImVec4{ 1.0f,0.2f,0.2f,1.0f }, ImVec4{ 0.9f,0.15f,0.15f,1.0f });
+		DrawButton("y", values.y, buttonSize, ImVec4{ 0.1f,0.1f,0.8f,1.0f }, ImVec4{ 0.2f,0.2f,1.0f,1.0f }, ImVec4{ 0.2f,0.2f,0.9f,1.0f });
+		DrawButton("z", values.z, buttonSize, ImVec4{ 0.1f,0.8f,0.2f,1.0f }, ImVec4{ 0.2f,1.0f,0.2f,1.0f }, ImVec4{ 0.1f,0.9f,0.2f,1.0f }, 1.0f);
 
 
 		ImGui::PopStyleVar();
