@@ -19,6 +19,7 @@ IncludeDir["Glm"]	= "CKR Engine/Vendor/Glm"
 IncludeDir["stb_image"]	= "CKR Engine/Vendor/stb_image"
 IncludeDir["entt"]	= "CKR Engine/Vendor/entt"
 IncludeDir["yaml"]	= "CKR Engine/Vendor/yaml/include"
+IncludeDir["ImGuizmo"]	= "CKR Engine/Vendor/ImGuizmo"
 
 -- Include this so that it can link to the project
 include "CKR Engine/Vendor/GLFW"
@@ -46,7 +47,10 @@ project "CKR Engine"
 		"%{prj.name}/Vendor/stb_image/**.cpp",
 		"%{prj.name}/Vendor/stb_image/**.h",
 		"%{prj.name}/Vendor/Glm/glm/**.hpp",
-		"%{prj.name}/Vendor/Glm/glm/**.inl"
+		"%{prj.name}/Vendor/Glm/glm/**.inl",
+
+		"%{prj.name}/Vendor/ImGuizmo/ImGuizmo.h",
+		"%{prj.name}/Vendor/ImGuizmo/ImGuizmo.cpp"
 		--"%{prj.name}/Vendor/entt/**.hpp"
 	}
 
@@ -65,7 +69,8 @@ project "CKR Engine"
 		"%{IncludeDir.Glm}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.entt}",
-		"%{IncludeDir.yaml}"
+		"%{IncludeDir.yaml}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links{
@@ -78,6 +83,9 @@ project "CKR Engine"
 		
 	}
 
+	filter "%{prj.name}/Vendor/ImGuizmo/**.cpp"
+    	flags { "NoPCH" }
+
 	filter "system:windows"
 	systemversion "latest"
 	-- define the preprocessor
@@ -88,11 +96,6 @@ project "CKR Engine"
 		"YAML_CPP_STATIC_DEFINE"
 	}
 	
-	--dont need for static library
-	-- build dll
---	postbuildcommands{
-	--	'{COPY} "%{cfg.targetdir}\\%{prj.name}.dll" "..\\bin\\Debug-windows-x86_64Game\\"'
---	}
 
 	filter "configurations:Debug"
 	defines "GE_DEBUG"
@@ -182,8 +185,8 @@ project "CKREngine-Editor"
 		"CKR Engine/src",
 		"CKR Engine/Vendor",
 		"%{IncludeDir.Glm}",
-		"%{IncludeDir.entt}"
-		
+		"%{IncludeDir.entt}",
+		"%{IncludeDir.ImGuizmo}"
 	}
 
 	links{

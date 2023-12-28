@@ -16,3 +16,6 @@
 [submodule "CKR Engine/Vendor/yaml"]
 	path = CKR Engine/Vendor/yaml
 	url = https://github.com/ChongKangRui/yaml-cpp.git
+[submodule "CKR Engine/Vendor/ImGuizmo"]
+	path = CKR Engine/Vendor/ImGuizmo
+	url = https://github.com/ChongKangRui/ImGuizmo.git

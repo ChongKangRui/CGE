@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOW;GE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\CKR Engine\Vendor\spdlog\include;..\CKR Engine\src;..\CKR Engine\Vendor;..\CKR Engine\Vendor\Glm;..\CKR Engine\Vendor\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\CKR Engine\Vendor\spdlog\include;..\CKR Engine\src;..\CKR Engine\Vendor;..\CKR Engine\Vendor\Glm;..\CKR Engine\Vendor\entt;..\CKR Engine\Vendor\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -95,7 +95,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOW;GE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\CKR Engine\Vendor\spdlog\include;..\CKR Engine\src;..\CKR Engine\Vendor;..\CKR Engine\Vendor\Glm;..\CKR Engine\Vendor\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\CKR Engine\Vendor\spdlog\include;..\CKR Engine\src;..\CKR Engine\Vendor;..\CKR Engine\Vendor\Glm;..\CKR Engine\Vendor\entt;..\CKR Engine\Vendor\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -115,7 +115,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GE_PLATFORM_WINDOW;GE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\CKR Engine\Vendor\spdlog\include;..\CKR Engine\src;..\CKR Engine\Vendor;..\CKR Engine\Vendor\Glm;..\CKR Engine\Vendor\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\CKR Engine\Vendor\spdlog\include;..\CKR Engine\src;..\CKR Engine\Vendor;..\CKR Engine\Vendor\Glm;..\CKR Engine\Vendor\entt;..\CKR Engine\Vendor\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

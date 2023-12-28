@@ -55,11 +55,13 @@ namespace GE {
 
 		glm::vec4 m_SquareColor = { 1,0.3,0.4,1.0f };
 
+		int m_GizmodeType = -1;
+
 		glm::vec2 m_ViewportSize{0.0f,0.0f };
 
 		bool m_ViewportFocus = false, m_ViewportHover = false;
 
-		SceneHierarchyPanel m_SHP;
+		SceneHierarchyPanel m_SceneHierarchyPanel;
 		
 	};
 }

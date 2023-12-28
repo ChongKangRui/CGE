@@ -2,6 +2,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <Glm/gtx/quaternion.hpp>
 
 #include "Core/Renderer/OrthographicCamera.h"
 #include "SceneCamera.h"
@@ -34,9 +36,10 @@ namespace GE {
 		{
 			auto position = glm::translate(glm::mat4(1.0f), Position);
 
-			auto rotation = glm::rotate(glm::mat4(1.0f), Rotation.x, { 1,0,0 })
+			/*auto rotation = glm::rotate(glm::mat4(1.0f), Rotation.x, { 1,0,0 })
 				* glm::rotate(glm::mat4(1.0f), Rotation.y, { 0,1,0 })
-				* glm::rotate(glm::mat4(1.0f), Rotation.z, { 0,0,1 });
+				* glm::rotate(glm::mat4(1.0f), Rotation.z, { 0,0,1 });*/
+			auto rotation = glm::toMat4(glm::quat(Rotation));
 
 			auto scale = glm::scale(glm::mat4(1.0f), Scale);
 

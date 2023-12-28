@@ -25,6 +25,7 @@ namespace GE {
 
 		void OnViewportResize(uint32_t width, uint32_t height);
 
+		Entity GetPrimaryCameraEntity();
 	private:
 		//Like a manager who responsible to manager all of the entities, components and related stuff.
 		entt::registry m_Registry;

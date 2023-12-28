@@ -1,8 +1,9 @@
 #include "EditorLayer.h"
-#include "imgui/imgui.h"
+#include <imgui/imgui.h>
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <ImGuizmo.h>
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
@@ -10,6 +11,8 @@
 
 #include "Core/Scene/SceneSerializer.h"
 #include "Core/Utils/PlatformUtils.h"
+
+#include "Core/Math/Math.h"
 
 namespace GE {
 	EditorLayer::EditorLayer() : Layer("Application 2D Renderer"), m_CameraController(1280 / 720, true)
@@ -85,7 +88,7 @@ namespace GE {
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
 #endif
-		m_SHP.SetContext(m_ActiveScene);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
 
 
@@ -211,11 +214,8 @@ namespace GE {
 			{
 
 				if (ImGui::MenuItem("New", "Ctrl+N")) {
-
 					NewScene();
-
 				}
-
 
 				if (ImGui::MenuItem("Open ...", "Ctrl+O")) {
 					LoadScene();
@@ -243,7 +243,7 @@ namespace GE {
 		}
 
 
-		m_SHP.OnImGuiRender();
+		m_SceneHierarchyPanel.OnImGuiRender();
 
 		ImGui::Begin("Setting");
 		auto stat = Renderer2D::GetStats();
@@ -253,32 +253,6 @@ namespace GE {
 		ImGui::Text("Vertices: %d", stat.GetTotalVertexCount());
 		ImGui::Text("Indices: %d", stat.GetTotalIndexCount());
 
-		/*if (m_SquareTest) {
-			auto& squareColor = m_SquareTest.GetComponent<SpriteComponent>().Color;
-			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
-		}*/
-
-		/*ImGui::DragFloat3("Camera Transform",
-			glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().Transform[3]));
-
-		if (ImGui::Checkbox("Camera A", &primaryCamera)) {
-			auto& cc = m_SecondCameraEntity.GetComponent<CameraComponent>();
-			cc.Primary = !primaryCamera;
-
-			auto& c1 = m_CameraEntity.GetComponent<CameraComponent>();
-			c1.Primary = primaryCamera;
-
-		}
-
-
-		{
-			auto& cc = m_SecondCameraEntity.GetComponent<CameraComponent>();
-			float orthosize = cc.Camera.GetOrthographicSize();
-			if(ImGui::DragFloat("SceoncCam ortho size", &orthosize)){
-				cc.Camera.SetOrthographicSize(orthosize);
-			}
-		}*/
-
 
 
 		ImGui::End();
@@ -287,13 +261,13 @@ namespace GE {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 
-		//////////////////////////viewport
+		//////////////////////////viewport///////////////////
 		ImGui::Begin("ViewPort");
 
 		m_ViewportFocus = ImGui::IsWindowFocused();
 		m_ViewportHover = ImGui::IsWindowHovered();
 
-		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocus || !m_ViewportHover);
+		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocus && !m_ViewportHover);
 
 		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
@@ -301,6 +275,54 @@ namespace GE {
 
 		uint32_t FBtextureID = m_FrameBuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)FBtextureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
+		
+		
+		///////////////////Gizmos Rendering/////////////////////
+		// In the future should replace to mouse picking entity
+		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+		
+		
+		if (selectedEntity && m_GizmodeType != -1) {
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
+
+			float windowWidth = (float)ImGui::GetWindowWidth();
+			float windowHeight = (float)ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+			//Camera
+			auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			const auto& camera = cameraEntity.GetComponent<CameraComponent>();
+			auto cameraProjection = camera.Camera.GetProjection();
+			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+			//Snaping
+			bool snap = Input::IsKeyPressed(KEY_LEFT_CONTROL);
+			float snapValue = 0.5f;
+			if (m_GizmodeType == ImGuizmo::OPERATION::ROTATE)
+				snapValue = 45.0f;
+
+			float snapValues[3] = { snapValue, snapValue, snapValue };
+
+			// Entity Transform
+			auto& tc = selectedEntity.GetComponent<TransformComponent>();
+			auto transform = tc.GetTransform();
+			
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), 
+				(ImGuizmo::OPERATION)m_GizmodeType, ImGuizmo::LOCAL, glm::value_ptr(transform), nullptr, snap? snapValues : nullptr);
+		
+			if (ImGuizmo::IsUsing()) {
+				glm::vec3 position, rotation, scale;
+				Math::DecomposeTransform(transform, position, rotation, scale);
+
+				tc.Position = position;
+				tc.Rotation = rotation;
+				tc.Scale = scale;
+
+			}
+		}
+
+		
 		ImGui::End();
 		ImGui::PopStyleVar();
 
@@ -346,7 +368,23 @@ namespace GE {
 			}
 			break;
 		}
-
+		///Gizmos
+		case KEY_Q:
+		{
+			m_GizmodeType = ImGuizmo::OPERATION::TRANSLATE;
+			break;
+		}
+		case KEY_W:
+		{
+			m_GizmodeType = ImGuizmo::OPERATION::ROTATE;
+			break;
+		}
+		case KEY_E:
+		{
+			m_GizmodeType = ImGuizmo::OPERATION::SCALE;
+			break;
+		}
+		
 
 		}
 		return false;
@@ -355,14 +393,14 @@ namespace GE {
 	{
 		m_ActiveScene = CreateRef<Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		m_SHP.SetContext(m_ActiveScene);
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 	void EditorLayer::LoadScene()
 	{
 		std::string filepath = FileDialogs::OpenFile("Scene (*.GE)\0*.GE\0");
 		if (!filepath.empty()) {
 			m_ActiveScene = CreateRef<Scene>();
-			m_SHP.SetContext(m_ActiveScene);
+			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
 			SceneSerializer serializer(m_ActiveScene);
 			serializer.Deserialize(filepath);
@@ -376,7 +414,7 @@ namespace GE {
 			SceneSerializer serializer(m_ActiveScene);
 			serializer.Serialize(filepath);
 		}
-		SceneSerializer serializer(m_ActiveScene);
-		serializer.Serialize("assets/scenes/Example.GE");
+		
+		
 	}
 }

@@ -88,12 +88,12 @@ namespace GE {
 
 	private:
 		void CalculateOffsetAndStride() {
-			uint32_t offset = 0;
+			m_Stride = 0;
 			
 			for (auto& element : m_Elements) {
-				element.Offset = offset;
-				offset += element.Size;
-				m_Stride = offset;
+				element.Offset = m_Stride;
+				m_Stride += element.Size;
+				
 
 				//Just for better understanding
 				//Log_Info("offset {0}, m_Stride {1}", offset, m_Stride);

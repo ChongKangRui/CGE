@@ -77,7 +77,7 @@
       <PrecompiledHeaderFile>gepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GE_BUILD_DLL;GE_PLATFORM_WINDOW;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;GE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;Vendor\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -97,7 +97,7 @@
       <PrecompiledHeaderFile>gepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GE_BUILD_DLL;GE_PLATFORM_WINDOW;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;GE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;Vendor\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -121,7 +121,7 @@
       <PrecompiledHeaderFile>gepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GE_BUILD_DLL;GE_PLATFORM_WINDOW;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;GE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;Vendor\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -140,7 +140,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\Utils\PlatformUtils.h" />
+    <ClInclude Include="src\Core\Math\Math.h" />
     <ClInclude Include="Vendor\Glm\glm\common.hpp" />
     <ClInclude Include="Vendor\Glm\glm\detail\_features.hpp" />
     <ClInclude Include="Vendor\Glm\glm\detail\_fixes.hpp" />
@@ -557,6 +557,7 @@
     <ClInclude Include="Vendor\Glm\glm\vec3.hpp" />
     <ClInclude Include="Vendor\Glm\glm\vec4.hpp" />
     <ClInclude Include="Vendor\Glm\glm\vector_relational.hpp" />
+    <ClInclude Include="Vendor\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="Vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\Core\Base\EngineApplication.h" />
     <ClInclude Include="src\Core\Base\EntryPoint.h" />
@@ -596,6 +597,7 @@
     <ClInclude Include="src\Core\Scene\SceneCamera.h" />
     <ClInclude Include="src\Core\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Core\Scene\ScriptableEntity.h" />
+    <ClInclude Include="src\Core\Utils\PlatformUtils.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLContext.h" />
@@ -608,7 +610,12 @@
     <ClInclude Include="src\gepch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\Window\WindowPlatformUtils.cpp" />
+    <ClCompile Include="src\Core\Math\Math.cpp" />
+    <ClCompile Include="Vendor\ImGuizmo\ImGuizmo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Vendor\stb_image\std_image.cpp" />
     <ClCompile Include="src\Core\Base\EngineApplication.cpp" />
     <ClCompile Include="src\Core\Base\Layer.cpp" />
@@ -641,6 +648,7 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\Platform\Window\WindowPlatformUtils.cpp" />
     <ClCompile Include="src\Platform\Window\WindowsInput.cpp" />
     <ClCompile Include="src\Platform\Window\WindowsWindow.cpp" />
     <ClCompile Include="src\gepch.cpp">
