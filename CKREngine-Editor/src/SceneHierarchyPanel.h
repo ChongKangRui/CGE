@@ -28,6 +28,7 @@ namespace GE{
 		Entity m_SelectedEntity;
 
 		friend class Scene;
+		
 	};
 
 }

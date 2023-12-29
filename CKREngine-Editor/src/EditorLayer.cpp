@@ -29,11 +29,12 @@ namespace GE {
 		//m_Subtexture = SubTexture2D::CreateFromCoords(m_SpriteSheet, { 7,6 }, { 128/2,128/2 });
 
 
-		FrameBufferSpecification spec;
-		spec.width = 1280;
-		spec.height = 720;
+		FramebufferSpecification fbspec;
+		fbspec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+		fbspec.Width = 1280;
+		fbspec.Height = 720;
 
-		m_FrameBuffer = FrameBuffer::Create(spec);
+		m_FrameBuffer = FrameBuffer::Create(fbspec);
 
 		m_ActiveScene = CreateRef<Scene>();
 
@@ -88,9 +89,11 @@ namespace GE {
 		m_SecondCameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
 #endif
+
+
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 
-
+		m_EditorCamera = EditorCamera(30.0f, 1.788, 0.1f, 1000.0f);
 
 	}
 
@@ -108,17 +111,21 @@ namespace GE {
 		//////Move from imgui render update to on update so can fix the flickering camera issue when resize
 		//Flickering is because recreate the color attachment, then right next draw using it before new texture is drawn to.
 		//Maybe first draw the viewport, even if the size is wrong, then resize if needed.Would flicker less.
-		if (FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
+		if (FramebufferSpecification spec = m_FrameBuffer->GetSpecification();
 			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
-			(spec.width != m_ViewportSize.x || spec.height != m_ViewportSize.y))
+			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
 			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 
 		}
 
-		if (m_ViewportFocus)
+		if (m_ViewportFocus) {
 			m_CameraController.OnUpdate(ts);
+			
+		}
+		m_EditorCamera.OnUpdate(ts);
 
 		Renderer2D::ResetStats();
 
@@ -128,9 +135,9 @@ namespace GE {
 
 
 		//Update scene
-		m_ActiveScene->OnUpdate(ts);
+		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
 
-
+		
 
 
 		//Renderer2D::EndScene();
@@ -290,11 +297,17 @@ namespace GE {
 			float windowHeight = (float)ImGui::GetWindowHeight();
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
-			//Camera
-			auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
+			//Scene Camera
+			//Runtime Camera From Entity
+			/*auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
 			const auto& camera = cameraEntity.GetComponent<CameraComponent>();
 			auto cameraProjection = camera.Camera.GetProjection();
-			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());*/
+
+			//Editor Camera
+			auto cameraProjection = m_EditorCamera.GetProjection();
+			glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
+
 
 			//Snaping
 			bool snap = Input::IsKeyPressed(KEY_LEFT_CONTROL);
@@ -334,6 +347,7 @@ namespace GE {
 	void EditorLayer::OnEvent(Event& e)
 	{
 		m_CameraController.OnEvent(e);
+		m_EditorCamera.OnEvent(e);
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(GE_BEVENT_FN(EditorLayer::OnKeyPressed));

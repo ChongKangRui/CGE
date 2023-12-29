@@ -55,8 +55,8 @@ namespace GE {
 		float m_OrthographicNear = -1.0f, m_OrthographicFar = 1.0f;
 
 		//Perpestive setting
-		float m_PerspectiveFOV = glm::radians(45.0f);
-		float m_PerspectiveNear = 0.01f, m_PerspectiveFar = 100.0f;
+		float m_PerspectiveFOV = glm::radians(100.0f);
+		float m_PerspectiveNear = 0.01f, m_PerspectiveFar = 1000.0f;
 
 
 

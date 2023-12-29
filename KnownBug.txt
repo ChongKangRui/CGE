@@ -1,3 +1,5 @@
--switch camera type need to resize
--add camera component need to resize as well
--vector panel color green and blue need to switch
+-switch camera type need to resize(fixed)
+-add camera component need to resize as well(fixed)
+-vector panel color green and blue need to switch(fixed)
+-unknown size bugs randomly happen
+

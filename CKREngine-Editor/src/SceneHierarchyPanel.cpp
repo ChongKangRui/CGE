@@ -288,6 +288,7 @@ namespace GE {
 			///Temporary, in the future, should do loop iteration
 			if (ImGui::MenuItem("Camera")) {
 				m_SelectedEntity.AddComponent<CameraComponent>();
+				m_Context->OnViewportResize(m_Context->m_ViewportWidth, m_Context->m_ViewportHeight);
 				ImGui::CloseCurrentPopup();
 			}
 
@@ -321,7 +322,7 @@ namespace GE {
 			
 			});
 
-		DrawComponent<CameraComponent>("Camera", entity, [](auto& component) {
+		DrawComponent<CameraComponent>("Camera", entity, [&](auto& component) {
 			auto& camera = component.Camera;
 			
 			const char* projectionTypeStrings[] = { "Perpestive", "Orthographic" };
@@ -336,9 +337,10 @@ namespace GE {
 					bool isSelected = currentProjectionTypeString == currentType;
 					if (ImGui::Selectable(currentType, isSelected)) {
 						currentProjectionTypeString = currentType;
-
 						int i = currentProjectionTypeString == "Perpestive" ? 0 : 1;
 						camera.SetProjectionType((SceneCamera::ProjectionType)i);
+
+						m_Context->OnViewportResize(m_Context->m_ViewportWidth, m_Context->m_ViewportHeight);
 					}
 
 					if (isSelected)

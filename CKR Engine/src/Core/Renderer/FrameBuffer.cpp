@@ -6,7 +6,7 @@
 #include "Platform/OpenGL/OpenGLFrameBuffer.h"
 
 namespace GE {
-	Ref<FrameBuffer> FrameBuffer::Create(const FrameBufferSpecification& spec)
+	Ref<FrameBuffer> FrameBuffer::Create(const FramebufferSpecification& spec)
 	{
 		switch (Renderer::GetAPI()) {
 		case RendererAPI::API::None: {

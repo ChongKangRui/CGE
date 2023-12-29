@@ -5,6 +5,8 @@
 
 #include "Core/Renderer/Camera.h"
 
+#include "EditorCamera.h"
+
 namespace GE {
 	class Renderer2D
 	{
@@ -16,6 +18,7 @@ namespace GE {
 		static void ShutDown();
 
 		static void BeginScene(OrthographicCamera& camera);
+		static void BeginScene(EditorCamera& camera);
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 
 		static void EndScene();

@@ -1,6 +1,7 @@
 #pragma once
 #include "entt.hpp"
 #include "Core/Base/TimeStep.h"
+#include "Core/Renderer/EditorCamera.h"
 
 
 namespace GE {
@@ -14,8 +15,8 @@ namespace GE {
 		Scene();
 		~Scene();
 
-		void OnUpdate(Timestep ts);
-
+		void OnUpdateRuntime(Timestep ts);
+		void OnUpdateEditor(Timestep ts, EditorCamera cam);
 		//Temp 
 		entt::registry& Reg() { return m_Registry; }
 

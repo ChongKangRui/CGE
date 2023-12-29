@@ -140,6 +140,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\Renderer\EditorCamera.h" />
     <ClInclude Include="src\Core\Math\Math.h" />
     <ClInclude Include="Vendor\Glm\glm\common.hpp" />
     <ClInclude Include="Vendor\Glm\glm\detail\_features.hpp" />
@@ -610,6 +611,7 @@
     <ClInclude Include="src\gepch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Core\Math\Math.cpp" />
     <ClCompile Include="Vendor\ImGuizmo\ImGuizmo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

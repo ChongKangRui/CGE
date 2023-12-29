@@ -64,6 +64,7 @@ namespace GE {
 		//  with some sort of weak ptr
 		Scene* m_Scene = nullptr;
 
+		
 	};
 
 	

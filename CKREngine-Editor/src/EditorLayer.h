@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine.h"
 #include "SceneHierarchyPanel.h"
-
+#include "Core/Renderer/EditorCamera.h"
 
 namespace GE {
 
@@ -49,6 +49,8 @@ namespace GE {
 		Entity m_SecondCameraEntity;
 
 		bool primaryCamera = true;
+
+		EditorCamera m_EditorCamera;
 
 		glm::vec3 m_SquadPos = { 0.0f, 0.0f, 0.0f };
 		float m_Rotation = 0;

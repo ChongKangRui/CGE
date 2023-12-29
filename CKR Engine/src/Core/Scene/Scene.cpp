@@ -33,7 +33,7 @@ namespace GE {
 		}
 	}
 
-	void Scene::OnUpdate(Timestep ts)
+	void Scene::OnUpdateRuntime(Timestep ts)
 	{
 		/////Update Scripts
 
@@ -93,6 +93,24 @@ namespace GE {
 			Renderer2D::EndScene();
 
 		}
+	}
+
+	void Scene::OnUpdateEditor(Timestep ts, EditorCamera cam)
+	{
+		Renderer2D::BeginScene(cam);
+
+		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
+
+		for (auto gr : group) {
+
+			auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(gr);
+			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+
+		}
+
+		//GE::Renderer2D::DrawQuad({ 0, 0 }, { 1.0f, 2.0f }, 0.0f, { 1.0f,0.3f,1.0f,1.0f });
+		Renderer2D::EndScene();
+
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
