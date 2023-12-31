@@ -126,7 +126,7 @@ namespace GE {
 
 	glm::vec3 EditorCamera::CalculatePosition() const
 	{
-		GELog_Trace("Forcal point= {0} ,{1}, {2}||||| Get Forward Direction = {3} ,{4}, {5}", m_FocalPoint.x, m_FocalPoint.y, m_FocalPoint.z, GetForwardDirection().x, GetForwardDirection().y, GetForwardDirection().z);
+		//GELog_Trace("Forcal point= {0} ,{1}, {2}||||| Get Forward Direction = {3} ,{4}, {5}", m_FocalPoint.x, m_FocalPoint.y, m_FocalPoint.z, GetForwardDirection().x, GetForwardDirection().y, GetForwardDirection().z);
 		return m_FocalPoint - GetForwardDirection() * m_Distance;
 	}
 

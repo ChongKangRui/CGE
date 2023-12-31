@@ -58,10 +58,11 @@ namespace GE {
 		}
 
 
-
+		
 
 		Camera* mainCamera = nullptr;
 		glm::mat4 camtransform;
+
 		{
 			auto view = m_Registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view) {
@@ -101,10 +102,10 @@ namespace GE {
 
 		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
 
-		for (auto gr : group) {
+		for (auto entity : group) {
 
-			auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(gr);
-			Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+			auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
 
 		}
 

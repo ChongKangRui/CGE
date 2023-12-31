@@ -28,7 +28,7 @@ namespace GE{
 		Entity m_SelectedEntity;
 
 		friend class Scene;
-		
+		friend class EditorLayer;
 	};
 
 }

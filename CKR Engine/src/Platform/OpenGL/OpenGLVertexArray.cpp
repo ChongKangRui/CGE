@@ -76,27 +76,88 @@ namespace GE {
 		// Initialize index for vertex attribute arrays
 		uint32_t index = 0;
 
+
 		// Iterate over each element in the vertex buffer layout
 		for (const auto& element : vertexBuffer->GetLayout()) {
 			// Enable the vertex attribute array at the specified index
-			glEnableVertexAttribArray(index);
 
-			// Set up the vertex attribute pointer
-			glVertexAttribPointer(
-				index,                           // Index of the generic vertex attribute
-				element.GetComponentCount(),    // Number of components per attribute
-				ShaderDataTypeToOpenGlBaseType(element.Type),  // Data type of each component
-				element.Normalized ? GL_TRUE : GL_FALSE,        // Whether data should be normalized
-				vertexBuffer->GetLayout().GetStride(),           // Stride between consecutive generic vertex attributes
-				(const void*)element.Offset       // Offset of the first component of the first generic vertex attribute in the array
-			);
+			switch (element.Type) {
+			case ShaderDataType::Float:
+			case ShaderDataType::Float2:
+			case ShaderDataType::Float3:
+			case ShaderDataType::Float4: {
+				// Set up the vertex attribute pointer
+				glEnableVertexAttribArray(index);
+				glVertexAttribPointer(
+					index,                           // Index of the generic vertex attribute
+					element.GetComponentCount(),    // Number of components per attribute
+					ShaderDataTypeToOpenGlBaseType(element.Type),  // Data type of each component
+					element.Normalized ? GL_TRUE : GL_FALSE,        // Whether data should be normalized
+					vertexBuffer->GetLayout().GetStride(),           // Stride between consecutive generic vertex attributes
+					(const void*)element.Offset       // Offset of the first component of the first generic vertex attribute in the array
+				);
+				index++;
+				break;
+			}
+			case ShaderDataType::Int:
+			case ShaderDataType::Int2:
+			case ShaderDataType::Int3:
+			case ShaderDataType::Int4:
+			case ShaderDataType::Bool:
+			{
+				// Set up the vertex attribute pointer
+				glEnableVertexAttribArray(index);
+				glVertexAttribIPointer(
+					index,                           // Index of the generic vertex attribute
+					element.GetComponentCount(),    // Number of components per attribute
+					ShaderDataTypeToOpenGlBaseType(element.Type),  // Data type of each component
+					vertexBuffer->GetLayout().GetStride(),           // Stride between consecutive generic vertex attributes
+					(const void*)element.Offset       // Offset of the first component of the first generic vertex attribute in the array
+				);
+				index++;
+				break;
+			}
+			case ShaderDataType::Mat3:
+			case ShaderDataType::Mat4:
+			{
+				uint8_t count = element.GetComponentCount();
+				// Set up the vertex attribute pointer
+				for (uint8_t i = 0; i < count; i++) {
+					glEnableVertexAttribArray(index);
+					glVertexAttribPointer(
+						index,                           // Index of the generic vertex attribute
+						count,    // Number of components per attribute
+						ShaderDataTypeToOpenGlBaseType(element.Type),  // Data type of each component
+						element.Normalized ? GL_TRUE : GL_FALSE,        // Whether data should be normalized
+						vertexBuffer->GetLayout().GetStride(),           // Stride between consecutive generic vertex attributes
+						(const void*)(element.Offset + sizeof(float) * count * i)
+					);
+					glVertexAttribDivisor(index, 1);
+					index++;
+				}
+				break;
+			}
+			default:
+				GE_CORE_ASSERT(false, "Unknown Shader")
+			}
 
-			// Increment the index for the next vertex attribute array
-			index++;
-
-			// Log information about the stride of the vertex layout
-			Log_Info("{0}", vertexBuffer->GetLayout().GetStride());
 		}
+		//for (const auto& element : vertexBuffer->GetLayout()) {
+		//	// Set up the vertex attribute pointer
+		//	glEnableVertexAttribArray(index);
+		//	glVertexAttribPointer(
+		//		index,                           // Index of the generic vertex attribute
+		//		element.GetComponentCount(),    // Number of components per attribute
+		//		ShaderDataTypeToOpenGlBaseType(element.Type),  // Data type of each component
+		//		element.Normalized ? GL_TRUE : GL_FALSE,        // Whether data should be normalized
+		//		vertexBuffer->GetLayout().GetStride(),           // Stride between consecutive generic vertex attributes
+		//		(const void*)element.Offset       // Offset of the first component of the first generic vertex attribute in the array
+		//	);
+		//	// Increment the index for the next vertex attribute array
+		//	index++;
+		//	// Log information about the stride of the vertex layout
+		//	Log_Info("{0}", vertexBuffer->GetLayout().GetStride());
+		//}
 
 		// Store the vertex buffer in the list of vertex buffers associated with the vertex array
 		m_VertexBuffers.push_back(vertexBuffer);

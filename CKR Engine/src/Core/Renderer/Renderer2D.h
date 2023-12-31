@@ -6,6 +6,7 @@
 #include "Core/Renderer/Camera.h"
 
 #include "EditorCamera.h"
+#include "Core/Scene/Component.h"
 
 namespace GE {
 	class Renderer2D
@@ -25,6 +26,9 @@ namespace GE {
 		static void Flush();
 
 		/////Rotation is on radians
+		static void DrawSprite(const glm::mat4& transform, SpriteComponent& src, int EntityId);
+
+
 		//Draw color square
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size,float rotation, const glm::vec4& color = glm::vec4(1.0f));
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color = glm::vec4(1.0f));

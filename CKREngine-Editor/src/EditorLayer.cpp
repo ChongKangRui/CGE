@@ -30,7 +30,7 @@ namespace GE {
 
 
 		FramebufferSpecification fbspec;
-		fbspec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+		fbspec.Attachments = { FramebufferTextureFormat::RGBA8,FramebufferTextureFormat::RED_INTERGER ,FramebufferTextureFormat::Depth };
 		fbspec.Width = 1280;
 		fbspec.Height = 720;
 
@@ -123,7 +123,7 @@ namespace GE {
 
 		if (m_ViewportFocus) {
 			m_CameraController.OnUpdate(ts);
-			
+
 		}
 		m_EditorCamera.OnUpdate(ts);
 
@@ -133,11 +133,35 @@ namespace GE {
 		RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0 });
 		RenderCommand::Clear();
 
+		//Clear entity id into -1
+		m_FrameBuffer->ClearAttachment(1, -1);
+
 
 		//Update scene
 		m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
 
-		
+		auto [mx, my] = ImGui::GetMousePos();
+		mx -= m_ViewportBounds[0].x;
+		my -= m_ViewportBounds[0].y;
+
+		auto viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
+		my = viewportSize.y - my;
+		int mousex = (int)mx;
+		int mousey = (int)my - 40;
+
+		if (mousex >= 0 && mousey >= 0 && mousex < (int)viewportSize.x && mousey < (int)viewportSize.y) {
+			auto pixel = m_FrameBuffer->ReadPixel(1, mousex, mousey);
+			if (pixel == -1)
+				m_HoveredEntity = {};
+			else
+				m_HoveredEntity = { (entt::entity)pixel, m_ActiveScene.get() };
+
+			GELog_Info("pixel = {0}", pixel);
+		}
+
+
+		//GELog_Info("mouse pos = {0}, {1}", mousex, mousey);
+		//GELog_Info("viewportSize = {0}, {1}", m_ViewportBounds[1].x, m_ViewportBounds[1].y);
 
 
 		//Renderer2D::EndScene();
@@ -270,6 +294,7 @@ namespace GE {
 
 		//////////////////////////viewport///////////////////
 		ImGui::Begin("ViewPort");
+		auto viewportOffset = ImGui::GetCursorPos(); // include tab bar
 
 		m_ViewportFocus = ImGui::IsWindowFocused();
 		m_ViewportHover = ImGui::IsWindowHovered();
@@ -282,13 +307,25 @@ namespace GE {
 
 		uint32_t FBtextureID = m_FrameBuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)FBtextureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
-		
-		
+
+		auto windowSize = ImGui::GetWindowSize();
+		ImVec2 minBound = ImGui::GetWindowPos();
+
+		minBound.x += viewportOffset.x;
+		minBound.y += viewportOffset.y;
+
+		ImVec2 maxBound{ minBound.x + windowSize.x, minBound.y + windowSize.y };
+		m_ViewportBounds[0] = { minBound.x, minBound.y };
+		m_ViewportBounds[1] = { maxBound.x, maxBound.y };
+
+		/*GELog_Info("Min Bound = {0}, {1}", m_ViewportBounds[0].x, m_ViewportBounds[0].y);
+		GELog_Info("Max Bound = {0}, {1}", m_ViewportBounds[1].x, m_ViewportBounds[1].y);*/
+
 		///////////////////Gizmos Rendering/////////////////////
 		// In the future should replace to mouse picking entity
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
-		
-		
+
+
 		if (selectedEntity && m_GizmodeType != -1) {
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
@@ -320,10 +357,10 @@ namespace GE {
 			// Entity Transform
 			auto& tc = selectedEntity.GetComponent<TransformComponent>();
 			auto transform = tc.GetTransform();
-			
-			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), 
-				(ImGuizmo::OPERATION)m_GizmodeType, ImGuizmo::LOCAL, glm::value_ptr(transform), nullptr, snap? snapValues : nullptr);
-		
+
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)m_GizmodeType, ImGuizmo::LOCAL, glm::value_ptr(transform), nullptr, snap ? snapValues : nullptr);
+
 			if (ImGuizmo::IsUsing()) {
 				glm::vec3 position, rotation, scale;
 				Math::DecomposeTransform(transform, position, rotation, scale);
@@ -335,7 +372,7 @@ namespace GE {
 			}
 		}
 
-		
+
 		ImGui::End();
 		ImGui::PopStyleVar();
 
@@ -359,7 +396,7 @@ namespace GE {
 
 		bool ctrl = Input::IsKeyPressed(KEY_LEFT_CONTROL) || Input::IsKeyPressed(KEY_RIGHT_CONTROL);
 		bool shift = Input::IsKeyPressed(KEY_LEFT_SHIFT) || Input::IsKeyPressed(KEY_RIGHT_SHIFT);
-
+		
 		switch (e.GetKeyCode()) {
 		case KEY_S:
 		{
@@ -382,25 +419,31 @@ namespace GE {
 			}
 			break;
 		}
-		///Gizmos
-		case KEY_Q:
-		{
-			m_GizmodeType = ImGuizmo::OPERATION::TRANSLATE;
-			break;
-		}
-		case KEY_W:
-		{
-			m_GizmodeType = ImGuizmo::OPERATION::ROTATE;
-			break;
-		}
-		case KEY_E:
-		{
-			m_GizmodeType = ImGuizmo::OPERATION::SCALE;
-			break;
-		}
-		
 
 		}
+
+	///Gizmos Control
+	bool RightM = Input::IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
+	if (m_SceneHierarchyPanel.GetSelectedEntity() && !RightM) {
+		switch (e.GetKeyCode()) {
+
+			case KEY_Q:
+			{
+				m_GizmodeType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			}
+			case KEY_W:
+			{
+				m_GizmodeType = ImGuizmo::OPERATION::ROTATE;
+				break;
+			}
+			case KEY_E:
+			{
+				m_GizmodeType = ImGuizmo::OPERATION::SCALE;
+				break;
+			}
+		}
+	}
 		return false;
 	}
 	void EditorLayer::NewScene()
@@ -428,7 +471,7 @@ namespace GE {
 			SceneSerializer serializer(m_ActiveScene);
 			serializer.Serialize(filepath);
 		}
-		
-		
+
+
 	}
 }

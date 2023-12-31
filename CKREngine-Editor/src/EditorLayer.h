@@ -47,6 +47,7 @@ namespace GE {
 
 		Entity m_CameraEntity;
 		Entity m_SecondCameraEntity;
+		Entity m_HoveredEntity;
 
 		bool primaryCamera = true;
 
@@ -60,6 +61,7 @@ namespace GE {
 		int m_GizmodeType = -1;
 
 		glm::vec2 m_ViewportSize{0.0f,0.0f };
+		glm::vec2 m_ViewportBounds[2];
 
 		bool m_ViewportFocus = false, m_ViewportHover = false;
 

@@ -26,6 +26,9 @@ namespace GE {
 		virtual void Unbind() const override;
 
 		virtual void Resize(uint32_t width, uint32_t height) override;
+		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) override;
+
+		virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
 
 	private:
 		uint32_t m_RendererID =0, /*m_ColorAttachment = 0, */m_DepthAttachment = 0;

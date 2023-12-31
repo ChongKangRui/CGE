@@ -22,7 +22,10 @@ namespace GE {
 		glm::vec2 TexCoord;
 		float TexIndex;
 		float TilingFactor;
-		// Todo: color, texid
+		
+		//Editor only
+		int EntityID = 0;
+
 
 	};
 
@@ -68,7 +71,8 @@ namespace GE {
 			{ShaderDataType::Float4, "a_Color"},
 			{ShaderDataType::Float2, "a_TexCoord"},
 			{ShaderDataType::Float, "a_TexIndex"},
-			{ShaderDataType::Float, "a_Tiling"}
+			{ShaderDataType::Float, "a_Tiling"},
+			{ShaderDataType::Int, "a_EntityID"}
 		};
 
 		s_Data.QuadVB->SetLayout(sqlayout);
@@ -197,6 +201,7 @@ namespace GE {
 	
 	}
 
+
 	void Renderer2D::FlushAndReset() {
 		EndScene();
 		//Reset everything
@@ -204,6 +209,42 @@ namespace GE {
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 
 		s_Data.TextureSlotIndex = 1;
+	}
+
+
+	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteComponent& src, int EntityId)
+	{
+		GE_PROFILE_FUNCTION();
+
+		//If exceed max indices, start a new drawcall
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+			FlushAndReset();
+
+		}
+		const float TilingFactor = 1.0f;
+
+		//WhiteTexture
+		const float texIndex = 0.0f;
+
+		constexpr glm::vec2 TexCoord[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f },{ 0.0f, 1.0f } };
+
+		constexpr size_t quadVertexCount = 4;
+
+		for (size_t i = 0; i < quadVertexCount; i++) {
+
+			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
+			s_Data.QuadVertexBufferPtr->color = src.Color;
+			s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
+			s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+			s_Data.QuadVertexBufferPtr->TilingFactor = TilingFactor;
+			s_Data.QuadVertexBufferPtr->EntityID = EntityId;
+			s_Data.QuadVertexBufferPtr++;
+
+		}
+
+		s_Data.QuadIndexCount += 6;
+
+		s_Data.Stats.QuadCount++;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
@@ -255,6 +296,7 @@ namespace GE {
 			s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = TilingFactor;
+			s_Data.QuadVertexBufferPtr->EntityID = 0;
 			s_Data.QuadVertexBufferPtr++;
 
 		}
@@ -327,6 +369,7 @@ namespace GE {
 			s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = TilingMultiplier;
+			s_Data.QuadVertexBufferPtr->EntityID = 0;
 			s_Data.QuadVertexBufferPtr++;
 
 		}
@@ -380,6 +423,7 @@ namespace GE {
 			s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = TilingMultiplier;
+			s_Data.QuadVertexBufferPtr->EntityID = 0;
 			s_Data.QuadVertexBufferPtr++;
 
 		}
