@@ -147,7 +147,7 @@ namespace GE {
 		auto viewportSize = m_ViewportBounds[1] - m_ViewportBounds[0];
 		my = viewportSize.y - my;
 		int mousex = (int)mx;
-		int mousey = (int)my - 40;
+		int mousey = (int)my;
 
 		if (mousex >= 0 && mousey >= 0 && mousex < (int)viewportSize.x && mousey < (int)viewportSize.y) {
 			auto pixel = m_FrameBuffer->ReadPixel(1, mousex, mousey);
@@ -308,18 +308,16 @@ namespace GE {
 		uint32_t FBtextureID = m_FrameBuffer->GetColorAttachmentRendererID();
 		ImGui::Image((void*)FBtextureID, ImVec2(m_ViewportSize.x, m_ViewportSize.y), ImVec2(0, 1), ImVec2(1, 0));
 
-		auto windowSize = ImGui::GetWindowSize();
-		ImVec2 minBound = ImGui::GetWindowPos();
+		auto windowMinSize = ImGui::GetWindowContentRegionMin();
+		auto windowMaxSize = ImGui::GetWindowContentRegionMax();
+		ImVec2 windowPos = ImGui::GetWindowPos();
 
-		minBound.x += viewportOffset.x;
-		minBound.y += viewportOffset.y;
+		
+		m_ViewportBounds[0] = { windowMinSize.x + windowPos.x , windowMinSize.y + windowPos.y };
+		m_ViewportBounds[1] = { windowMaxSize.x + windowPos.x, windowMaxSize.y + windowPos.y };
 
-		ImVec2 maxBound{ minBound.x + windowSize.x, minBound.y + windowSize.y };
-		m_ViewportBounds[0] = { minBound.x, minBound.y };
-		m_ViewportBounds[1] = { maxBound.x, maxBound.y };
-
-		/*GELog_Info("Min Bound = {0}, {1}", m_ViewportBounds[0].x, m_ViewportBounds[0].y);
-		GELog_Info("Max Bound = {0}, {1}", m_ViewportBounds[1].x, m_ViewportBounds[1].y);*/
+		//GELog_Info("Min Bound = {0}, {1}", m_ViewportBounds[0].x, m_ViewportBounds[0].y);
+		//GELog_Info("Max Bound = {0}, {1}", m_ViewportBounds[1].x, m_ViewportBounds[1].y);
 
 		///////////////////Gizmos Rendering/////////////////////
 		// In the future should replace to mouse picking entity
@@ -330,9 +328,9 @@ namespace GE {
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
 
-			float windowWidth = (float)ImGui::GetWindowWidth();
-			float windowHeight = (float)ImGui::GetWindowHeight();
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+			//float windowWidth = (float)ImGui::GetWindowWidth();
+			//float windowHeight = (float)ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(m_ViewportBounds[0].x, m_ViewportBounds[0].y, m_ViewportBounds[1].x - m_ViewportBounds[0].x, m_ViewportBounds[1].y - m_ViewportBounds[0].y);
 
 			//Scene Camera
 			//Runtime Camera From Entity
@@ -388,11 +386,26 @@ namespace GE {
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(GE_BEVENT_FN(EditorLayer::OnKeyPressed));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(GE_BEVENT_FN(EditorLayer::OnMouseButtonPressed));
+	}
+	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+	{
+		
+		if (Input::IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+			if (!ImGuizmo::IsOver() && m_ViewportHover )
+				m_SceneHierarchyPanel.SetSelectedEntity(m_HoveredEntity);
+			
+		}
+
+		return false;
 	}
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
 		if (e.GetRepeatCount() > 0)
 			return false;
+
+
+		
 
 		bool ctrl = Input::IsKeyPressed(KEY_LEFT_CONTROL) || Input::IsKeyPressed(KEY_RIGHT_CONTROL);
 		bool shift = Input::IsKeyPressed(KEY_LEFT_SHIFT) || Input::IsKeyPressed(KEY_RIGHT_SHIFT);
@@ -444,6 +457,9 @@ namespace GE {
 			}
 		}
 	}
+
+
+
 		return false;
 	}
 	void EditorLayer::NewScene()

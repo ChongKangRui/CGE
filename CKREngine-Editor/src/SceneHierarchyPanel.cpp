@@ -85,6 +85,11 @@ namespace GE {
 
 	}
 
+	void SceneHierarchyPanel::SetSelectedEntity(Entity e)
+	{
+		m_SelectedEntity = e;
+	}
+
 	void SceneHierarchyPanel::DrawEntityNode(Entity entity)
 	{
 

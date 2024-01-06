@@ -15,6 +15,8 @@ namespace GE{
 
 		void OnImGuiRender();
 
+		void SetSelectedEntity(Entity e);
+
 		Entity GetSelectedEntity() const {
 			return m_SelectedEntity;
 		}
@@ -28,7 +30,7 @@ namespace GE{
 		Entity m_SelectedEntity;
 
 		friend class Scene;
-		friend class EditorLayer;
+	
 	};
 
 }
