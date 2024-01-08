@@ -36,6 +36,10 @@
 bin/
 bin-int/
 doc/
+CKR Engine/vendor/VulkanSDK
+CKREngine-Editor/assets/cache
+Scripts/__pycache__
+
 
 # ignore json file
 *.json

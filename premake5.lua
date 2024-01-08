@@ -11,6 +11,8 @@ workspace "CKR Engine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
+
+VULKAN_SDK = os.getenv("VULKAN_SDK")
 IncludeDir = {}
 IncludeDir["GLFW"] = "CKR Engine/Vendor/GLFW/include"
 IncludeDir["Glad"]	= "CKR Engine/Vendor/Glad/include"
@@ -20,6 +22,26 @@ IncludeDir["stb_image"]	= "CKR Engine/Vendor/stb_image"
 IncludeDir["entt"]	= "CKR Engine/Vendor/entt"
 IncludeDir["yaml"]	= "CKR Engine/Vendor/yaml/include"
 IncludeDir["ImGuizmo"]	= "CKR Engine/Vendor/ImGuizmo"
+IncludeDir["VulkanSDK"]	= "CKR Engine/Vendor/VulkanSDK"
+
+LibraryDir = {}
+
+LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"
+LibraryDir["VulkanSDK_Debug"] = "%{wks.location}/CKR Engine/Vendor/VulkanSDK/Lib"
+
+Library = {}
+Library["Vulkan"] = "%{LibraryDir.VulkanSDK}/vulkan-1.lib"
+Library["VulkanUtils"] = "%{LibraryDir.VulkanSDK}/VkLayer_utils.lib"
+
+Library["ShaderC_Debug"] = "%{LibraryDir.VulkanSDK}/shaderc_sharedd.lib"
+Library["SPIRV_Cross_Debug"] = "%{LibraryDir.VulkanSDK}/spirv-cross-cored.lib"
+Library["SPIRV_Cross_GLSL_Debug"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsld.lib"
+Library["SPIRV_Tools_Debug"] = "%{LibraryDir.VulkanSDK}/SPIRV-Toolsd.lib"
+
+Library["ShaderC"] = "%{LibraryDir.VulkanSDK}/shaderc_shared.lib"
+Library["SPIRV_Cross"] = "%{LibraryDir.VulkanSDK}/spirv-cross-core.lib"
+Library["SPIRV_Cross_GLSL"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.lib"
+Library["SPIRV_Tools"] = "%{LibraryDir.VulkanSDK}/SPIRV-Tools.lib"
 
 -- Include this so that it can link to the project
 include "CKR Engine/Vendor/GLFW"
@@ -32,7 +54,7 @@ project "CKR Engine"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++20"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -54,7 +76,6 @@ project "CKR Engine"
 		--"%{prj.name}/Vendor/entt/**.hpp"
 	}
 
-
 	defines{
 		"_CRT_SECURE_NO_WARNINGS"
 	}
@@ -70,7 +91,8 @@ project "CKR Engine"
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.yaml}",
-		"%{IncludeDir.ImGuizmo}"
+		"%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.VulkanSDK}"
 	}
 
 	links{
@@ -83,8 +105,8 @@ project "CKR Engine"
 		
 	}
 
-	filter "%{prj.name}/Vendor/ImGuizmo/**.cpp"
-    	flags { "NoPCH" }
+	filter "files:CKR Engine/Vendor/ImGuizmo/ImGuizmo.cpp"
+		flags { "NoPCH" }
 
 	filter "system:windows"
 	systemversion "latest"
@@ -102,23 +124,47 @@ project "CKR Engine"
 	runtime "Debug"
 	symbols "on"
 
+	links
+	{
+		"%{Library.ShaderC_Debug}",
+		"%{Library.SPIRV_Cross_Debug}",
+		"%{Library.SPIRV_Cross_GLSL_Debug}"
+	}
+
 	filter "configurations:Release"
 	defines "GE_RELEASE"
 	runtime "Release"
 	optimize "on"
+
+	links
+	{
+		"%{Library.ShaderC}",
+		"%{Library.SPIRV_Cross}",
+		"%{Library.SPIRV_Cross_GLSL}"
+	}
+
 
 	filter "configurations:Dist"
 	defines "GE_DIST"
 	runtime "Release"
 	optimize "on"
 
+	links
+	{
+		"%{Library.ShaderC}",
+		"%{Library.SPIRV_Cross}",
+		"%{Library.SPIRV_Cross_GLSL}"
+	}
+
+
+	
 		
 project "Game"
 	location "Game"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++20"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")
@@ -169,7 +215,7 @@ project "CKREngine-Editor"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++20"
-	staticruntime "on"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "%{prj.name}")

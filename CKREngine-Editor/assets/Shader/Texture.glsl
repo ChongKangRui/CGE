@@ -8,9 +8,10 @@ layout(location = 3) in float a_TexIndex;
 layout(location = 4) in float a_Tiling;
 layout(location = 5) in int a_EntityID;
 		
-//layout(std140, binding = 0) uniform Camera{
-//mat4 u_ViewProjection;
-//};
+layout(std140, binding = 0) uniform Camera
+{
+	mat4 u_ViewProjection;
+};
 
 struct VertexOutput{
 	vec4 Color;
@@ -23,7 +24,7 @@ struct VertexOutput{
 layout(location = 0) out VertexOutput Output;
 layout(location = 4) out flat int v_EntityID;
 
-uniform mat4 u_ViewProjection;
+//uniform mat4 u_ViewProjection;
 //uniform mat4 u_ModelTransform;
 
 //out vec4 v_Color;	

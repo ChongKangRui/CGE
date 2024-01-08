@@ -156,7 +156,7 @@ namespace GE {
 			else
 				m_HoveredEntity = { (entt::entity)pixel, m_ActiveScene.get() };
 
-			GELog_Info("pixel = {0}", pixel);
+			//GELog_Info("pixel = {0}", pixel);
 		}
 
 

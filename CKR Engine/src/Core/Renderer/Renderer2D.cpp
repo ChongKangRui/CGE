@@ -1,6 +1,7 @@
 #include "gepch.h"
 #include "Renderer2D.h"
 #include "RendererCommand.h"
+#include "Core/Renderer/UniformBuffer.h"
 
 #include "VertexArray.h"
 #include "Shader.h"
@@ -53,6 +54,13 @@ namespace GE {
 
 	
 		Renderer2D::Statistics Stats;
+
+		struct CameraData
+		{
+			glm::mat4 ViewProjection;
+		};
+		CameraData CameraBuffer;
+		Ref<UniformBuffer> CameraUniformBuffer;
 	};
 
 	//can make this as pointer if we have a bunch of data wanna manage
@@ -124,6 +132,7 @@ namespace GE {
 		s_Data.QuadVertexPosition[2] = { 0.5f, 0.5f, 0.0f, 1.0f };
 		s_Data.QuadVertexPosition[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
 
+		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
 
 
 	}
@@ -138,10 +147,7 @@ namespace GE {
 		s_Data.TextureShader->Bind();
 		s_Data.TextureShader->SetMat4("Camera.u_ViewProjection", camera.GetViewProjectionMatrix());
 
-		s_Data.QuadIndexCount = 0;
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-
-		s_Data.TextureSlotIndex = 1;
+		StartBatch();
 
 
 	}
@@ -151,30 +157,24 @@ namespace GE {
 		
 		glm::mat4 viewProj = camera.GetViewProjectionMatrix();
 
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+		//s_Data.TextureShader->Bind();
+		//s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+		s_Data.CameraBuffer.ViewProjection = viewProj;
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
-		s_Data.QuadIndexCount = 0;
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-
-		s_Data.TextureSlotIndex = 1;
+		StartBatch();
 
 	}
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
 		GE_PROFILE_FUNCTION();
 
-		glm::mat4 viewProj = camera.GetProjection() * glm::inverse(transform);
+		//s_Data.TextureShader->Bind();
+		//s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
+		s_Data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
-		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetMat4("u_ViewProjection", viewProj);
-
-		s_Data.QuadIndexCount = 0;
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
-
-		s_Data.TextureSlotIndex = 1;
-
-
+		StartBatch();
 	}
 	void Renderer2D::EndScene()
 	{
@@ -195,7 +195,7 @@ namespace GE {
 		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) {
 			s_Data.TextureSlots[i]->Bind(i);
 		}
-
+		s_Data.TextureShader->Bind();
 		RenderCommand::DrawIndexed(s_Data.QuadVA,s_Data.QuadIndexCount);
 		s_Data.Stats.DrawCall++;
 	
@@ -442,6 +442,13 @@ namespace GE {
 	void Renderer2D::ResetStats()
 	{
 		memset(&s_Data.Stats, 0, sizeof(Statistics));
+	}
+	void Renderer2D::StartBatch()
+	{
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextureSlotIndex = 1;
 	}
 }
 

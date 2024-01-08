@@ -77,10 +77,10 @@
       <PrecompiledHeaderFile>gepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GE_BUILD_DLL;GE_PLATFORM_WINDOW;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;GE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;Vendor\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;Vendor\ImGuizmo;Vendor\VulkanSDK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -88,7 +88,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;dwmapi.lib;C:\VulkanSDK\1.3.250.1\Lib\shaderc_sharedd.lib;C:\VulkanSDK\1.3.250.1\Lib\spirv-cross-cored.lib;C:\VulkanSDK\1.3.250.1\Lib\spirv-cross-glsld.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -97,13 +97,13 @@
       <PrecompiledHeaderFile>gepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GE_BUILD_DLL;GE_PLATFORM_WINDOW;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;GE_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;Vendor\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;Vendor\ImGuizmo;Vendor\VulkanSDK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -112,7 +112,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;dwmapi.lib;C:\VulkanSDK\1.3.250.1\Lib\shaderc_shared.lib;C:\VulkanSDK\1.3.250.1\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.3.250.1\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -121,13 +121,13 @@
       <PrecompiledHeaderFile>gepch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GE_BUILD_DLL;GE_PLATFORM_WINDOW;GLFW_INCLUDE_NONE;YAML_CPP_STATIC_DEFINE;GE_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;Vendor\ImGuizmo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;Vendor\spdlog\include;Vendor\GLFW\include;Vendor\Glad\include;Vendor\imgui;Vendor\Glm;Vendor\stb_image;Vendor\entt;Vendor\yaml\include;Vendor\ImGuizmo;Vendor\VulkanSDK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -136,12 +136,10 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;dwmapi.lib;C:\VulkanSDK\1.3.250.1\Lib\shaderc_shared.lib;C:\VulkanSDK\1.3.250.1\Lib\spirv-cross-core.lib;C:\VulkanSDK\1.3.250.1\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\Renderer\EditorCamera.h" />
-    <ClInclude Include="src\Core\Math\Math.h" />
     <ClInclude Include="Vendor\Glm\glm\common.hpp" />
     <ClInclude Include="Vendor\Glm\glm\detail\_features.hpp" />
     <ClInclude Include="Vendor\Glm\glm\detail\_fixes.hpp" />
@@ -569,6 +567,7 @@
     <ClInclude Include="src\Core\Base\Log.h" />
     <ClInclude Include="src\Core\Base\MouseCode.h" />
     <ClInclude Include="src\Core\Base\TimeStep.h" />
+    <ClInclude Include="src\Core\Base\Timer.h" />
     <ClInclude Include="src\Core\Base\Window.h" />
     <ClInclude Include="src\Core\Core.h" />
     <ClInclude Include="src\Core\Debug\instrumentor.h" />
@@ -577,8 +576,10 @@
     <ClInclude Include="src\Core\Event\KeyEvent.h" />
     <ClInclude Include="src\Core\Event\MouseEvent.h" />
     <ClInclude Include="src\Core\Imgui\ImGuiLayer.h" />
+    <ClInclude Include="src\Core\Math\Math.h" />
     <ClInclude Include="src\Core\Renderer\Buffer.h" />
     <ClInclude Include="src\Core\Renderer\Camera.h" />
+    <ClInclude Include="src\Core\Renderer\EditorCamera.h" />
     <ClInclude Include="src\Core\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Core\Renderer\GraphicContext.h" />
     <ClInclude Include="src\Core\Renderer\OrthographicCamera.h" />
@@ -591,6 +592,7 @@
     <ClInclude Include="src\Core\Renderer\Shader.h" />
     <ClInclude Include="src\Core\Renderer\SubTexture2D.h" />
     <ClInclude Include="src\Core\Renderer\Texture.h" />
+    <ClInclude Include="src\Core\Renderer\UniformBuffer.h" />
     <ClInclude Include="src\Core\Renderer\VertexArray.h" />
     <ClInclude Include="src\Core\Scene\Component.h" />
     <ClInclude Include="src\Core\Scene\Entity.h" />
@@ -606,17 +608,14 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h" />
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Platform\Window\WindowsWindow.h" />
     <ClInclude Include="src\gepch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
-    <ClCompile Include="src\Core\Math\Math.cpp" />
     <ClCompile Include="Vendor\ImGuizmo\ImGuizmo.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Vendor\stb_image\std_image.cpp" />
     <ClCompile Include="src\Core\Base\EngineApplication.cpp" />
@@ -626,7 +625,9 @@
     <ClCompile Include="src\Core\Base\Window.cpp" />
     <ClCompile Include="src\Core\Imgui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Core\Imgui\ImguiBuild.cpp" />
+    <ClCompile Include="src\Core\Math\Math.cpp" />
     <ClCompile Include="src\Core\Renderer\Buffer.cpp" />
+    <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="src\Core\Renderer\OrthographicCamera.cpp" />
     <ClCompile Include="src\Core\Renderer\OrthographicCameraController.cpp" />
@@ -638,6 +639,7 @@
     <ClCompile Include="src\Core\Renderer\Shader.cpp" />
     <ClCompile Include="src\Core\Renderer\SubTexture2D.cpp" />
     <ClCompile Include="src\Core\Renderer\Texture.cpp" />
+    <ClCompile Include="src\Core\Renderer\UniformBuffer.cpp" />
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\Core\Scene\Entity.cpp" />
     <ClCompile Include="src\Core\Scene\Scene.cpp" />
@@ -649,6 +651,7 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Platform\Window\WindowPlatformUtils.cpp" />
     <ClCompile Include="src\Platform\Window\WindowsInput.cpp" />

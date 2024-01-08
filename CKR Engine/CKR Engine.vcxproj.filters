@@ -46,6 +46,9 @@
     <Filter Include="src\Core\Imgui">
       <UniqueIdentifier>{AF388104-9B06-750A-849A-E5307007516F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Core\Math">
+      <UniqueIdentifier>{9E477A55-0A08-F68B-D342-3F093FC23A68}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Core\Renderer">
       <UniqueIdentifier>{EB009555-5717-93EB-A08E-1E0D0CE46373}</UniqueIdentifier>
     </Filter>
@@ -1347,6 +1350,9 @@
     <ClInclude Include="src\Core\Base\TimeStep.h">
       <Filter>src\Core\Base</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Base\Timer.h">
+      <Filter>src\Core\Base</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Base\Window.h">
       <Filter>src\Core\Base</Filter>
     </ClInclude>
@@ -1371,10 +1377,16 @@
     <ClInclude Include="src\Core\Imgui\ImGuiLayer.h">
       <Filter>src\Core\Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Math\Math.h">
+      <Filter>src\Core\Math</Filter>
+    </ClInclude>
     <ClInclude Include="src\Core\Renderer\Buffer.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\Camera.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\EditorCamera.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\FrameBuffer.h">
@@ -1411,6 +1423,9 @@
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\Texture.h">
+      <Filter>src\Core\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Renderer\UniformBuffer.h">
       <Filter>src\Core\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Renderer\VertexArray.h">
@@ -1458,6 +1473,9 @@
     <ClInclude Include="src\Platform\OpenGL\OpenGLTexture.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\OpenGLUniformBuffer.h">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\OpenGLVertexArray.h">
       <Filter>src\Platform\OpenGL</Filter>
     </ClInclude>
@@ -1467,8 +1485,6 @@
     <ClInclude Include="src\gepch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Math\Math.h" />
-    <ClInclude Include="src\Core\Renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vendor\ImGuizmo\ImGuizmo.cpp">
@@ -1498,7 +1514,13 @@
     <ClCompile Include="src\Core\Imgui\ImguiBuild.cpp">
       <Filter>src\Core\Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Math\Math.cpp">
+      <Filter>src\Core\Math</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Renderer\Buffer.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Renderer\EditorCamera.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Renderer\FrameBuffer.cpp">
@@ -1534,6 +1556,9 @@
     <ClCompile Include="src\Core\Renderer\Texture.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Renderer\UniformBuffer.cpp">
+      <Filter>src\Core\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Core\Renderer\VertexArray.cpp">
       <Filter>src\Core\Renderer</Filter>
     </ClCompile>
@@ -1567,6 +1592,9 @@
     <ClCompile Include="src\Platform\OpenGL\OpenGLTexture.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\OpenGLUniformBuffer.cpp">
+      <Filter>src\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\OpenGLVertexArray.cpp">
       <Filter>src\Platform\OpenGL</Filter>
     </ClCompile>
@@ -1582,7 +1610,5 @@
     <ClCompile Include="src\gepch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\Math\Math.cpp" />
-    <ClCompile Include="src\Core\Renderer\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

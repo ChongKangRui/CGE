@@ -59,6 +59,8 @@ namespace GE {
 		static void ResetStats();
 		
 	private:
+		static void StartBatch();
+
 		struct SceneData {
 			glm::mat4 ViewProjectionMatrix;
 
