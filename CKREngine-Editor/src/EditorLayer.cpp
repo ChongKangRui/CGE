@@ -15,6 +15,7 @@
 #include "Core/Math/Math.h"
 
 namespace GE {
+	extern const std::filesystem::path s_AssetsDirectory;
 	EditorLayer::EditorLayer() : Layer("Application 2D Renderer"), m_CameraController(1280 / 720, true)
 	{
 
@@ -275,6 +276,7 @@ namespace GE {
 
 
 		m_SceneHierarchyPanel.OnImGuiRender();
+		m_ContentBrowserPanel.OnImGuiRender();
 
 		ImGui::Begin("Setting");
 		auto stat = Renderer2D::GetStats();
@@ -318,6 +320,17 @@ namespace GE {
 
 		//GELog_Info("Min Bound = {0}, {1}", m_ViewportBounds[0].x, m_ViewportBounds[0].y);
 		//GELog_Info("Max Bound = {0}, {1}", m_ViewportBounds[1].x, m_ViewportBounds[1].y);
+
+		if (ImGui::BeginDragDropTarget()) {
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Content_Browser_Item")) {
+				auto path = (const wchar_t*)payload->Data;
+
+				LoadScene(std::filesystem::path(s_AssetsDirectory)/path);
+			}
+
+			ImGui::EndDragDropTarget();
+		}
+
 
 		///////////////////Gizmos Rendering/////////////////////
 		// In the future should replace to mouse picking entity
@@ -440,17 +453,17 @@ namespace GE {
 	if (m_SceneHierarchyPanel.GetSelectedEntity() && !RightM) {
 		switch (e.GetKeyCode()) {
 
-			case KEY_Q:
+			case KEY_W:
 			{
 				m_GizmodeType = ImGuizmo::OPERATION::TRANSLATE;
 				break;
 			}
-			case KEY_W:
+			case KEY_E:
 			{
 				m_GizmodeType = ImGuizmo::OPERATION::ROTATE;
 				break;
 			}
-			case KEY_E:
+			case KEY_R:
 			{
 				m_GizmodeType = ImGuizmo::OPERATION::SCALE;
 				break;
@@ -472,13 +485,19 @@ namespace GE {
 	{
 		std::string filepath = FileDialogs::OpenFile("Scene (*.GE)\0*.GE\0");
 		if (!filepath.empty()) {
-			m_ActiveScene = CreateRef<Scene>();
-			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
-
-			SceneSerializer serializer(m_ActiveScene);
-			serializer.Deserialize(filepath);
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			LoadScene(filepath);
 		}
+	}
+	void EditorLayer::LoadScene(const std::filesystem::path& path)
+	{
+		m_ActiveScene = CreateRef<Scene>();
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		SceneSerializer serializer(m_ActiveScene);
+		serializer.Deserialize(path.string());
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+
 	}
 	void EditorLayer::SaveScene()
 	{

@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine.h"
 #include "SceneHierarchyPanel.h"
+#include "ContentBrowserPanel.h"
 #include "Core/Renderer/EditorCamera.h"
 
 namespace GE {
@@ -26,6 +27,7 @@ namespace GE {
 
 		void NewScene();
 		void LoadScene();
+		void LoadScene(const std::filesystem::path& path);
 		void SaveScene();
 
 	private:
@@ -67,6 +69,6 @@ namespace GE {
 		bool m_ViewportFocus = false, m_ViewportHover = false;
 
 		SceneHierarchyPanel m_SceneHierarchyPanel;
-		
+		ContentBrowserPanel m_ContentBrowserPanel;
 	};
 }
