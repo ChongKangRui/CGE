@@ -67,7 +67,7 @@ void ParticleSystem::OnRender(GE::OrthographicCamera& camera)
 		//color.a = color.a * life;
 
 		float size = glm::lerp(particle.SizeEnd, particle.SizeBegin, life);
-		GE::Renderer2D::DrawQuad({ particle.Position.x, particle.Position.y }, { size, size }, particle.Rotation, color);
+		//GE::Renderer2D::DrawQuad({ particle.Position.x, particle.Position.y }, { size, size }, particle.Rotation, color);
 
 	}
 	GE::Renderer2D::EndScene();

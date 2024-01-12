@@ -3,3 +3,4 @@
 -vector panel color green and blue need to switch(fixed)
 -unknown size bugs randomly happen(fixed)
 -New scene, create new entity may result previous level entity appear again
+-Improve EditorCameraControlliong

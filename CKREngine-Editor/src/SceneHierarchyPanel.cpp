@@ -6,10 +6,10 @@
 #include "SceneHierarchyPanel.h"
 #include "Core/Scene/Component.h"
 
-
+#include "ContentBrowserPanel.h"
 namespace GE {
 
-
+	extern const std::filesystem::path s_AssetsDirectory;
 
 	SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& scene)
 	{
@@ -392,7 +392,22 @@ namespace GE {
 
 		DrawComponent<SpriteComponent>("Sprite Renderer", entity, [](auto& component) {
 			ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
+			ImGui::Button("Texture", ImVec2(100.0f, 0.0f));
 
+
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("Content_Browser_Item")) {
+					auto path = (const wchar_t*)payload->Data;
+					auto texturepath = std::filesystem::path(s_AssetsDirectory) / path;
+					component.Texture = Texture2D::Create(texturepath.string());
+					
+				}
+
+				ImGui::EndDragDropTarget();
+			}
+
+
+			ImGui::DragFloat("TilingFactor", &component.TilingFactor, 0.1f, 0.0f, 100.0f);
 			});
 
 

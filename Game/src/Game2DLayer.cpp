@@ -90,14 +90,7 @@ void EditorLayer::OnUpdate(GE::Timestep ts)
 
 		GE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		//Blue Diamond
-		GE::Renderer2D::DrawQuad({ m_SquadPos.y + 7,m_SquadPos.y + 2 }, { 1.0f, 2.0f }, 0.0f, { 1.0f,0.3f,1.0f,1.0f });
-
-		//White Diamond
-		GE::Renderer2D::DrawQuad({ m_SquadPos.x + 6,m_SquadPos.y + 5}, { 1.0f, 1.0f }, 0.0f, { 1.0f,1.0f,0.0f,1.0f });
-
-		//Tree Texture
-		GE::Renderer2D::DrawQuad({ m_SquadPos.x,m_SquadPos.y - 1.0f, 0.2f }, { 1.0f, 1.0f }, 0.0f, m_TextureTree,{ 0.5,0.5,1.0,1.0 });
+		
 
 		
 		GE::Renderer2D::EndScene();
@@ -109,7 +102,7 @@ void EditorLayer::OnUpdate(GE::Timestep ts)
 
 				glm::vec4 TileColor = { (x + 5.0f) / 10.0f, 0.4f, (y + 5.0f) / 10.0f, 0.5f };
 
-				GE::Renderer2D::DrawQuad({ x + 10, y + 10 }, { 0.45f, 0.45f },0.0f,  { TileColor });
+				
 
 			}
 		}

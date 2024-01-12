@@ -11,6 +11,7 @@ namespace GE {
 	ContentBrowserPanel::ContentBrowserPanel() : m_CurrentDirectory(s_AssetsDirectory)
 	{
 		m_FolderIcon = Texture2D::Create("Resources/Icon/Folder.png");
+		m_AssetIcon = Texture2D::Create("Resources/Icon/Asset.png");
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()
@@ -51,9 +52,11 @@ namespace GE {
 			//ImGui::Text("stem %s", p2.c_str());
 
 #pragma endregion
+			ImTextureID id = (it.is_directory()) ? (ImTextureID)m_FolderIcon->GetRendererID() : (ImTextureID)m_AssetIcon->GetRendererID();
+
 			//Push and pop disable the grey background of the button
 			ImGui::PushStyleColor(ImGuiCol_Button, { 0,0,0,0 });
-			ImGui::ImageButton((ImTextureID)m_FolderIcon->GetRendererID(), { m_ThumbnailSize,m_ThumbnailSize }, { 0,1 }, { 1,0 });
+			ImGui::ImageButton(id, { m_ThumbnailSize,m_ThumbnailSize }, { 0,1 }, { 1,0 });
 
 			if (ImGui::BeginDragDropSource()) {
 				auto itemPath = relativePath.c_str();

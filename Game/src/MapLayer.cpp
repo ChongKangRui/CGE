@@ -143,7 +143,7 @@ void Map_Layer::OnUpdate(GE::Timestep ts)
 				//	GE::Renderer2D::DrawQuad({ x - m_MapWidth / 2.0f,y - m_MapHeight / 2.0f + 1, 0.2f }, { 1.0f, 1.0f }, 0.0f, gtexture);
 				//}
 				//else
-					GE::Renderer2D::DrawQuad({ x - m_MapWidth / 2.0f,y - m_MapHeight / 2.0f, 0.2f }, { 1.0f, 1.0f }, 0.0f, texture);
+					//GE::Renderer2D::DrawQuad({ x - m_MapWidth / 2.0f,y - m_MapHeight / 2.0f, 0.2f }, { 1.0f, 1.0f }, 0.0f, texture);
 
 			}
 

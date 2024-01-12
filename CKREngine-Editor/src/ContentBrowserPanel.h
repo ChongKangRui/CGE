@@ -20,7 +20,7 @@ namespace GE {
 	private:
 		std::filesystem::path m_CurrentDirectory;
 		Ref<Texture2D> m_FolderIcon;
-		Ref<Texture2D> m_TestIcon;
+		Ref<Texture2D> m_AssetIcon;
 
 		float m_ThumbnailSize = 50.0f;
 		float m_Padding = 25.0f;

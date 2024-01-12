@@ -86,7 +86,7 @@ namespace GE {
 			for (auto gr : group) {
 
 				auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(gr);
-				Renderer2D::DrawQuad(transform.GetTransform(), sprite.Color);
+				Renderer2D::DrawSprite((int)-1, transform.GetTransform(), sprite);
 
 			}
 
@@ -105,7 +105,7 @@ namespace GE {
 		for (auto entity : group) {
 
 			auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
-			Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+			Renderer2D::DrawSprite((int)entity, transform.GetTransform(), sprite);
 
 		}
 

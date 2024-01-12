@@ -8,7 +8,7 @@
 
 #include "Core/Renderer/OrthographicCamera.h"
 #include "SceneCamera.h"
-
+#include "Core/Renderer/Texture.h"
 #include "ScriptableEntity.h"
 
 namespace GE {
@@ -52,6 +52,8 @@ namespace GE {
 
 	struct SpriteComponent {
 		glm::vec4 Color{1.0f,1.0f,1.0f,1.0f};
+		float TilingFactor = 1.0f;
+		Ref<Texture2D> Texture;
 
 		SpriteComponent() = default;
 		SpriteComponent(const SpriteComponent&) = default;

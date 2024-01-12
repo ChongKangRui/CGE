@@ -212,7 +212,15 @@ namespace GE {
 	}
 
 
-	void Renderer2D::DrawSprite(const glm::mat4& transform, SpriteComponent& src, int EntityId)
+	void Renderer2D::DrawSprite(int EntityId, const glm::mat4& transform, SpriteComponent& src)
+	{
+		if (src.Texture)
+			DrawSprite(EntityId, transform, src.Texture, src.Color, src.TilingFactor);
+		else
+			DrawSprite(EntityId, transform, src.Color);
+	}
+
+	void Renderer2D::DrawSprite(int EntityId, const glm::mat4& transform, const glm::vec4& color)
 	{
 		GE_PROFILE_FUNCTION();
 
@@ -233,7 +241,7 @@ namespace GE {
 		for (size_t i = 0; i < quadVertexCount; i++) {
 
 			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
-			s_Data.QuadVertexBufferPtr->color = src.Color;
+			s_Data.QuadVertexBufferPtr->color = color;
 			s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
 			s_Data.QuadVertexBufferPtr->TilingFactor = TilingFactor;
@@ -247,27 +255,7 @@ namespace GE {
 		s_Data.Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
-	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, rotation, color);
-
-	}
-
-	
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
-	{
-		GE_PROFILE_FUNCTION();
-
-
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
-			glm::rotate(glm::mat4(1.0f), rotation, { 0.0f,0.0f,1.0f })
-			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-		
-		DrawQuad(transform, color);
-
-	}
-
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	void Renderer2D::DrawSprite(int EntityId, const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& color, int tilingFactor)
 	{
 		GE_PROFILE_FUNCTION();
 
@@ -277,14 +265,26 @@ namespace GE {
 
 		}
 
-		const float TilingFactor = 1.0f;
+		float texIndex = 0;
+		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
+			if (*s_Data.TextureSlots[i].get() == *texture.get()) {
+				texIndex = (float)i;
 
-		//WhiteTexture
-		const float texIndex = 0.0f;
+				break;
+			}
+		}
 
-		//GELog_Info("{0}", position);
 
-	
+		if (texIndex == 0.0f) {
+			if (s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlots)
+				FlushAndReset();
+
+			texIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex++;
+
+		}
+
 		constexpr glm::vec2 TexCoord[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f },{ 0.0f, 1.0f } };
 
 		constexpr size_t quadVertexCount = 4;
@@ -295,8 +295,8 @@ namespace GE {
 			s_Data.QuadVertexBufferPtr->color = color;
 			s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
 			s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = TilingFactor;
-			s_Data.QuadVertexBufferPtr->EntityID = 0;
+			s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.QuadVertexBufferPtr->EntityID = EntityId;
 			s_Data.QuadVertexBufferPtr++;
 
 		}
@@ -304,134 +304,194 @@ namespace GE {
 		s_Data.QuadIndexCount += 6;
 
 		s_Data.Stats.QuadCount++;
-
-
-	}
-	
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, const glm::vec4& color, float TilingMultiplier)
-	{
-	
-		DrawQuad({ position.x, position.y, 0.0f }, size, rotation, texture, color, TilingMultiplier);
-
-	}
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, const glm::vec4& color, float TilingMultiplier)
-	{
-		GE_PROFILE_FUNCTION();
-
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }) *
-			glm::rotate(glm::mat4(1.0f), rotation, { 0.0f,0.0f,1.0f });
-
-		DrawQuad(transform, texture,color,TilingMultiplier);
-
 	}
 
-	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& color, float TilingMultiplier)
-	{
-		GE_PROFILE_FUNCTION();
+	//void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	//{
+	//	DrawQuad({ position.x, position.y, 0.0f }, size, rotation, color);
 
-		constexpr glm::vec2 TexCoord[] = {
-			{ 0.0f, 0.0f },
-			{ 1.0f, 0.0f },
-			{ 1.0f, 1.0f },
-			{ 0.0f, 1.0f } };
+	//}
 
-		constexpr size_t quadVertexCount = 4;
-
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
-			FlushAndReset();
-		}
-
-		float textureIndex = 0.0f;
-
-		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
-			if (*s_Data.TextureSlots[i].get() == *texture.get()) {
-				textureIndex = (float)i;
-				break;
-			}
-		}
-
-		if (textureIndex == 0.0f) {
-			textureIndex = (float)s_Data.TextureSlotIndex;
-
-			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
-			s_Data.TextureSlotIndex++;
-
-		}
+	//
+	//void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	//{
+	//	GE_PROFILE_FUNCTION();
 
 
+	//	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * 
+	//		glm::rotate(glm::mat4(1.0f), rotation, { 0.0f,0.0f,1.0f })
+	//		* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+	//	
+	//	DrawQuad(transform, color);
 
-		for (size_t i = 0; i < quadVertexCount; i++) {
+	//}
 
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
-			s_Data.QuadVertexBufferPtr->color = color;
-			s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
-			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = TilingMultiplier;
-			s_Data.QuadVertexBufferPtr->EntityID = 0;
-			s_Data.QuadVertexBufferPtr++;
+	//void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+	//{
+	//	GE_PROFILE_FUNCTION();
 
-		}
-		s_Data.QuadIndexCount += 6;
+	//	//If exceed max indices, start a new drawcall
+	//	if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+	//		FlushAndReset();
 
-		s_Data.Stats.QuadCount++;
-	}
+	//	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& texture, const glm::vec4& color , float TilingMultiplier) {
-		DrawQuad({ position.x, position.y, 0.0f }, size, rotation, texture, color, TilingMultiplier);
-	}
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float TilingMultiplier ) {
-		GE_PROFILE_FUNCTION();
+	//	const float TilingFactor = 1.0f;
 
-		const glm::vec2* TexCoord = subTexture->GetTexCoords();
-		const Ref<Texture2D> texture = subTexture->GetTexture();
+	//	//WhiteTexture
+	//	const float texIndex = 0.0f;
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
-			FlushAndReset();
-		}
+	//	//GELog_Info("{0}", position);
 
-		float textureIndex = 0.0f;
+	//
+	//	constexpr glm::vec2 TexCoord[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f },{ 0.0f, 1.0f } };
 
-		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
-			if (*s_Data.TextureSlots[i].get() == *texture.get()) {
-				textureIndex = (float)i;
-				break;
-			}
-		}
+	//	constexpr size_t quadVertexCount = 4;
 
-		if (textureIndex == 0.0f) {
-			textureIndex = (float)s_Data.TextureSlotIndex;
+	//	for (size_t i = 0; i < quadVertexCount; i++) {
 
-			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
-			s_Data.TextureSlotIndex++;
+	//		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
+	//		s_Data.QuadVertexBufferPtr->color = color;
+	//		s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
+	//		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+	//		s_Data.QuadVertexBufferPtr->TilingFactor = TilingFactor;
+	//		s_Data.QuadVertexBufferPtr->EntityID = 0;
+	//		s_Data.QuadVertexBufferPtr++;
 
-		}
+	//	}
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
-			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }) *
-			glm::rotate(glm::mat4(1.0f), rotation, { 0.0f,0.0f,1.0f });
+	//	s_Data.QuadIndexCount += 6;
 
-		
+	//	s_Data.Stats.QuadCount++;
 
-		constexpr size_t quadVertexCount = 4;
 
-		for (size_t i = 0; i < quadVertexCount; i++) {
+	//}
+	//
 
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
-			s_Data.QuadVertexBufferPtr->color = color;
-			s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
-			s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-			s_Data.QuadVertexBufferPtr->TilingFactor = TilingMultiplier;
-			s_Data.QuadVertexBufferPtr->EntityID = 0;
-			s_Data.QuadVertexBufferPtr++;
+	//void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, const glm::vec4& color, float TilingMultiplier)
+	//{
+	//
+	//	DrawQuad({ position.x, position.y, 0.0f }, size, rotation, texture, color, TilingMultiplier);
 
-		}
-		s_Data.QuadIndexCount += 6;
+	//}
+	//void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, const glm::vec4& color, float TilingMultiplier)
+	//{
+	//	GE_PROFILE_FUNCTION();
 
-		s_Data.Stats.QuadCount++;
+	//	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+	//		glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }) *
+	//		glm::rotate(glm::mat4(1.0f), rotation, { 0.0f,0.0f,1.0f });
 
-	}
+	//	DrawQuad(transform, texture,color,TilingMultiplier);
+
+	//}
+
+	//void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& color, float TilingMultiplier)
+	//{
+	//	GE_PROFILE_FUNCTION();
+
+	//	constexpr glm::vec2 TexCoord[] = {
+	//		{ 0.0f, 0.0f },
+	//		{ 1.0f, 0.0f },
+	//		{ 1.0f, 1.0f },
+	//		{ 0.0f, 1.0f } };
+
+	//	constexpr size_t quadVertexCount = 4;
+
+	//	if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+	//		FlushAndReset();
+	//	}
+
+	//	float textureIndex = 0.0f;
+
+	//	for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
+	//		if (*s_Data.TextureSlots[i].get() == *texture.get()) {
+	//			textureIndex = (float)i;
+	//			break;
+	//		}
+	//	}
+
+	//	if (textureIndex == 0.0f) {
+	//		textureIndex = (float)s_Data.TextureSlotIndex;
+
+	//		s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+	//		s_Data.TextureSlotIndex++;
+
+	//	}
+
+
+
+	//	for (size_t i = 0; i < quadVertexCount; i++) {
+
+	//		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
+	//		s_Data.QuadVertexBufferPtr->color = color;
+	//		s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
+	//		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+	//		s_Data.QuadVertexBufferPtr->TilingFactor = TilingMultiplier;
+	//		s_Data.QuadVertexBufferPtr->EntityID = 0;
+	//		s_Data.QuadVertexBufferPtr++;
+
+	//	}
+	//	s_Data.QuadIndexCount += 6;
+
+	//	s_Data.Stats.QuadCount++;
+	//}
+
+	//void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& texture, const glm::vec4& color , float TilingMultiplier) {
+	//	DrawQuad({ position.x, position.y, 0.0f }, size, rotation, texture, color, TilingMultiplier);
+	//}
+	//void Renderer2D::
+	// (const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float TilingMultiplier ) {
+	//	GE_PROFILE_FUNCTION();
+
+	//	const glm::vec2* TexCoord = subTexture->GetTexCoords();
+	//	const Ref<Texture2D> texture = subTexture->GetTexture();
+
+	//	if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices) {
+	//		FlushAndReset();
+	//	}
+
+	//	float textureIndex = 0.0f;
+
+	//	for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++) {
+	//		if (*s_Data.TextureSlots[i].get() == *texture.get()) {
+	//			textureIndex = (float)i;
+	//			break;
+	//		}
+	//	}
+
+	//	if (textureIndex == 0.0f) {
+	//		textureIndex = (float)s_Data.TextureSlotIndex;
+
+	//		s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+	//		s_Data.TextureSlotIndex++;
+
+	//	}
+
+	//	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) *
+	//		glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }) *
+	//		glm::rotate(glm::mat4(1.0f), rotation, { 0.0f,0.0f,1.0f });
+
+	//	
+
+	//	constexpr size_t quadVertexCount = 4;
+
+	//	for (size_t i = 0; i < quadVertexCount; i++) {
+
+	//		s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPosition[i];
+	//		s_Data.QuadVertexBufferPtr->color = color;
+	//		s_Data.QuadVertexBufferPtr->TexCoord = TexCoord[i];
+	//		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+	//		s_Data.QuadVertexBufferPtr->TilingFactor = TilingMultiplier;
+	//		s_Data.QuadVertexBufferPtr->EntityID = 0;
+	//		s_Data.QuadVertexBufferPtr++;
+
+	//	}
+	//	s_Data.QuadIndexCount += 6;
+
+	//	s_Data.Stats.QuadCount++;
+
+	//}
 
 
 
